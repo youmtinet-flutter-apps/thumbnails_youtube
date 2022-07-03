@@ -10,7 +10,7 @@ class ShapePainter extends CustomPainter {
     required this.bgColor,
     required this.shadowColor,
     this.shadowRadius = 0,
-    this.position = PopupArrowPosition.TopLeft,
+    this.position = PopupArrowPosition.topLeft,
   });
 
   @override
@@ -19,28 +19,28 @@ class ShapePainter extends CustomPainter {
     double height = size.height;
     Path path;
     switch (position) {
-      case PopupArrowPosition.BottomCenter:
+      case PopupArrowPosition.bottomCenter:
         path = bottomCenter(width, height);
         break;
-      case PopupArrowPosition.BottomLeft:
+      case PopupArrowPosition.bottomLeft:
         path = bottomLeft(width, height);
         break;
-      case PopupArrowPosition.BottomRight:
+      case PopupArrowPosition.bottomRight:
         path = bottomRight(width, height);
         break;
-      case PopupArrowPosition.CenterRight:
+      case PopupArrowPosition.centerRight:
         path = centerRight(width, height);
         break;
-      case PopupArrowPosition.CenterLeft:
+      case PopupArrowPosition.centerLeft:
         path = centerLeft(width, height);
         break;
-      case PopupArrowPosition.TopRight:
+      case PopupArrowPosition.topRight:
         path = topRight(width, height);
         break;
-      case PopupArrowPosition.TopLeft:
+      case PopupArrowPosition.topLeft:
         path = topLeft(width, height);
         break;
-      case PopupArrowPosition.TopCenter:
+      case PopupArrowPosition.topCenter:
         path = topCenter(width, height);
         break;
       default:
