@@ -274,7 +274,7 @@ class DayPicker extends StatelessWidget {
   })  : assert(!firstDate.isAfter(lastDate)),
         assert(!selectedFirstDate.isBefore(firstDate) &&
             (selectedLastDate == null || !selectedLastDate.isAfter(lastDate))),
-        assert(selectedLastDate == null || !selectedLastDate.isBefore(selectedFirstDate)),
+        // assert(selectedLastDate == null || !selectedLastDate.isBefore(selectedFirstDate)),
         super(key: key);
 
   /// The currently selected date.
@@ -559,9 +559,13 @@ class MonthPicker extends StatefulWidget {
     required this.lastDate,
     this.selectableDayPredicate,
   })  : assert(!firstDate.isAfter(lastDate)),
-        assert(!selectedFirstDate.isBefore(firstDate) &&
-            (selectedLastDate == null || !selectedLastDate.isAfter(lastDate))),
-        assert(selectedLastDate == null || !selectedLastDate.isBefore(selectedFirstDate)),
+        assert(
+          !selectedFirstDate.isBefore(firstDate) &&
+              (selectedLastDate == null || !selectedLastDate.isAfter(lastDate)),
+        ),
+        /* assert(
+          selectedLastDate == null || !selectedLastDate.isBefore(selectedFirstDate),
+        ), */
         super(key: key);
 
   /// The currently selected date.

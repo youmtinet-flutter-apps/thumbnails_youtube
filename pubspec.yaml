@@ -19,6 +19,7 @@ dependencies:
   starflut: ^0.9.5
   flutter_google_street_view: ^2.2.7
   flextras: ^0.0.2
+  pointer_interceptor: ^0.9.3+2
 
 dev_dependencies:
   flutter_test:

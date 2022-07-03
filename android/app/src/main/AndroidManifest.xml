@@ -4,6 +4,8 @@
         android:label="thumbnail_youtube"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAwWRUwCoumy_5Pjb4uQvF-0BmUQJZCTJQ"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

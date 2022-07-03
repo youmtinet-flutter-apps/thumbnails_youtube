@@ -14,26 +14,27 @@ class _ExampleDateRangePickerState extends State<ExampleDateRangePicker> {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-        color: Colors.deepOrangeAccent,
-        onPressed: () async {
-          final List<DateTime>? picked = await showCustomDateRangePicker(
-            context: context,
-            initialFirstDate: DateTime.now(),
-            initialLastDate: (DateTime.now()).add(const Duration(days: 7)),
-            firstDate: DateTime(2015),
-            lastDate: DateTime(
-              DateTime.now().year + 2,
-            ),
-          );
-          if (picked != null) {
-            if (picked.length == 2) {
-              if (kDebugMode) {
-                print(picked);
-              }
+      color: Colors.deepOrangeAccent,
+      onPressed: () async {
+        final List<DateTime>? picked = await showCustomDateRangePicker(
+          context: context,
+          initialFirstDate: DateTime.now(),
+          initialLastDate: (DateTime.now()).add(const Duration(days: 7)),
+          firstDate: DateTime(2015),
+          lastDate: DateTime(
+            DateTime.now().year + 2,
+          ),
+        );
+        if (picked != null) {
+          if (picked.length == 2) {
+            if (kDebugMode) {
+              print(picked);
             }
           }
-        },
-        child: const Text("Pick date range"));
+        }
+      },
+      child: const Text("Pick date range"),
+    );
   }
 
   theme() {
