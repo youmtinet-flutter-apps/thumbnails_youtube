@@ -20,6 +20,7 @@ dependencies:
   flutter_google_street_view: ^2.2.7
   flextras: ^0.0.2
   pointer_interceptor: ^0.9.3+2
+  image_picker: ^0.8.5+3
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +31,5 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+  assets:
+    - assets/
