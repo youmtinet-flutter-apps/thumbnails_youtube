@@ -9,7 +9,7 @@ class ViewportPainter extends CustomPainter {
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..color = Colors.white
-      ..strokeWidth = 1;
+      ..strokeWidth = 5;
 
     canvas.drawRect(viewport, paint);
   }

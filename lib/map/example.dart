@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             subtitle: const Text('OSM light-themed vector maps.'),
             trailing: const Icon(Icons.chevron_right_sharp),
             onTap: () => _push(const VectorMapPage()),
-            enabled: false,
+            enabled: true,
           ),
           ListTile(
             title: const Text('Markers'),

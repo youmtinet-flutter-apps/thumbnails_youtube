@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ymrabtiapps.thumbnails.thumbnail_youtube">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="thumbnail_youtube"
         android:name="${applicationName}"

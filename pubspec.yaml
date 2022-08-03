@@ -21,6 +21,9 @@ dependencies:
   flextras: ^0.0.2
   pointer_interceptor: ^0.9.3+2
   image_picker: ^0.8.5+3
+  animated_theme_switcher: ^2.0.6
+  animated_splash_screen: ^1.3.0
+  provider: ^6.0.3
 
 dev_dependencies:
   flutter_test:
@@ -33,3 +36,36 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+  fonts:
+    - family: AlQuranAli
+      fonts:
+        - asset: assets/AlQuranAli-L3A83.ttf
+        # 
+        # 
+    - family: font islamic color
+      fonts:
+        - asset: assets/font islamic color.ttf
+        # 
+        # 
+    - family: My Font Quraan 7
+      fonts:
+        - asset: assets/My Font Quraan 7.ttf
+        # 
+        # 
+    - family: My Font Quraan 9
+      fonts:
+        - asset: assets/My Font Quraan 9.ttf
+        # 
+        # 
+    - family: Surah Names
+      fonts:
+        - asset: assets/sura_names.woff2
+          weight: 900
+        # 
+        # 
+    - family: Uthmanic
+      fonts:
+        - asset: assets/UthmanicHafs1Ver18.woff2
+          weight: 900
+        # 
+        # 

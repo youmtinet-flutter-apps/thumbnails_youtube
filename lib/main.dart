@@ -1,10 +1,15 @@
 import 'dart:async';
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:thumbnail_youtube/providers.dart';
 import 'package:thumbnail_youtube/utils.dart';
 
 import 'date_range_picker/example.dart';
+import 'themes.dart';
 
 void main() => runApp(const ThumbnailsApp());
 
@@ -14,12 +19,24 @@ class ThumbnailsApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<RThemeModeProvider>(
+          create: (context) => RThemeModeProvider(isDarkMode: false),
+        ),
+      ],
+      child: ThemeProvider(
+        initTheme: MyThemes.lightTheme,
+        child: Builder(builder: (context) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.red,
+            ),
+            home: const ThmbHomePage(title: 'Thumbnails YouTube'),
+          );
+        }),
       ),
-      home: const ThmbHomePage(title: 'Thumbnails YouTube'),
     );
   }
 }
@@ -40,21 +57,44 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
 //
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            inputField(),
-            if (videoId.isNotEmpty) imageBody(),
-            if (resList.isNotEmpty) resolutionsChoix(),
-            const ExampleDateRangePicker(),
-          ],
-        ),
-      ),
-      floatingActionButton: fab(),
+    final isDarkMode = Provider.of<RThemeModeProvider>(context, listen: true);
+    return ThemeSwitchingArea(
+      child: Builder(builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+            actions: [
+              ThemeSwitcher(
+                builder: (bcontext) => IconButton(
+                  icon: const Icon(CupertinoIcons.moon_stars),
+                  onPressed: () {
+                    final theme = isDarkMode.isDarkMode ? MyThemes.lightTheme : MyThemes.darkTheme;
+
+                    final isDarkModeChange = Provider.of<RThemeModeProvider>(
+                      context,
+                      listen: false,
+                    );
+                    isDarkModeChange.toggleThemeMode();
+                    final switcher = ThemeSwitcher.of(bcontext);
+                    switcher.changeTheme(theme: theme, isReversed: !isDarkMode.isDarkMode);
+                  },
+                ),
+              ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                inputField(),
+                if (videoId.isNotEmpty) imageBody(),
+                if (resList.isNotEmpty) resolutionsChoix(),
+                const ExampleDateRangePicker(),
+              ],
+            ),
+          ),
+          floatingActionButton: fab(),
+        );
+      }),
     );
   }
 
