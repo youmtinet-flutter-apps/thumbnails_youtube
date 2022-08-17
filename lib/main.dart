@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/providers.dart';
 import 'package:thumbnail_youtube/utils.dart';
 import 'package:flutter_launcher_icons/android.dart' as android;
-import 'date_range_picker/example.dart';
 import 'themes.dart';
 
 void main() {
@@ -94,7 +93,6 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
                   inputField(),
                   if (videoId.isNotEmpty) imageBody(),
                   if (resList.isNotEmpty) resolutionsChoix(),
-                  const ExampleDateRangePicker(),
                 ],
               ),
             ),
