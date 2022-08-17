@@ -12,7 +12,8 @@ class AnchoredPopups extends StatefulWidget {
   AnchoredPopupsController createState() => AnchoredPopupsController();
 
   static AnchoredPopupsController? of(BuildContext context) {
-    final w = context.dependOnInheritedWidgetOfExactType<_InheritedPopupOverlay>();
+    final w =
+        context.dependOnInheritedWidgetOfExactType<_InheritedPopupOverlay>();
     if (w == null) {
       if (kDebugMode) {
         print("[AnchoredPopups] WARNING: No AnchoredPopup was found.");
@@ -51,8 +52,8 @@ class AnchoredPopupsController extends State<AnchoredPopups> {
       // Work out the fractional offset for the popUp content based on the incoming popupAnchor.
       // For anchor of -1,-1 (top left), we want an offset of (0, 0), for anchor of 1, 1 (bottom right), we want an offset of (-1, -1)
       // Formula is: offset = .5 - align/2 - 1;
-      popUpFractionalOffset =
-          Offset(.5 - (config.popUpAnchor.x / 2) - 1, .5 - (config.popUpAnchor.y / 2) - 1);
+      popUpFractionalOffset = Offset(.5 - (config.popUpAnchor.x / 2) - 1,
+          .5 - (config.popUpAnchor.y / 2) - 1);
     }
     return _InheritedPopupOverlay(
         state: this,
@@ -121,7 +122,8 @@ class AnchoredPopupsController extends State<AnchoredPopups> {
   }
 
   void _closeHoverOnScreenSizeChange() {
-    Size screenSize = MediaQueryData.fromWindow(WidgetsBinding.instance!.window).size;
+    Size screenSize =
+        MediaQueryData.fromWindow(WidgetsBinding.instance!.window).size;
     if (screenSize != _prevSize) {
       _currentPopupConfig = null;
     }
@@ -131,7 +133,8 @@ class AnchoredPopupsController extends State<AnchoredPopups> {
 
 /// InheritedWidget boilerplate
 class _InheritedPopupOverlay extends InheritedWidget {
-  const _InheritedPopupOverlay({Key? key, required Widget child, required this.state})
+  const _InheritedPopupOverlay(
+      {Key? key, required Widget child, required this.state})
       : super(key: key, child: child);
 
   final AnchoredPopupsController state;

@@ -86,8 +86,8 @@ class InteractiveMapPageState extends State<InteractiveMapPage> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  content:
-                      Text('You have clicked on (${location.longitude}, ${location.latitude}).'),
+                  content: Text(
+                      'You have clicked on (${location.longitude}, ${location.latitude}).'),
                 ),
               );
             },

@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, this.title = "Flutter Panorama"}) : super(key: key);
+  const MyHomePage({Key? key, this.title = "Flutter Panorama"})
+      : super(key: key);
 
   final String title;
 
@@ -47,7 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget hotspotButton({String? text, IconData? icon, VoidCallback? onPressed}) {
+  Widget hotspotButton(
+      {String? text, IconData? icon, VoidCallback? onPressed}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -64,7 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ? Container(
                 padding: const EdgeInsets.all(4.0),
                 decoration: const BoxDecoration(
-                    color: Colors.black38, borderRadius: BorderRadius.all(Radius.circular(4))),
+                    color: Colors.black38,
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
                 child: Center(child: Text(text)),
               )
             : Container(),
@@ -81,7 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
           animSpeed: 1.0,
           sensorControl: SensorControl.orientation,
           onViewChanged: onViewChanged,
-          onTap: (longitude, latitude, tilt) => debugPrint('onTap: $longitude, $latitude, $tilt'),
+          onTap: (longitude, latitude, tilt) =>
+              debugPrint('onTap: $longitude, $latitude, $tilt'),
           onLongPressStart: (longitude, latitude, tilt) =>
               debugPrint('onLongPressStart: $longitude, $latitude, $tilt'),
           onLongPressMoveUpdate: (longitude, latitude, tilt) =>
@@ -105,8 +109,9 @@ class _MyHomePageState extends State<MyHomePage> {
               longitude: -46.0,
               width: 60.0,
               height: 60.0,
-              widget:
-                  hotspotButton(icon: Icons.search, onPressed: () => setState(() => _panoId = 2)),
+              widget: hotspotButton(
+                  icon: Icons.search,
+                  onPressed: () => setState(() => _panoId = 2)),
             ),
             Hotspot(
               latitude: -33.0,
@@ -175,7 +180,8 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         mini: true,
         onPressed: () async {
-          final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+          final pickedFile =
+              await picker.pickImage(source: ImageSource.gallery);
           setState(() {
             if (pickedFile != null) {
               panoImages.add(Image.file(File(pickedFile.path)));

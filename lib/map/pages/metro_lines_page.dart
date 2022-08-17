@@ -114,7 +114,8 @@ class MetroLinesPageState extends State<MetroLinesPage> {
                   ),
                   ...stations
                       .map(
-                        (e) => _buildStationMarker(e, Colors.black, transformer),
+                        (e) =>
+                            _buildStationMarker(e, Colors.black, transformer),
                       )
                       .toList(),
                 ],
@@ -179,7 +180,8 @@ class PolylinePainter extends CustomPainter {
         var p1 = transformer.toOffset(line.stations[i].position);
         var p2 = transformer.toOffset(line.stations[i + 1].position);
 
-        var dash = line.stations[i].underConstruction || line.stations[i + 1].underConstruction;
+        var dash = line.stations[i].underConstruction ||
+            line.stations[i + 1].underConstruction;
 
         if (dash) {
           var dir = (p2 - p1);
@@ -527,7 +529,8 @@ final _bimeh = MetroStation(
   position: const LatLng(35.69967513438331, 51.320199419396154),
 );
 
-final _line4 = MetroLine(name: 'Line 4', color: Colors.orange.shade300, stations: [
+final _line4 =
+    MetroLine(name: 'Line 4', color: Colors.orange.shade300, stations: [
   _kolahdooz,
   _shohada,
   _shemiran,
@@ -542,7 +545,8 @@ final _line4 = MetroLine(name: 'Line 4', color: Colors.orange.shade300, stations
   _eramSabz,
 ]);
 
-final _line5 = MetroLine(name: 'Line 5', color: Colors.green.shade900, stations: [
+final _line5 =
+    MetroLine(name: 'Line 5', color: Colors.green.shade900, stations: [
   _aryashahr,
   _eramSabz,
   _chitgar,
@@ -645,7 +649,8 @@ final _dowlatAbad = MetroStation(
   position: const LatLng(35.61897971493006, 51.464688221944336),
 );
 
-final _line6 = MetroLine(name: 'Line 6', color: Colors.pink.shade300, stations: [
+final _line6 =
+    MetroLine(name: 'Line 6', color: Colors.pink.shade300, stations: [
   _suleqan,
   _abshenasan,
   _shahran,

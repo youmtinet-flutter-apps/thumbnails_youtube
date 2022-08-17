@@ -19,7 +19,8 @@ class NumbersWidget extends StatelessWidget {
         child: VerticalDivider(),
       );
 
-  Widget buildButton(BuildContext context, String value, String text) => MaterialButton(
+  Widget buildButton(BuildContext context, String value, String text) =>
+      MaterialButton(
         padding: const EdgeInsets.symmetric(vertical: 4),
         onPressed: () {},
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

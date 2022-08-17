@@ -6,15 +6,20 @@ import 'package:vector_math/vector_math_64.dart';
 
 final MotionSensors motionSensors = MotionSensors();
 const MethodChannel _methodChannel = MethodChannel('motion_sensors/method');
-const EventChannel _accelerometerEventChannel = EventChannel('motion_sensors/accelerometer');
-const EventChannel _gyroscopeEventChannel = EventChannel('motion_sensors/gyroscope');
-const EventChannel _magnetometerEventChannel = EventChannel('motion_sensors/magnetometer');
+const EventChannel _accelerometerEventChannel =
+    EventChannel('motion_sensors/accelerometer');
+const EventChannel _gyroscopeEventChannel =
+    EventChannel('motion_sensors/gyroscope');
+const EventChannel _magnetometerEventChannel =
+    EventChannel('motion_sensors/magnetometer');
 const EventChannel _userAccelerometerEventChannel =
     EventChannel('motion_sensors/user_accelerometer');
-const EventChannel _orientationChannel = EventChannel('motion_sensors/orientation');
+const EventChannel _orientationChannel =
+    EventChannel('motion_sensors/orientation');
 const EventChannel _absoluteOrientationChannel =
     EventChannel('motion_sensors/absolute_orientation');
-const EventChannel _screenOrientationChannel = EventChannel('motion_sensors/screen_orientation');
+const EventChannel _screenOrientationChannel =
+    EventChannel('motion_sensors/screen_orientation');
 
 // from https://github.com/flutter/plugins/tree/master/packages/sensors
 /// Discrete reading from an accelerometer. Accelerometers measure the velocity
@@ -205,27 +210,32 @@ class MotionSensors {
 
   /// Determines whether sensor is available.
   Future<bool> isSensorAvailable(int sensorType) async {
-    final available = await _methodChannel.invokeMethod('isSensorAvailable', sensorType);
+    final available =
+        await _methodChannel.invokeMethod('isSensorAvailable', sensorType);
     return available;
   }
 
   /// Determines whether accelerometer is available.
-  Future<bool> isAccelerometerAvailable() => isSensorAvailable(tYPEACCELEROMETER);
+  Future<bool> isAccelerometerAvailable() =>
+      isSensorAvailable(tYPEACCELEROMETER);
 
   /// Determines whether magnetometer is available.
-  Future<bool> isMagnetometerAvailable() => isSensorAvailable(tYPEMAGNETICFIELD);
+  Future<bool> isMagnetometerAvailable() =>
+      isSensorAvailable(tYPEMAGNETICFIELD);
 
   /// Determines whether gyroscope is available.
   Future<bool> isGyroscopeAvailable() => isSensorAvailable(tYPEGYROSCOPE);
 
   /// Determines whether user accelerometer is available.
-  Future<bool> isUserAccelerationAvailable() => isSensorAvailable(tYPEUSERACCELEROMETER);
+  Future<bool> isUserAccelerationAvailable() =>
+      isSensorAvailable(tYPEUSERACCELEROMETER);
 
   /// Determines whether orientation is available.
   Future<bool> isOrientationAvailable() => isSensorAvailable(tYPEORIENTATION);
 
   /// Determines whether absolute orientation is available.
-  Future<bool> isAbsoluteOrientationAvailable() => isSensorAvailable(tYPEABSOLUTEORIENTATION);
+  Future<bool> isAbsoluteOrientationAvailable() =>
+      isSensorAvailable(tYPEABSOLUTEORIENTATION);
 
   /// Change the update interval of sensor. The units are in microseconds.
   Future setSensorUpdateInterval(int sensorType, int interval) async {
@@ -248,14 +258,16 @@ class MotionSensors {
       setSensorUpdateInterval(tYPEMAGNETICFIELD, interval);
 
   /// The update interval of Gyroscope. The units are in microseconds.
-  set gyroscopeUpdateInterval(int interval) => setSensorUpdateInterval(tYPEGYROSCOPE, interval);
+  set gyroscopeUpdateInterval(int interval) =>
+      setSensorUpdateInterval(tYPEGYROSCOPE, interval);
 
   /// The update interval of user accelerometer. The units are in microseconds.
   set userAccelerometerUpdateInterval(int interval) =>
       setSensorUpdateInterval(tYPEUSERACCELEROMETER, interval);
 
   /// The update interval of orientation. The units are in microseconds.
-  set orientationUpdateInterval(int interval) => setSensorUpdateInterval(tYPEORIENTATION, interval);
+  set orientationUpdateInterval(int interval) =>
+      setSensorUpdateInterval(tYPEORIENTATION, interval);
 
   /// The update interval of absolute orientation. The units are in microseconds.
   set absoluteOrientationUpdateInterval(int interval) =>
@@ -265,7 +277,8 @@ class MotionSensors {
   Stream<AccelerometerEvent> get accelerometer {
     _accelerometerEvents ??= _accelerometerEventChannel
         .receiveBroadcastStream()
-        .map((dynamic event) => AccelerometerEvent.fromList(event.cast<double>()));
+        .map((dynamic event) =>
+            AccelerometerEvent.fromList(event.cast<double>()));
     return _accelerometerEvents!;
   }
 
@@ -281,7 +294,8 @@ class MotionSensors {
   Stream<UserAccelerometerEvent> get userAccelerometer {
     _userAccelerometerEvents ??= _userAccelerometerEventChannel
         .receiveBroadcastStream()
-        .map((dynamic event) => UserAccelerometerEvent.fromList(event.cast<double>()));
+        .map((dynamic event) =>
+            UserAccelerometerEvent.fromList(event.cast<double>()));
     return _userAccelerometerEvents!;
   }
 
@@ -289,17 +303,21 @@ class MotionSensors {
   Stream<MagnetometerEvent> get magnetometer {
     _magnetometerEvents ??= _magnetometerEventChannel
         .receiveBroadcastStream()
-        .map((dynamic event) => MagnetometerEvent.fromList(event.cast<double>()));
+        .map((dynamic event) =>
+            MagnetometerEvent.fromList(event.cast<double>()));
     return _magnetometerEvents!;
   }
 
   /// The current orientation of the device.
   Stream<OrientationEvent> get orientation {
-    _orientationEvents ??= _orientationChannel.receiveBroadcastStream().map((dynamic event) {
+    _orientationEvents ??=
+        _orientationChannel.receiveBroadcastStream().map((dynamic event) {
       var orientation = OrientationEvent.fromList(event.cast<double>());
       _initialOrientation ??= orientation;
       // Change the initial yaw of the orientation to zero
-      var yaw = (orientation.yaw + math.pi - _initialOrientation!.yaw) % (math.pi * 2) - math.pi;
+      var yaw = (orientation.yaw + math.pi - _initialOrientation!.yaw) %
+              (math.pi * 2) -
+          math.pi;
       return OrientationEvent(yaw, orientation.pitch, orientation.roll);
     });
     return _orientationEvents!;
@@ -309,7 +327,8 @@ class MotionSensors {
   Stream<AbsoluteOrientationEvent> get absoluteOrientation {
     _absoluteOrientationEvents ??= _absoluteOrientationChannel
         .receiveBroadcastStream()
-        .map((dynamic event) => AbsoluteOrientationEvent.fromList(event.cast<double>()));
+        .map((dynamic event) =>
+            AbsoluteOrientationEvent.fromList(event.cast<double>()));
     return _absoluteOrientationEvents!;
   }
 

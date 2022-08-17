@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
+        primarySwatch: Colors.indigo,
       ),
       home: const Home(),
     );
@@ -32,44 +32,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final GlobalKey widgetKey = GlobalKey();
-
-  CustomPointedPopup getCustomPointedPopup(BuildContext context) {
-    return CustomPointedPopup(
-      backgroundColor: Colors.red,
-      context: context,
-      widthFractionWithRespectToDeviceWidth: 3,
-      triangleDirection: TriangleDirection.straight,
-      popupElevation: 10,
-      displayBelowWidget: false,
-      // customHeight: 150,
-
-      ///you can also add border radius
-      ////popupBorderRadius:,
-      item: CustomPointedPopupItem(
-        title: 'Popup that can be shown on any targeted widget with customized pointed design.',
-        textStyle: Theme.of(context).textTheme.caption!.copyWith(
-              color: Theme.of(context).cardColor,
-            ),
-        iconWidget: Icon(
-          Icons.add_moderator,
-          color: Theme.of(context).cardColor,
-        ),
-
-        ///Or you can add custom item widget below instead above 3
-        // itemWidget: Container(
-        //   child: Center(
-        //     child: Text('CUstome item'),
-        //   ),
-        // ),
-      ),
-      onClickWidget: (onClickMenu) {
-        consoleLog('popup item clicked');
-      },
-      onDismiss: () {
-        consoleLog('on dismissed called');
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +90,45 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+    );
+  }
+
+  CustomPointedPopup getCustomPointedPopup(BuildContext context) {
+    return CustomPointedPopup(
+      backgroundColor: Colors.red,
+      context: context,
+      widthFractionWithRespectToDeviceWidth: 3,
+      triangleDirection: TriangleDirection.straight,
+      popupElevation: 10,
+      displayBelowWidget: false,
+      stateChangeed: (chang) {
+        consoleLog(chang);
+      },
+      // customHeight: 150,
+
+      ///you can also add border radius
+      ////popupBorderRadius:,
+      item: CustomPointedPopupItem(
+        title: 'Popup that can be shown...',
+        textStyle: Theme.of(context).textTheme.caption!.copyWith(
+              color: Theme.of(context).cardColor,
+            ),
+        iconWidget: Icon(
+          Icons.add_moderator,
+          color: Theme.of(context).cardColor,
+        ),
+
+        ///Or you can add custom item widget below instead above 3
+        itemWidget: const Center(
+          child: Text('CUstome item'),
+        ),
+      ),
+      onClickWidget: (onClickMenu) {
+        consoleLog('popup item clicked');
+      },
+      onDismiss: () {
+        consoleLog('on dismissed called');
+      },
     );
   }
 }

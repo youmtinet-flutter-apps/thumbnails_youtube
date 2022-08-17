@@ -88,7 +88,10 @@ class AnchoredPopUpRegion extends StatefulWidget {
         popChild: clickPopChild,
         popAnchor: clickPopAnchor,
         child: hover(
-            popAnchor: hoverPopAnchor, popChild: hoverPopChild, anchor: hoverAnchor, child: child));
+            popAnchor: hoverPopAnchor,
+            popChild: hoverPopChild,
+            anchor: hoverAnchor,
+            child: child));
   }
 }
 

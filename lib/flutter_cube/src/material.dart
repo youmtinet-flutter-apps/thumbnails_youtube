@@ -39,7 +39,8 @@ class Material {
 /// Loading material from Material Library File (.mtl).
 /// Reference：http://paulbourke.net/dataformats/mtl/
 ///
-Future<Map<String, Material>> loadMtl(String fileName, {bool isAsset = true}) async {
+Future<Map<String, Material>> loadMtl(String fileName,
+    {bool isAsset = true}) async {
   final materials = <String, Material>{};
   String data;
   try {
@@ -66,25 +67,29 @@ Future<Map<String, Material>> loadMtl(String fileName, {bool isAsset = true}) as
         break;
       case 'Ka':
         if (parts.length >= 4) {
-          final v = Vector3(double.parse(parts[1]), double.parse(parts[2]), double.parse(parts[3]));
+          final v = Vector3(double.parse(parts[1]), double.parse(parts[2]),
+              double.parse(parts[3]));
           material.ambient = v;
         }
         break;
       case 'Kd':
         if (parts.length >= 4) {
-          final v = Vector3(double.parse(parts[1]), double.parse(parts[2]), double.parse(parts[3]));
+          final v = Vector3(double.parse(parts[1]), double.parse(parts[2]),
+              double.parse(parts[3]));
           material.diffuse = v;
         }
         break;
       case 'Ks':
         if (parts.length >= 4) {
-          final v = Vector3(double.parse(parts[1]), double.parse(parts[2]), double.parse(parts[3]));
+          final v = Vector3(double.parse(parts[1]), double.parse(parts[2]),
+              double.parse(parts[3]));
           material.specular = v;
         }
         break;
       case 'Ke':
         if (parts.length >= 4) {
-          final v = Vector3(double.parse(parts[1]), double.parse(parts[2]), double.parse(parts[3]));
+          final v = Vector3(double.parse(parts[1]), double.parse(parts[2]),
+              double.parse(parts[3]));
           material.ke = v;
         }
         break;
@@ -129,7 +134,8 @@ Future<Image> loadImageFromAsset(String fileName, {bool isAsset = true}) {
   final c = Completer<Image>();
   Future<Uint8List> dataFuture;
   if (isAsset) {
-    dataFuture = rootBundle.load(fileName).then((data) => data.buffer.asUint8List());
+    dataFuture =
+        rootBundle.load(fileName).then((data) => data.buffer.asUint8List());
   } else {
     dataFuture = File(fileName).readAsBytes();
   }
@@ -146,7 +152,8 @@ Future<Image> loadImageFromAsset(String fileName, {bool isAsset = true}) {
 }
 
 /// load texture from asset
-Future<MapEntry<String, Image>?> loadTexture(Material? material, String basePath,
+Future<MapEntry<String, Image>?> loadTexture(
+    Material? material, String basePath,
     {bool isAsset = true}) async {
   // get the texture file name
   if (material == null) return null;
@@ -181,7 +188,8 @@ Future<Uint32List> getImagePixels(Image image) async {
 
 /// Convert Vector3 to Color
 Color toColor(Vector3 v, [double opacity = 1.0]) {
-  return Color.fromRGBO((v.r * 255).toInt(), (v.g * 255).toInt(), (v.b * 255).toInt(), opacity);
+  return Color.fromRGBO(
+      (v.r * 255).toInt(), (v.g * 255).toInt(), (v.b * 255).toInt(), opacity);
 }
 
 /// Convert Color to Vector3

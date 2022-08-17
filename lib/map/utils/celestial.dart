@@ -12,8 +12,12 @@ LatLng getSunLocation(DateTime utcNow) {
   final gst = toGreenwichMeanSiderealTime(utcNow);
   double num1 = toJulian(utcNow) * 2.7378507871321E-05;
   double num2 = num1 * num1;
-  double num3 = pi / 180.0 * ((280.466457 + 36000.7698278 * num1 + 0.00030322 * num2) % 360.0);
-  double num4 = pi / 180.0 * ((282.937348 + 1.7195366 * num1 + 0.00045688 * num2) % 360.0);
+  double num3 = pi /
+      180.0 *
+      ((280.466457 + 36000.7698278 * num1 + 0.00030322 * num2) % 360.0);
+  double num4 = pi /
+      180.0 *
+      ((282.937348 + 1.7195366 * num1 + 0.00045688 * num2) % 360.0);
   double num5 = 0.01670843 - 4.2037E-05 * num1 - 1.267E-07 * num2;
   double num6 = num3 - num4;
   double d = num6;
@@ -49,16 +53,21 @@ double toJulian(DateTime utc) {
   var minute = utc.minute;
   var second = utc.second;
 
-  double num1 =
-      day + hour * (1.0 / 24.0) + minute * 0.000694444444444444 + second * 1.15740740740741E-05;
+  double num1 = day +
+      hour * (1.0 / 24.0) +
+      minute * 0.000694444444444444 +
+      second * 1.15740740740741E-05;
   if (month < 3) {
     year--;
     month += 12;
   }
   int num2 = year ~/ 100;
   int num3 = 2 - num2 + (num2 ~/ 4);
-  var dayJulian =
-      (365.25 * (year - 2000)).floor() + (30.6001 * (month + 1)).floor() + num1 + num3 - 50.5;
+  var dayJulian = (365.25 * (year - 2000)).floor() +
+      (30.6001 * (month + 1)).floor() +
+      num1 +
+      num3 -
+      50.5;
 
   return dayJulian;
 }
@@ -69,7 +78,10 @@ double toGreenwichMeanSiderealTime(DateTime utc) {
   double num1 = jd * 2.7378507871321E-05;
   double num2 = num1 * num1;
 
-  var v = 280.46061837 + 360.98564736629 * jd + 0.000387933 * num2 - num2 * num1 / 38710000.0;
+  var v = 280.46061837 +
+      360.98564736629 * jd +
+      0.000387933 * num2 -
+      num2 * num1 / 38710000.0;
   return pi / 180.0 * (v % 360.0);
 }
 
@@ -90,26 +102,43 @@ LatLng getMoonLocation(DateTime utcNow) {
 
   // Longitude moyenne de la Lune
   final ll = _deg2rad *
-      ((218.3164477 + 481267.88123421 * t - 0.0015786 * t2 + t3 / 538841.0 - t4 / 65194000.0) %
+      ((218.3164477 +
+              481267.88123421 * t -
+              0.0015786 * t2 +
+              t3 / 538841.0 -
+              t4 / 65194000.0) %
           _t360);
 
   // Elongation moyenne de la Lune
   coef[0] = _deg2rad *
-      ((297.8501921 + 445267.1114034 * t - 0.0018819 * t2 + t3 / 545868.0 - t4 / 113065000.0) %
+      ((297.8501921 +
+              445267.1114034 * t -
+              0.0018819 * t2 +
+              t3 / 545868.0 -
+              t4 / 113065000.0) %
           _t360);
 
   // Anomalie moyenne du Soleil
-  coef[1] =
-      _deg2rad * ((357.5291092 + 35999.0502909 * t - 0.0001536 * t2 + t3 / 24490000.0) % _t360);
+  coef[1] = _deg2rad *
+      ((357.5291092 + 35999.0502909 * t - 0.0001536 * t2 + t3 / 24490000.0) %
+          _t360);
 
   // Anomalie moyenne de la Lune
   coef[2] = _deg2rad *
-      ((134.9633964 + 477198.8675055 * t + 0.0087414 * t2 + t3 / 69699.0 - t4 / 14712000.0) %
+      ((134.9633964 +
+              477198.8675055 * t +
+              0.0087414 * t2 +
+              t3 / 69699.0 -
+              t4 / 14712000.0) %
           _t360);
 
   // Argument de latitude de la Lune
   coef[3] = _deg2rad *
-      ((93.272095 + 483202.0175233 * t - 0.0036539 * t2 - t3 / 3526000.0 + t4 / 863310000.0) %
+      ((93.272095 +
+              483202.0175233 * t -
+              0.0036539 * t2 -
+              t3 / 3526000.0 +
+              t4 / 863310000.0) %
           _t360);
 
   coef[4] = 1.0 - 0.002516 * t - 0.0000074 * t2;
@@ -160,8 +189,9 @@ LatLng getMoonLocation(DateTime utcNow) {
 
   final cb = cos(bt);
   final sb = sin(bt);
-  final obliquite =
-      _deg2rad * (84381.448 - 46.815 * t - 0.00059 * t2 + 0.001813 * t3) * _degPerArcsec;
+  final obliquite = _deg2rad *
+      (84381.448 - 46.815 * t - 0.00059 * t2 + 0.001813 * t3) *
+      _degPerArcsec;
   final ce = cos(obliquite);
   final se = sin(obliquite);
   final xx = rp * cb * sin(lv);

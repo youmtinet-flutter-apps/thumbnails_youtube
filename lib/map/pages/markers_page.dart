@@ -66,7 +66,8 @@ class MarkersPageState extends State<MarkersPage> {
     }
   }
 
-  Widget _buildMarkerWidget(Offset pos, Color color, [IconData icon = Icons.location_on]) {
+  Widget _buildMarkerWidget(Offset pos, Color color,
+      [IconData icon = Icons.location_on]) {
     return Positioned(
       left: pos.dx - 24,
       top: pos.dy - 24,
@@ -107,12 +108,15 @@ class MarkersPageState extends State<MarkersPage> {
 
           final homeLocation = transformer.toOffset(const LatLng(35.68, 51.42));
 
-          final homeMarkerWidget = _buildMarkerWidget(homeLocation, Colors.black, Icons.home);
+          final homeMarkerWidget =
+              _buildMarkerWidget(homeLocation, Colors.black, Icons.home);
 
-          final centerLocation = Offset(transformer.constraints.biggest.width / 2,
+          final centerLocation = Offset(
+              transformer.constraints.biggest.width / 2,
               transformer.constraints.biggest.height / 2);
 
-          final centerMarkerWidget = _buildMarkerWidget(centerLocation, Colors.purple);
+          final centerMarkerWidget =
+              _buildMarkerWidget(centerLocation, Colors.purple);
 
           return GestureDetector(
             behavior: HitTestBehavior.opaque,

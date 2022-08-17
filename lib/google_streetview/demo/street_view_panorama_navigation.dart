@@ -9,15 +9,18 @@ class StreetViewPanoramaNavigationDemo extends StatefulWidget {
   const StreetViewPanoramaNavigationDemo({Key? key}) : super(key: key);
 
   @override
-  _StreetViewPanoramaNavigationDemoState createState() => _StreetViewPanoramaNavigationDemoState();
+  _StreetViewPanoramaNavigationDemoState createState() =>
+      _StreetViewPanoramaNavigationDemoState();
 }
 
-class _StreetViewPanoramaNavigationDemoState extends State<StreetViewPanoramaNavigationDemo> {
+class _StreetViewPanoramaNavigationDemoState
+    extends State<StreetViewPanoramaNavigationDemo> {
   StreetViewController? _controller;
   var animateFraction = 0.3;
   final int animateMaxDuration = 2000;
 
-  int get animateDuration => max((animateFraction * animateMaxDuration), 1).toInt();
+  int get animateDuration =>
+      max((animateFraction * animateMaxDuration), 1).toInt();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,8 @@ class _StreetViewPanoramaNavigationDemoState extends State<StreetViewPanoramaNav
                   });
                 },
               ),
-              if (_controller != null) PointerInterceptor(child: _controlPanel())
+              if (_controller != null)
+                PointerInterceptor(child: _controlPanel())
             ],
           ),
         ),
@@ -92,7 +96,9 @@ class _StreetViewPanoramaNavigationDemoState extends State<StreetViewPanoramaNav
                                 final double? zoom = camera.zoom;
                                 _controller!.animateTo(
                                     camera: StreetViewPanoramaCamera(
-                                        bearing: bearing, tilt: tilt, zoom: zoom),
+                                        bearing: bearing,
+                                        tilt: tilt,
+                                        zoom: zoom),
                                     duration: animateDuration);
                               });
                             }),
@@ -106,7 +112,9 @@ class _StreetViewPanoramaNavigationDemoState extends State<StreetViewPanoramaNav
                                 final double? zoom = camera.zoom;
                                 _controller!.animateTo(
                                     camera: StreetViewPanoramaCamera(
-                                        bearing: bearing, tilt: tilt, zoom: zoom),
+                                        bearing: bearing,
+                                        tilt: tilt,
+                                        zoom: zoom),
                                     duration: animateDuration);
                               });
                             })

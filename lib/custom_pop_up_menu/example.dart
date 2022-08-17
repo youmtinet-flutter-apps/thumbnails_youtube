@@ -91,6 +91,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Icon(Icons.add_circle_outline, color: Colors.white),
               padding: const EdgeInsets.all(20),
             ),
+            enablePassEvent: true,
+            pressType: PressType.singleClick,
+            verticalMargin: -10,
+            controller: _controller,
             menuBuilder: () => ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Container(
@@ -98,52 +102,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: IntrinsicWidth(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: menuItems
-                        .map(
-                          (item) => GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              if (kDebugMode) {
-                                print("onTap");
-                              }
-                              _controller.hideMenu();
-                            },
-                            child: Container(
-                              height: 40,
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(
-                                    item.icon,
-                                    size: 15,
-                                    color: Colors.white,
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      margin: const EdgeInsets.only(left: 10),
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
-                                      child: Text(
-                                        item.title,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
+                    children: getMenuItems(),
                   ),
                 ),
               ),
             ),
-            pressType: PressType.singleClick,
-            verticalMargin: -10,
-            controller: _controller,
           ),
         ],
       ),
@@ -167,6 +130,48 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
+  }
+
+  List<GestureDetector> getMenuItems() {
+    return menuItems
+        .map(
+          (item) => GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              if (kDebugMode) {
+                print("onTap");
+              }
+              _controller.hideMenu();
+            },
+            child: Container(
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    item.icon,
+                    size: 15,
+                    color: Colors.white,
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        item.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+        .toList();
   }
 }
 
@@ -212,7 +217,8 @@ class MessageContent extends StatelessWidget {
                         margin: const EdgeInsets.only(top: 2),
                         child: Text(
                           item.title,
-                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12),
                         ),
                       ),
                     ],

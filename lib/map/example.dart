@@ -55,7 +55,8 @@ class _HomePageState extends State<HomePage> {
           ),
           ListTile(
             title: const Text('Markers'),
-            subtitle: const Text('Drop multiple fixed and centered markers on the map.'),
+            subtitle: const Text(
+                'Drop multiple fixed and centered markers on the map.'),
             trailing: const Icon(Icons.chevron_right_sharp),
             onTap: () => _push(const MarkersPage()),
           ),
@@ -79,7 +80,8 @@ class _HomePageState extends State<HomePage> {
           ),
           ListTile(
             title: const Text('Custom Projection'),
-            subtitle: const Text('How we convert LatLng to XY. Useful for games.'),
+            subtitle:
+                const Text('How we convert LatLng to XY. Useful for games.'),
             trailing: const Icon(Icons.chevron_right_sharp),
             onTap: _showNotImplemented,
             enabled: false,
@@ -96,7 +98,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showNotImplemented() {
-    const snackBar = SnackBar(content: Text('This demo is not implemented yet.'));
+    const snackBar =
+        SnackBar(content: Text('This demo is not implemented yet.'));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 

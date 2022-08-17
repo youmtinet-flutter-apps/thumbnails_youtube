@@ -370,7 +370,9 @@ List<Mesh> normalizeMesh(List<Mesh> meshes) {
 Future<Image?> packingTexture(List<Mesh> meshes) async {
   // generate a key for a mesh.
   String getMeshKey(Mesh mesh) {
-    if (mesh.texture != null) return mesh.texturePath ?? '' + mesh.textureRect.toString();
+    if (mesh.texture != null) {
+      return mesh.texturePath ?? '' + mesh.textureRect.toString();
+    }
     return toColor(mesh.material.diffuse.bgr).toString();
   }
 
@@ -430,8 +432,12 @@ Future<Image?> packingTexture(List<Mesh> meshes) async {
   int textureHeight = 0;
   for (Mesh mesh in meshes) {
     final Rect box = mesh.textureRect;
-    if (textureWidth < box.left + box.width) textureWidth = (box.left + box.width).ceil();
-    if (textureHeight < box.top + box.height) textureHeight = (box.top + box.height).ceil();
+    if (textureWidth < box.left + box.width) {
+      textureWidth = (box.left + box.width).ceil();
+    }
+    if (textureHeight < box.top + box.height) {
+      textureHeight = (box.top + box.height).ceil();
+    }
   }
 
   // get the pixels from mesh.texture

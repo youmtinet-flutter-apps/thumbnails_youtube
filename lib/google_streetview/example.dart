@@ -35,7 +35,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(debugShowCheckedModeBanner: false, home: HomePage());
+    return const MaterialApp(
+        debugShowCheckedModeBanner: false, home: HomePage());
   }
 }
 
@@ -58,7 +59,8 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const StreetViewPanoramaInitDemo()),
+                  MaterialPageRoute(
+                      builder: (context) => const StreetViewPanoramaInitDemo()),
                 );
               },
             ),
@@ -73,7 +75,8 @@ class HomePage extends StatelessWidget {
                 children: [
                   const Text.rich(
                     TextSpan(children: [
-                      TextSpan(text: "An example of street view event handling."),
+                      TextSpan(
+                          text: "An example of street view event handling."),
                       TextSpan(
                           text: " Include invalid panorama event.",
                           style: TextStyle(fontWeight: FontWeight.bold)),
@@ -83,7 +86,8 @@ class HomePage extends StatelessWidget {
                     height: 8,
                   ),
                   DefaultTextStyle(
-                      style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          color: Colors.redAccent, fontWeight: FontWeight.bold),
                       child: Row(
                         children: const [
                           Expanded(
@@ -100,7 +104,9 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const StreetViewPanoramaEventsDemo()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const StreetViewPanoramaEventsDemo()),
                 );
               },
             ),
@@ -110,11 +116,14 @@ class HomePage extends StatelessWidget {
             ),
             ListTile(
               title: const Text("Street View Panorama navigation"),
-              subtitle: const Text("An example to show how to use navigation related function."),
+              subtitle: const Text(
+                  "An example to show how to use navigation related function."),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const StreetViewPanoramaNavigationDemo()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const StreetViewPanoramaNavigationDemo()),
                 );
               },
             ),
@@ -128,7 +137,9 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const StreetViewPanoramaOptionsDemo()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const StreetViewPanoramaOptionsDemo()),
                 );
               },
             ),

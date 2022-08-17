@@ -7,11 +7,13 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/providers.dart';
 import 'package:thumbnail_youtube/utils.dart';
-
+import 'package:flutter_launcher_icons/android.dart' as android;
 import 'date_range_picker/example.dart';
 import 'themes.dart';
 
-void main() => runApp(const ThumbnailsApp());
+void main() {
+  runApp(const ThumbnailsApp());
+}
 
 class ThumbnailsApp extends StatelessWidget {
   const ThumbnailsApp({Key? key}) : super(key: key);
@@ -57,6 +59,9 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
 //
   @override
   Widget build(BuildContext context) {
+    // android.createAdaptiveBackgrounds({}, '../assets/play.png', null);
+    var minSdk = android.adaptiveForegroundIcons.map((e) => e.directoryName);
+    consoleLog(minSdk, color: 32);
     final isDarkMode = Provider.of<RThemeModeProvider>(context, listen: true);
     return ThemeSwitchingArea(
       child: Builder(builder: (context) {
@@ -83,13 +88,15 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
             ],
           ),
           body: SingleChildScrollView(
-            child: Column(
-              children: [
-                inputField(),
-                if (videoId.isNotEmpty) imageBody(),
-                if (resList.isNotEmpty) resolutionsChoix(),
-                const ExampleDateRangePicker(),
-              ],
+            child: InkWell(
+              child: Column(
+                children: [
+                  inputField(),
+                  if (videoId.isNotEmpty) imageBody(),
+                  if (resList.isNotEmpty) resolutionsChoix(),
+                  const ExampleDateRangePicker(),
+                ],
+              ),
             ),
           ),
           floatingActionButton: fab(),

@@ -11,7 +11,8 @@ class StreetViewPanoramaInitDemo extends StatefulWidget {
   State<StatefulWidget> createState() => _StreetViewPanoramaInitDemoState();
 }
 
-class _StreetViewPanoramaInitDemoState extends State<StreetViewPanoramaInitDemo> {
+class _StreetViewPanoramaInitDemoState
+    extends State<StreetViewPanoramaInitDemo> {
   Uint8List? _bluePoint;
 
   @override

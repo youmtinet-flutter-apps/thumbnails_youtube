@@ -2,7 +2,7 @@
     package="com.ymrabtiapps.thumbnails.thumbnail_youtube">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="thumbnail_youtube"
+        android:label="Video Thumbnails"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"

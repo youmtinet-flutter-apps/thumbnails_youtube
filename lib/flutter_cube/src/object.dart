@@ -114,7 +114,9 @@ class Object {
   /// Find a child matching the name
   Object? find(Pattern name) {
     for (Object child in children) {
-      if (child.name != null && (name as RegExp).hasMatch(child.name!)) return child;
+      if (child.name != null && (name as RegExp).hasMatch(child.name!)) {
+        return child;
+      }
       final Object? result = child.find(name);
       if (result != null) return result;
     }

@@ -3,6 +3,31 @@ import 'package:flutter/material.dart';
 
 import 'date_range_picker.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'CustomPopupMenu',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const Scaffold(
+        body: Center(
+          child: ExampleDateRangePicker(),
+        ),
+      ),
+    );
+  }
+}
+
 class ExampleDateRangePicker extends StatefulWidget {
   const ExampleDateRangePicker({Key? key}) : super(key: key);
 
@@ -58,13 +83,15 @@ class _ExampleDateRangePickerState extends State<ExampleDateRangePicker> {
       child: Builder(
         builder: (context) => ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(212, 20, 15, 1.0)),
+            backgroundColor: MaterialStateProperty.all(
+                const Color.fromRGBO(212, 20, 15, 1.0)),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             )),
           ),
           child: const Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
+            padding: EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
             child: Text(
               "Date Picker",
               style: TextStyle(

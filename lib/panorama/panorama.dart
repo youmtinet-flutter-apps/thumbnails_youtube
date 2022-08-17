@@ -418,7 +418,9 @@ class _PanoramaState extends State<Panorama> with SingleTickerProviderStateMixin
 
     _controller = AnimationController(duration: const Duration(milliseconds: 60000), vsync: this)
       ..addListener(_updateView);
-    if (widget.sensorControl != SensorControl.none || widget.animSpeed != 0) _controller.repeat();
+    if (widget.sensorControl != SensorControl.none || widget.animSpeed != 0) {
+      _controller.repeat();
+    }
   }
 
   @override

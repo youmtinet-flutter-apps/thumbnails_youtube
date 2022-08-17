@@ -83,13 +83,17 @@ class PopupTip extends StatelessWidget {
             ),
             Positioned(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: padding, vertical: 10),
+                padding:
+                    EdgeInsets.symmetric(horizontal: padding, vertical: 10),
                 decoration: BoxDecoration(
                   color: bgColor,
                   borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                   boxShadow: [
                     if (isShadow)
-                      BoxShadow(offset: const Offset(.5, 3), color: shadowColor, blurRadius: 3)
+                      BoxShadow(
+                          offset: const Offset(.5, 3),
+                          color: shadowColor,
+                          blurRadius: 3)
                   ],
                 ),
                 child: Text(text,
@@ -111,7 +115,9 @@ class PopupTip extends StatelessWidget {
   // 获取字体Size
   Size _getTextSize(String text, TextStyle style) {
     final TextPainter textPainter = TextPainter(
-        text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
       ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
   }

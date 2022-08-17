@@ -15,5 +15,6 @@ class ViewportPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant ViewportPainter oldDelegate) => oldDelegate.viewport != viewport;
+  bool shouldRepaint(covariant ViewportPainter oldDelegate) =>
+      oldDelegate.viewport != viewport;
 }

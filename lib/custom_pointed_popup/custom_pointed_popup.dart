@@ -112,7 +112,8 @@ class CustomPointedPopup {
     onClickItemWidget = onClickWidget;
     dismissCallback = onDismiss;
     stateChanged = stateChangeed;
-    _widthFractionWithRespectToDeviceWidth = widthFractionWithRespectToDeviceWidth ?? 3;
+    _widthFractionWithRespectToDeviceWidth =
+        widthFractionWithRespectToDeviceWidth ?? 3;
     _backgroundColor = backgroundColor ?? Colors.red;
   }
 
@@ -145,7 +146,8 @@ class CustomPointedPopup {
   static Rect getWidgetGlobalRect(GlobalKey key) {
     RenderBox renderBox = key.currentContext!.findRenderObject()! as RenderBox;
     var offset = renderBox.localToGlobal(Offset.zero);
-    return Rect.fromLTWH(offset.dx, offset.dy, renderBox.size.width, renderBox.size.height);
+    return Rect.fromLTWH(
+        offset.dx, offset.dy, renderBox.size.width, renderBox.size.height);
   }
 
   void _calculatePosition(BuildContext context) {
@@ -218,8 +220,9 @@ class CustomPointedPopup {
                 painter: TrianglePainter(
                   isDown: _isTriangleDown,
                   color: _backgroundColor,
-                  triangleDirection:
-                      triangleDirection != null ? triangleDirection! : TriangleDirection.straight,
+                  triangleDirection: triangleDirection != null
+                      ? triangleDirection!
+                      : TriangleDirection.straight,
                 ),
               ),
             ),
@@ -231,23 +234,29 @@ class CustomPointedPopup {
                 elevation: popupElevation ?? 0,
                 margin: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
-                  borderRadius: popupBorderRadius ?? BorderRadius.circular(10.0),
+                  borderRadius:
+                      popupBorderRadius ?? BorderRadius.circular(10.0),
                 ),
                 child: SizedBox(
                   width: popupWidth(),
-                  height: displayBelowWidget ? customHeight : (customHeight ?? popupHeight()),
+                  height: displayBelowWidget
+                      ? customHeight
+                      : (customHeight ?? popupHeight()),
                   child: Column(
                     children: <Widget>[
                       ClipRRect(
-                        borderRadius: popupBorderRadius ?? BorderRadius.circular(10.0),
+                        borderRadius:
+                            popupBorderRadius ?? BorderRadius.circular(10.0),
                         child: Container(
                           width: popupWidth(),
-                          height:
-                              displayBelowWidget ? customHeight : (customHeight ?? popupHeight()),
+                          height: displayBelowWidget
+                              ? customHeight
+                              : (customHeight ?? popupHeight()),
                           padding: const EdgeInsets.all(5.0),
                           decoration: BoxDecoration(
                             color: _backgroundColor,
-                            borderRadius: popupBorderRadius ?? BorderRadius.circular(10.0),
+                            borderRadius: popupBorderRadius ??
+                                BorderRadius.circular(10.0),
                           ),
                           child: GestureDetector(
                             onTap: () {

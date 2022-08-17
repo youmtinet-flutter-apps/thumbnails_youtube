@@ -44,8 +44,9 @@ class ShowMoreTextPopup {
     _popupHeight = height ?? 200;
     _popupWidth = width ?? 200;
     _text = text ?? '';
-    _textStyle =
-        textStyle ?? const TextStyle(fontWeight: FontWeight.normal, color: Color(0xFF000000));
+    _textStyle = textStyle ??
+        const TextStyle(
+            fontWeight: FontWeight.normal, color: Color(0xFF000000));
     _backgroundColor = backgroundColor ?? const Color(0xFFFFA500);
     _borderRadius = borderRadius ?? BorderRadius.circular(10.0);
     _padding = padding ?? const EdgeInsets.all(4.0);
@@ -81,7 +82,8 @@ class ShowMoreTextPopup {
   Rect _getWidgetGlobalRect(GlobalKey key) {
     RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
     var offset = renderBox.localToGlobal(Offset.zero);
-    return Rect.fromLTWH(offset.dx, offset.dy, renderBox.size.width, renderBox.size.height);
+    return Rect.fromLTWH(
+        offset.dx, offset.dy, renderBox.size.width, renderBox.size.height);
   }
 
   /// Returns calculated widget offset using [context]
@@ -124,10 +126,13 @@ class ShowMoreTextPopup {
               // triangle arrow
               Positioned(
                 left: _showRect.left + _showRect.width / 2.0 - 7.5,
-                top: _isDownArrow ? offset.dy + _popupHeight : offset.dy - arrowHeight,
+                top: _isDownArrow
+                    ? offset.dy + _popupHeight
+                    : offset.dy - arrowHeight,
                 child: CustomPaint(
                   size: Size(15.0, arrowHeight),
-                  painter: TrianglePainter(isDownArrow: _isDownArrow, color: _backgroundColor),
+                  painter: TrianglePainter(
+                      isDownArrow: _isDownArrow, color: _backgroundColor),
                 ),
               ),
               // popup content

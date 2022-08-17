@@ -8,16 +8,19 @@ class StreetViewPanoramaEventsDemo extends StatefulWidget {
   const StreetViewPanoramaEventsDemo({Key? key}) : super(key: key);
 
   @override
-  _StreetViewPanoramaEventsDemoState createState() => _StreetViewPanoramaEventsDemoState();
+  _StreetViewPanoramaEventsDemoState createState() =>
+      _StreetViewPanoramaEventsDemoState();
 }
 
-class _StreetViewPanoramaEventsDemoState extends State<StreetViewPanoramaEventsDemo> {
+class _StreetViewPanoramaEventsDemoState
+    extends State<StreetViewPanoramaEventsDemo> {
   StreetViewController? _controller;
 
   var _onPanoramaClickListenerCnt = 0;
   var _onPanoramaLongClickListenerCnt = 0;
 
-  var _onCameraChangeListenerInfo = "Camera Change, bearing: N/A, tilt: N/A, zoom: N/A";
+  var _onCameraChangeListenerInfo =
+      "Camera Change, bearing: N/A, tilt: N/A, zoom: N/A";
   var _onPanoramaChangeListenerInfo = "Pano Change: position: N/A, PanoId:N/A";
   var _onPanoramaClickListenerInfo = "onClick cnt:0";
   var _onPanoramaLongClickListenerInfo = "onLongClick cnt:0";

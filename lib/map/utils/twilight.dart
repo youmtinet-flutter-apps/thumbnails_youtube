@@ -33,5 +33,6 @@ class TwilightPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant TwilightPainter oldDelegate) => oldDelegate.border != border;
+  bool shouldRepaint(covariant TwilightPainter oldDelegate) =>
+      oldDelegate.border != border;
 }

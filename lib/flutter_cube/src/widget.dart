@@ -31,7 +31,8 @@ class _CubeState extends State<Cube> {
   }
 
   void _handleScaleUpdate(ScaleUpdateDetails details) {
-    scene.camera.trackBall(toVector2(_lastFocalPoint), toVector2(details.localFocalPoint), 1.5);
+    scene.camera.trackBall(
+        toVector2(_lastFocalPoint), toVector2(details.localFocalPoint), 1.5);
     _lastFocalPoint = details.localFocalPoint;
     if (_lastZoom == null) {
       _lastZoom = scene.camera.zoom;
@@ -56,7 +57,8 @@ class _CubeState extends State<Cube> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       scene.camera.viewportWidth = constraints.maxWidth;
       scene.camera.viewportHeight = constraints.maxHeight;
       final customPaint = CustomPaint(
