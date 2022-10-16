@@ -1,1 +1,1 @@
-git add . && git commit -m "shit version" && git push -u origin main
+git add . && git commit -m "version historic , init firebase firestore" && git push -u origin main

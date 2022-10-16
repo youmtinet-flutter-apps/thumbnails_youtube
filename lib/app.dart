@@ -1,18 +1,26 @@
 import 'dart:async';
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
+import 'package:thumbnail_youtube/utils/models.dart';
+import 'package:thumbnail_youtube/utils/constants.dart';
 import 'package:thumbnail_youtube/themes/colors.dart';
-import 'package:thumbnail_youtube/themes/dark_theme.dart';
-import 'package:thumbnail_youtube/providers.dart';
-import 'package:thumbnail_youtube/utils.dart';
+import 'package:thumbnail_youtube/utils/utils.dart';
+import 'package:thumbnail_youtube/components/widgets.dart';
+
+import 'components/historic.dart';
+
 // import 'package:wakelock/wakelock.dart';
-import 'themes/light_theme.dart';
+extension IntX on int {
+  double get toRadian => this * pi / 180;
+}
+
+extension DoubleX on int {
+  double get toRad => this * pi / 180;
+}
 
 class ThmbHomePage extends StatefulWidget {
   const ThmbHomePage({Key? key}) : super(key: key);
@@ -22,142 +30,130 @@ class ThmbHomePage extends StatefulWidget {
 }
 
 class _ThmbHomePageState extends State<ThmbHomePage> {
+  // ResolutionList(extensionUrl: 'maxresdefault.jpg', view: '1280 x 720'),
   final TextEditingController textEditingController = TextEditingController();
-  List<String> resList = [
+  List<String> availableChoices = [
     '320 x 180',
     '480 x 360',
     '640 x 480',
-    // ResolutionList(extensionUrl: 'maxresdefault.jpg', view: '1280 x 720'),
     '1280 x 720',
   ];
+  bool showFullscreenMonitor = true;
   String videoId = "";
   late String _resolution;
+  final List<String> resolutions = [
+    "mqdefault",
+    "hqdefault",
+    "sddefault",
+    "maxresdefault",
+  ];
 //
   @override
   void initState() {
     super.initState();
-    _resolution = resList[0];
+    _resolution = availableChoices[0];
   }
 
   @override
   Widget build(BuildContext context) {
-    /* var minSdk = android.adaptiveForegroundIcons.map((e) => e.directoryName);
-    */
-    final isDarkMode = Provider.of<RThemeModeProvider>(context, listen: true).isDarkMode;
-    return ThemeSwitchingArea(
-      child: Builder(builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Thumbnails YouTube'),
-            actions: [
-              ThemeSwitcher(
-                builder: (bcontext) => IconButton(
-                  icon: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: isDarkMode
-                        ? const Icon(CupertinoIcons.moon_stars)
-                        : const Icon(CupertinoIcons.sun_haze),
-                    transitionBuilder: (child, animation) {
-                      return ScaleTransition(
-                        scale: animation,
-                        child: RotationTransition(
-                          turns: animation,
-                          child: child,
-                        ),
-                      );
-                    },
-                  ),
-                  onPressed: () async {
-                    final theme = isDarkMode ? lightTheme : darkTheme;
-
-                    final isDarkModeChange = Provider.of<RThemeModeProvider>(
-                      context,
-                      listen: false,
-                    );
-                    await savePreferences(
-                      isDarkMode ? Brightness.light : Brightness.dark,
-                    );
-                    isDarkModeChange.toggleThemeMode();
-                    final switcher = ThemeSwitcher.of(bcontext);
-                    switcher.changeTheme(theme: theme, isReversed: isDarkMode);
-                  },
-                ),
-              ),
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: Material(
-              child: InkWell(
-                child: Column(
-                  children: [
-                    inputField(),
-                    if (videoId.isNotEmpty) imageBody(),
-                    if (resList.isNotEmpty) resolutionsChoix(),
-                    GestureDetector(
-                      onTap: _saveNetworkImage,
-                      child: Container(
-                        width: Get.width * 0.75,
-                        height: 60,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            Text(
-                              'Download',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
-                              ),
-                            ),
-                            Icon(Icons.download),
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(28),
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              primaryColor.withBlue(primaryColor.blue + 50),
-                              primaryColor,
-                            ],
-                          ),
-                          color: primaryColor,
-                        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Thumbnails YouTube'),
+        actions: const [CuistomThemeSwitcher()],
+      ),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            inputField(),
+            if (videoId.isNotEmpty) imageBody(),
+            if (availableChoices.isNotEmpty) resolutionsChoix(),
+            GestureDetector(
+              onTap: () => saveNetworkImage(_resolution, videoId),
+              child: Container(
+                width: Get.width * 0.75,
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [
+                    Text(
+                      'Download',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 25,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    TextButton(
-                      onPressed: () {},
-                      child: Container(
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(Icons.history_toggle_off),
-                        ),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey,
-                        ),
-                      ),
+                    Icon(
+                      Icons.download,
+                      color: Colors.white,
                     ),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        crossAxisSpacing: 5.0,
-                        mainAxisSpacing: 5.0,
-                      ),
-                      itemBuilder: (context, index) {
-                        return const SizedBox();
-                      },
-                    )
                   ],
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(28),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      primaryColor.withBlue(primaryColor.blue + 50),
+                      primaryColor,
+                    ],
+                  ),
+                  color: primaryColor,
                 ),
               ),
             ),
-          ),
-          floatingActionButton: fab(),
-        );
-      }),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Get.to(() => const HistoricPage());
+              },
+              child: Container(
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.history_toggle_off),
+                ),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            FutureBuilder<List<String>>(
+              future: getHistoric(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<String> historic = snapshot.data ?? [];
+                  return GridView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: historic.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 5.0,
+                      mainAxisSpacing: .0,
+                    ),
+                    itemBuilder: (context, index) {
+                      var vid = historic[historic.length - (index + 1)];
+                      return Image(
+                        image: NetworkImage(
+                          "https://i.ytimg.com/vi/$vid/${RsolutionEnum.mqdefault.name}.jpg",
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return const CircularProgressIndicator(
+                    backgroundColor: Color(0xFF7A1C00),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: fab(),
     );
   }
 
@@ -194,8 +190,8 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
         controller: textEditingController,
         decoration: InputDecoration(
           suffixIcon: GestureDetector(
-            onTap: () {
-              consoleLog(videoId);
+            onTap: () async {
+              await getImageFromUrl(textEditingController.text);
             },
             child: Container(
               margin: const EdgeInsets.only(right: 4.0),
@@ -220,6 +216,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
             ),
           ),
           prefixText: "https://",
+          helperText: "URI de video",
           hintText: 'Video url',
         ),
       ),
@@ -228,23 +225,65 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
 
   Widget imageBody() {
     var res = resFrmReverse(_resolution).name;
-    consoleLog(res);
     var url = "https://i.ytimg.com/vi/$videoId/$res.jpg";
-    return Center(
-      child: InteractiveViewer(
-        child: Image(
-          image: NetworkImage(url),
-          loadingBuilder: (BuildContext bcntxt, Widget widget, ImageChunkEvent? i) {
-            return widget;
-          },
-          errorBuilder: (BuildContext btext, Object object, StackTrace? stackTrace) {
-            return const ErrorWidget();
-          },
-          frameBuilder: (BuildContext buildContext, Widget widget, int? op, bool rebuild) {
-            return widget;
-          },
+    return Stack(
+      children: [
+        // SizedBox(height: 300, width: Get.width),
+        Material(
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                showFullscreenMonitor = !showFullscreenMonitor;
+              });
+            },
+            child: Align(
+              alignment: Alignment.center,
+              child: MainImageview(url: url),
+            ),
+          ),
         ),
-      ),
+        AnimatedSwitcher(
+          duration: const Duration(seconds: 1),
+          child: showFullscreenMonitor
+              ? Material(
+                  child: InkWell(
+                    onTap: () async {
+                      await Get.generalDialog(
+                        // transitionDuration: const Duration(seconds: 1),
+                        transitionBuilder: (context, animation, secondaryAnimation, child) {
+                          return SizeTransition(
+                            sizeFactor: animation,
+                            child: child,
+                          );
+                        },
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return Scaffold(
+                            body: SizeTransition(
+                              sizeFactor: animation,
+                              child: Transform.rotate(
+                                angle: 90.toRadian,
+                                child: MainImageview(url: url),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Expanded(child: SizedBox()),
+                          Icon(Icons.fullscreen),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : null,
+        ),
+      ],
     );
   }
 
@@ -263,7 +302,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
         borderRadius: BorderRadius.circular(20),
         icon: const Icon(Icons.downloading_sharp),
         alignment: Alignment.center,
-        items: resList.map((e) {
+        items: availableChoices.map((e) {
           return DropdownMenuItem<String>(
             value: e,
             child: Text(e),
@@ -283,87 +322,56 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
     if (data != null) {
       var text = data.text;
       if (text != null) {
-        var convertUrlTo = convertUrlToId(text);
-        setState(() {
-          if (convertUrlTo != null) {
-            videoId = convertUrlTo;
-          }
-        });
+        await getImageFromUrl(text);
+      }
+    }
+  }
+
+  Future<void> getImageFromUrl(String text) async {
+    var convertUrlTo = convertUrlToId(text);
+    if (convertUrlTo != null) {
+      var resulutionsStatuses = await Future.wait(
+        resolutions.map((e) => resolutionStatus(e, convertUrlTo)),
+      );
+      var available = resulutionsStatuses.where((e) => e.statusCode == 200).toList();
+      if (available.isNotEmpty) {
+        setState(() => videoId = convertUrlTo);
         textEditingController.text = "youtube.com/watch?v=$videoId";
-        List<String> resolutions = [
-          "mqdefault",
-          "hqdefault",
-          "sddefault",
-          "maxresdefault",
-        ];
-        List<ResStatusCode> res2 = await Future.wait(resolutions.map((e) => boolRes(e)));
-        var list = res2.where((element) => element.statusCode == 200).toList();
-        setState(() {
-          resList = list.map((e) => resFrmEnum(e.resoluton)).toList();
-        });
-        consoleLog(list, color: 32);
+        setState(() => availableChoices = available.map((e) => resFrmEnum(e.resoluton)).toList());
+        await addToHistoric(videoId);
+        await firestoreStatistics();
+      } else {
+        setState(() => videoId = '');
+        textEditingController.text = '';
+        setState(() => availableChoices =
+            resolutions.map((e) => resFrmString(e)).map((e) => resFrmEnum(e)).toList());
       }
+    } else {
+      Get.showSnackbar(const GetSnackBar(message: 'URI non valide'));
     }
   }
 
-  void _saveNetworkImage() async {
-    var res = resFrmReverse(_resolution).name;
-    String path = "https://i.ytimg.com/vi/$videoId/$res.jpg";
-    var afterSave = await GallerySaver.saveImage(path, toDcim: false, albumName: 'VideoThumnails');
-    if (afterSave != null) {
-      if (afterSave) {
-        Get.showSnackbar(
-          GetSnackBar(
-            messageText: Row(
-              children: [
-                const Expanded(
-                  child: Text("Image downloaded successfully!"),
-                ),
-                Container(
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.download_done),
-                  ),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: primaryColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+  Future<void> firestoreStatistics() async {
+    final result =
+        await firebaseFirestore.collection('statistics').where("videoId", isEqualTo: videoId).get();
+    if (result.docs.isNotEmpty) {
+      for (var e in result.docs) {
+        consoleLog(e.data(), color: 34);
       }
     }
-  }
-
-  Future<ResStatusCode> boolRes(resolution) async {
-    var url = Uri.https('i.ytimg.com', '/vi/$videoId/$resolution.jpg');
-    var response = await http.get(url);
-    consoleLog('${response.statusCode}', color: 35);
-    return ResStatusCode(statusCode: response.statusCode, resoluton: resFrmString(resolution));
+    final collection = firebaseFirestore.collection('statistics');
+    collection.add({
+      "lastuse": Timestamp((DateTime.now().millisecondsSinceEpoch / 1000).floor(), 0),
+      "videoId": videoId,
+      "downloads": 0,
+      "views": 1,
+      "likes": 0,
+    });
   }
 }
 
-class ErrorWidget extends StatelessWidget {
-  const ErrorWidget({
-    Key? key,
-    this.message,
-  }) : super(key: key);
-  final String? message;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(50),
-      child: Column(
-        children: [
-          const Icon(
-            Icons.error,
-            color: Colors.red,
-          ),
-          if (message != null) Text(message ?? '')
-        ],
-      ),
-    );
-  }
+Future<ResStatusCode> resolutionStatus(resolution, String videoId) async {
+  var url = Uri.https('i.ytimg.com', '/vi/$videoId/$resolution.jpg');
+  var response = await http.get(url);
+  return ResStatusCode(statusCode: response.statusCode, resoluton: resFrmString(resolution));
 }
