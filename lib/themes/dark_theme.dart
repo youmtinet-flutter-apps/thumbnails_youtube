@@ -4,9 +4,11 @@ import 'package:thumbnail_youtube/themes/colors.dart';
 ThemeData darkTheme = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: Colors.grey.shade900,
   primaryColorDark: primaryColor,
-  colorScheme: const ColorScheme.dark(primary: primaryColor),
+  colorScheme: const ColorScheme.dark(
+    primary: primaryColor,
+    error: Color(0xFF85120A),
+  ),
   brightness: Brightness.dark,
-  errorColor: Colors.red,
   dialogBackgroundColor: Colors.transparent,
   appBarTheme: const AppBarTheme(
     //color: Colo rs.black,
