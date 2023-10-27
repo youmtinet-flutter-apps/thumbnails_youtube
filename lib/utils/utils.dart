@@ -1,3 +1,4 @@
+export 'cloud_messaging.dart';
 export 'constants.dart';
 export 'firebase_methods.dart';
 export 'firebase_options.dart';

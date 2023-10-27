@@ -15,13 +15,11 @@ class ThmbHomePage extends StatefulWidget {
 class _ThmbHomePageState extends State<ThmbHomePage> {
   bool showFullscreenMonitor = true;
 
-  late RsolutionEnum _resolution;
   final GlobalKey _globalKey = GlobalKey();
   //
   @override
   void initState() {
     super.initState();
-    _resolution = RsolutionEnum.mqdefault;
   }
 
   @override
@@ -49,8 +47,6 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
             ),
             if (videoId.isNotEmpty)
               MainImageView(
-                resolution: _resolution,
-                videoId: videoId,
                 showFullscreenMonitor: showFullscreenMonitor,
                 onPressed: () {
                   setState(() {
@@ -58,20 +54,18 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
                   });
                 },
               ),
-            if (availableChoices.isNotEmpty)
-              ResolutionChoiceWidget(
-                resolution: _resolution,
-                availableChoices: availableChoices,
-                onChanged: (RsolutionEnum? value) {
-                  setState(() {
-                    _resolution = value ?? _resolution;
-                  });
-                },
-              ),
-            DownloadButton(resolution: _resolution, videoId: videoId),
-            const SizedBox(height: 20),
+            Row(
+              children: [
+                if (availableChoices.isNotEmpty)
+                  Expanded(
+                    child: ResolutionChoiceWidget(availableChoices: availableChoices),
+                  ),
+                const DownloadButton(),
+                const SizedBox(height: 20),
+              ],
+            ),
             const HistoricIcon(),
-            const HistoricBuilder(),
+            const HistoricBuilder(preview: true),
           ],
         ),
       ),

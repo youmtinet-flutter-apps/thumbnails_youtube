@@ -100,6 +100,14 @@ class VideoThumbnailMetataData {
   }
 }
 
+extension IntX on int {
+  double get toRadian => this * pi / 180;
+}
+
+extension DoubleX on int {
+  double get toRad => this * pi / 180;
+}
+
 extension EnumX on RsolutionEnum {
   String resFrmEnum() {
     switch (this) {
@@ -117,12 +125,19 @@ extension EnumX on RsolutionEnum {
   }
 }
 
-extension IntX on int {
-  double get toRadian => this * pi / 180;
-}
-
-extension DoubleX on int {
-  double get toRad => this * pi / 180;
+RsolutionEnum resFrmStr(String? resolu) {
+  switch (resolu) {
+    case "320 x 180":
+      return RsolutionEnum.mqdefault;
+    case "480 x 360":
+      return RsolutionEnum.hqdefault;
+    case "640 x 480":
+      return RsolutionEnum.sddefault;
+    case "1280 x 720":
+      return RsolutionEnum.maxresdefault;
+    default:
+      return RsolutionEnum.mqdefault;
+  }
 }
 
 enum PreferencesKeys {

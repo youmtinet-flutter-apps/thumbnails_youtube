@@ -6,32 +6,33 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
+import 'package:personal_dropdown/personal_dropdown.dart';
 import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/lib.dart';
 
-class MainImageview extends StatelessWidget {
-  const MainImageview({
+class AppImageViewer extends StatelessWidget {
+  const AppImageViewer({
     Key? key,
-    required this.url,
   }) : super(key: key);
-
-  final String url;
 
   @override
   Widget build(BuildContext context) {
-    return InteractiveViewer(
-      child: Image(
-        image: NetworkImage(url),
-        repeat: ImageRepeat.repeatX,
-        loadingBuilder: (BuildContext bcntxt, Widget widget, ImageChunkEvent? i) {
-          return widget;
-        },
-        errorBuilder: (BuildContext btext, Object object, StackTrace? stackTrace) {
-          return ErrorWidget(object);
-        },
-        frameBuilder: (BuildContext buildContext, Widget widget, int? op, bool rebuild) {
-          return widget;
-        },
+    return Hero(
+      tag: 'CurrentViewer',
+      child: InteractiveViewer(
+        child: Image(
+          image: NetworkImage(context.watch<AppProvider>().thumbnail()),
+          repeat: ImageRepeat.repeatX,
+          loadingBuilder: (BuildContext bcntxt, Widget widget, ImageChunkEvent? i) {
+            return widget;
+          },
+          errorBuilder: (BuildContext btext, Object object, StackTrace? stackTrace) {
+            return ErrorWidget(object);
+          },
+          frameBuilder: (BuildContext buildContext, Widget widget, int? op, bool rebuild) {
+            return widget;
+          },
+        ),
       ),
     );
   }
@@ -164,31 +165,24 @@ class ErreurWidget extends StatelessWidget {
 class MainImageView extends StatelessWidget {
   const MainImageView({
     Key? key,
-    required RsolutionEnum resolution,
-    required this.videoId,
     this.onPressed,
     required this.showFullscreenMonitor,
-  })  : _resolution = resolution,
-        super(key: key);
+  }) : super(key: key);
   final void Function()? onPressed;
-  final RsolutionEnum _resolution;
-  final String videoId;
   final bool showFullscreenMonitor;
 
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      var res = _resolution.name;
-      var url = "https://i.ytimg.com/vi/$videoId/$res.jpg";
       return Stack(
         children: [
           // SizedBox(height: 300, width: Get.width),
           Material(
             child: InkWell(
               onTap: onPressed,
-              child: Align(
+              child: const Align(
                 alignment: Alignment.center,
-                child: MainImageview(url: url),
+                child: AppImageViewer(),
               ),
             ),
           ),
@@ -198,8 +192,11 @@ class MainImageView extends StatelessWidget {
                 ? Material(
                     child: InkWell(
                       onTap: () async {
-                        await Get.generalDialog(
-                          // transitionDuration: const Duration(seconds: 1),
+                        /* await Get.generalDialog(
+                          barrierColor: Colors.white,
+                          barrierDismissible: true,
+                          barrierLabel: 'Close',
+                          transitionDuration: const Duration(seconds: 2),
                           transitionBuilder: (context, animation, secondaryAnimation, child) {
                             return SizeTransition(
                               sizeFactor: animation,
@@ -207,16 +204,40 @@ class MainImageView extends StatelessWidget {
                             );
                           },
                           pageBuilder: (context, animation, secondaryAnimation) {
-                            return Scaffold(
-                              body: SizeTransition(
-                                sizeFactor: animation,
-                                child: Transform.rotate(
-                                  angle: 90.toRadian,
-                                  child: MainImageview(url: url),
+                            return SizeTransition(
+                              sizeFactor: animation,
+                              child: Transform.rotate(
+                                angle: 90.toRadian,
+                                child: Hero(
+                                  tag: 'CurrentViewer',
+                                  child: Image(
+                                    image: NetworkImage(
+                                      context.watch<AppProvider>().thumbnail(maxRes: true),
+                                    ),
+                                  ),
                                 ),
                               ),
                             );
                           },
+                        ); */
+                        Get.to(
+                          () => Scaffold(
+                            appBar: AppBar(),
+                            body: Center(
+                              child: Transform.rotate(
+                                angle: (90).toRadian,
+                                child: Hero(
+                                  tag: 'CurrentViewer',
+                                  child: Image(
+                                    image: NetworkImage(
+                                      context.watch<AppProvider>().thumbnail(maxRes: true),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          duration: const Duration(milliseconds: 400),
                         );
                       },
                       child: const Align(
@@ -254,6 +275,7 @@ class AppInputField extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         controller: textEditingController,
+        textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           suffixIcon: GestureDetector(
             onTap: onPressed,
@@ -261,20 +283,12 @@ class AppInputField extends StatelessWidget {
               margin: const EdgeInsets.only(right: 4.0),
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 5,
-                    blurStyle: BlurStyle.normal,
-                    color: Colors.grey,
-                  ),
-                ],
+                boxShadow: [],
               ),
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.search,
-                  color: Colors.red,
                 ),
               ),
             ),
@@ -304,42 +318,49 @@ class AppFABclipdata extends StatelessWidget {
 }
 
 class ResolutionChoiceWidget extends StatelessWidget {
-  final void Function(RsolutionEnum?)? onChanged;
-
-  const ResolutionChoiceWidget({
+  ResolutionChoiceWidget({
     Key? key,
-    required RsolutionEnum resolution,
-    this.onChanged,
     required this.availableChoices,
-  })  : _resolution = resolution,
-        super(key: key);
+  }) : super(key: key);
 
-  final RsolutionEnum _resolution;
   final List<RsolutionEnum> availableChoices;
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: DropdownButtonFormField<RsolutionEnum>(
-        isExpanded: true,
-        value: _resolution,
-        autofocus: true,
-        elevation: 10,
-        /* selectedItemBuilder: (BuildContext _context) {
-            return [];
-          }, */
-        decoration: const InputDecoration(fillColor: Colors.black),
-        borderRadius: BorderRadius.circular(20),
-        icon: const Icon(Icons.downloading_sharp),
-        alignment: Alignment.center,
-        items: availableChoices.map((e) {
-          return DropdownMenuItem<RsolutionEnum>(
-            value: e,
-            child: Text(e.resFrmEnum()),
+      child: CustomDropdown<String>.search(
+        searchFunction: (e, searchPrompt) => e.contains(searchPrompt),
+        searchableTextItem: (item) => item,
+        hintText: 'Resolution',
+        items: [...availableChoices.map((e) => e.resFrmEnum())],
+        fillColor: Get.theme.colorScheme.background,
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.grey),
+        onItemSelect: (String? value) {
+          context.read<AppProvider>().setResolution(resFrmStr(value));
+        },
+        excludeSelected: true,
+        listItemBuilder: (BuildContext context, String result) {
+          return Text(
+            result,
+            style: context.watch<AppProvider>().resolution.resFrmEnum() == result
+                ? TextStyle(
+                    color: Get.theme.primaryColor,
+                    fontWeight: FontWeight.bold,
+                  )
+                : null,
           );
-        }).toList(),
-        onChanged: onChanged,
+        },
+        selectedStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Get.theme.primaryColor,
+        ),
+        onChanged: (value) {
+          controller.text = value;
+        },
+        controller: controller,
       ),
     );
   }
@@ -348,28 +369,20 @@ class ResolutionChoiceWidget extends StatelessWidget {
 class DownloadButton extends StatelessWidget {
   const DownloadButton({
     Key? key,
-    required RsolutionEnum resolution,
-    required this.videoId,
-  })  : _resolution = resolution,
-        super(key: key);
-
-  final RsolutionEnum _resolution;
-  final String videoId;
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        var res = _resolution.name;
-        String path = "https://i.ytimg.com/vi/$videoId/$res.jpg";
+        String path = context.watch<AppProvider>().thumbnail();
         bool? afterSave = await GallerySaver.saveImage(
           path,
           toDcim: false,
           albumName: PreferencesKeys.videoThumnails.name,
         );
 
-        await firestoreStatistics(Incremente.downloads, videoId, context);
-        context.read<AppProvider>().addDownload(videoId);
+        await context.read<AppProvider>().addDownload(context);
 
         if (afterSave == null) return;
 
@@ -377,25 +390,8 @@ class DownloadButton extends StatelessWidget {
         appSnackbar('Infos', "Image downloaded successfully!");
       },
       child: Container(
-        width: Get.width * 0.75,
         height: 60,
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              'Download',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-            Icon(
-              Icons.download,
-              color: Colors.white,
-            ),
-          ],
-        ),
+        width: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),
           gradient: LinearGradient(
@@ -407,6 +403,10 @@ class DownloadButton extends StatelessWidget {
             ],
           ),
           color: primaryColor,
+        ),
+        child: const Icon(
+          Icons.download,
+          color: Colors.white,
         ),
       ),
     );

@@ -44,18 +44,13 @@ Future<ResStatusCode> resolutionStatus(RsolutionEnum resolution, String videoId)
   return ResStatusCode(statusCode: response.statusCode, resoluton: resolution);
 }
 
-Future<ResStatusCodeVideo> resolutionStatusMetaData(
+Future<ResStatusCodeVideo> resolu(
   RsolutionEnum resolution,
   VideoThumbnailMetataData video,
 ) async {
   var url = Uri.https('i.ytimg.com', '/vi/${video.videoId}/${resolution.name}.jpg');
   var response = await http.get(url);
   return ResStatusCodeVideo(statusCode: response.statusCode, resoluton: resolution, video: video);
-}
-
-Future<ResStatusCodeVideo> resolutionStatusMeta(VideoThumbnailMetataData video) async {
-  ResStatusCodeVideo resulutionsStatuses = await resolutionStatusMetaData(RsolutionEnum.mqdefault, video);
-  return resulutionsStatuses;
 }
 
 Future<void> getImageFromUrl(String text, BuildContext context) async {

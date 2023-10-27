@@ -6,9 +6,19 @@ import 'utils.dart';
 
 class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   late List<VideoThumbnailMetataData> _firebaseHistory;
-  List<VideoThumbnailMetataData> get firebaseHistory => _firebaseHistory;
+  List<VideoThumbnailMetataData> get firebaseHistory => _firebaseHistory
+    ..sort(
+      (a, b) => a.views - b.views,
+    );
   List<RsolutionEnum> _availableChoices = RsolutionEnum.values;
   List<RsolutionEnum> get availableChoices => _availableChoices;
+  RsolutionEnum _resolution = RsolutionEnum.mqdefault;
+  RsolutionEnum get resolution => _resolution;
+
+  void setResolution(RsolutionEnum? value) {
+    _resolution = value ?? _resolution;
+    notifyListeners();
+  }
 
   void setAvailableChoices(List<RsolutionEnum> value) {
     _availableChoices = value;
@@ -17,6 +27,11 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   String _videoId = "";
   String get videoId => _videoId;
+  String thumbnail({String? videoId, bool maxRes = false, bool mainView = true}) {
+    var thum = "https://i.ytimg.com/vi/${videoId ?? _videoId}/${(maxRes ? _availableChoices.last : (mainView ? _resolution : RsolutionEnum.mqdefault)).name}.jpg";
+    return thum;
+  }
+
   final TextEditingController textEditingController = TextEditingController();
 
   void setvideoId(String value) {
@@ -48,19 +63,22 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  Future<void> addLike(VideoThumbnailMetataData value) async {
+  Future<void> addLike(VideoThumbnailMetataData value, BuildContext context) async {
+    await firestoreStatistics(Incremente.likes, value.videoId, context);
     value.likes++;
     notifyListeners();
   }
 
-  void addView(VideoThumbnailMetataData value) {
+  Future<void> addView(VideoThumbnailMetataData value, BuildContext context) async {
+    await firestoreStatistics(Incremente.views, value.videoId, context);
     value.views++;
     notifyListeners();
   }
 
-  void addDownload(String value) {
+  Future<void> addDownload(BuildContext context) async {
+    await firestoreStatistics(Incremente.downloads, _videoId, context);
     for (var histor in firebaseHistory) {
-      if (histor.videoId != value) continue;
+      if (histor.videoId != _videoId) continue;
       histor.downloads++;
       break;
     }
@@ -78,5 +96,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     properties.add(IterableProperty<VideoThumbnailMetataData>('_firebaseHistory', _firebaseHistory));
     properties.add(DiagnosticsProperty<TextEditingController>('textEditingController', textEditingController));
     properties.add(IterableProperty<RsolutionEnum>('_availableChoices', _availableChoices));
+    properties.add(EnumProperty<RsolutionEnum>('_resolution', _resolution));
   }
 }

@@ -9,7 +9,9 @@ import 'package:thumbnail_youtube/lib.dart';
 class HistoricBuilder extends StatelessWidget {
   const HistoricBuilder({
     Key? key,
+    this.preview = false,
   }) : super(key: key);
+  final bool preview;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +19,8 @@ class HistoricBuilder extends StatelessWidget {
     List<VideoThumbnailMetataData> historic = context.watch<AppProvider>().firebaseHistory;
     return GridView.builder(
       physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: historic.length,
+      shrinkWrap: preview,
+      itemCount: preview ? 5 : historic.length,
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 300,
         // crossAxisCount: 3,
@@ -32,10 +34,9 @@ class HistoricBuilder extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: InkWell(
             onTap: () async {
-              await firestoreStatistics(Incremente.views, vid.videoId, context);
               await addToHistoric(vid.videoId);
               context.read<AppProvider>().addFromLocal(vid);
-              context.read<AppProvider>().addView(vid);
+              await context.read<AppProvider>().addView(vid, context);
               context.read<AppProvider>().setvideoId(vid.videoId);
             },
             child: PhysicalModel(
@@ -51,7 +52,7 @@ class HistoricBuilder extends StatelessWidget {
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
                       child: Image(
                         image: NetworkImage(
-                          "https://i.ytimg.com/vi/${vid.videoId}/mqdefault.jpg",
+                          context.watch<AppProvider>().thumbnail(videoId: vid.videoId, mainView: false),
                         ),
                         errorBuilder: (context, error, stackTrace) {
                           return LimitedBox(
@@ -77,34 +78,36 @@ class HistoricBuilder extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         children: [
-                          Icon(vid.isLocal ? Icons.folder : Icons.cloud),
+                          Icon(vid.isLocal ? Icons.folder : Icons.cloud, color: Colors.white),
                           //
                           const Expanded(child: SizedBox()),
                           //
-                          const Icon(CupertinoIcons.cloud_download_fill),
+                          const Icon(CupertinoIcons.cloud_download_fill, color: Colors.white),
                           Text(
                             vid.downloads.toString(),
+                            style: const TextStyle(color: Colors.white),
                           ),
                           const SizedBox(width: 8),
 
                           //
-                          const Icon(Icons.remove_red_eye),
+                          const Icon(Icons.remove_red_eye, color: Colors.white),
                           Text(
                             vid.views.toString(),
+                            style: const TextStyle(color: Colors.white),
                           ),
                           const SizedBox(width: 8),
                           //
                           InkWell(
                             onTap: () async {
-                              await firestoreStatistics(Incremente.likes, vid.videoId, context);
-                              context.read<AppProvider>().addLike(vid);
+                              await context.read<AppProvider>().addLike(vid, context);
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(CupertinoIcons.heart_solid),
+                                const Icon(CupertinoIcons.heart_solid, color: Colors.white),
                                 Text(
                                   vid.likes.toString(),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ],
                             ),
@@ -116,6 +119,7 @@ class HistoricBuilder extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
                         DateFormat.MMMMEEEEd().format(lastuse).toString(),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ],
@@ -138,16 +142,23 @@ class HistoricIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Get.to(() => const HistoricBuilder());
+        Get.to(
+          () => const Scaffold(
+            body: HistoricBuilder(),
+          ),
+        );
       },
       child: Container(
         child: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Icon(Icons.history_toggle_off),
+          padding: EdgeInsets.symmetric(vertical: 18),
+          child: Icon(
+            Icons.history_toggle_off,
+            color: Colors.white,
+          ),
         ),
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.grey,
+        width: Get.width,
+        decoration: BoxDecoration(
+          color: Get.theme.primaryColor,
         ),
       ),
     );

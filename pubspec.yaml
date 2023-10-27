@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: 'none' 
 
-version: 1.0.0+1
+version: 1.0.4+5
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
@@ -25,21 +25,26 @@ dependencies:
   cloud_firestore: ^4.11.0
   path_provider: ^2.1.1
   intl: ^0.18.1
+  firebase_messaging: ^14.7.2
+  personal_dropdown: 
+    git:
+      url: https://github.com/ymrabti/flutter-personal-dropdown.git
+      ref: v1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-  flutter_launcher_icons: ^0.9.2
-  flutter_native_splash: ^2.1.6
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.2
 
 # flutter pub run flutter_native_splash:create
 flutter_native_splash:
   image: assets/launcher.png
-  color: 23a11a
+  color: "#ff23a11a"
   android_12:
     image: assets/launcher.png
-    color: 23a11a
+    color: "#ff23a11a"
 # flutter pub run flutter_launcher_icons:main
 flutter_icons:
   android: ic_launcher

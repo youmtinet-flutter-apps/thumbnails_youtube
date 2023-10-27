@@ -30,6 +30,13 @@
             {
               "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "150520271583-4v5delkv0nprfu17fkssvq5riqi1juc4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ymrabtiapps.thumbnails.thumbnailYoutube"
+              }
             }
           ]
         }
@@ -67,6 +74,13 @@
             {
               "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "150520271583-4v5delkv0nprfu17fkssvq5riqi1juc4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ymrabtiapps.thumbnails.thumbnailYoutube"
+              }
             }
           ]
         }

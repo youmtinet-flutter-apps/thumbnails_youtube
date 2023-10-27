@@ -7,6 +7,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
   colorScheme: const ColorScheme.light(
     primary: primaryColor,
     error: Color(0xFF85120A),
+    background: Color(0xFFFFFFFF),
   ),
   dialogBackgroundColor: Colors.transparent,
   appBarTheme: AppBarTheme(
@@ -25,7 +26,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
   primaryTextTheme: const TextTheme(),
   inputDecorationTheme: () {
     OutlineInputBorder outlineInputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(28),
+      borderRadius: BorderRadius.circular(10),
       borderSide: const BorderSide(color: Colors.black),
       gapPadding: 10,
     );

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await firebaseInitialization;
+  await FirebaseMessagingApi().initNotifications();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: primaryColor,
@@ -20,19 +19,19 @@ void main() async {
   final collection = firebaseFirestore.collection('statistics');
   final dataCollection = await collection.get();
   var firebaseHistory = dataCollection.docs.map((e) => VideoThumbnailMetataData.fromJson(e.data())).toList();
-  var futureTest = await Future.wait(firebaseHistory.map((h) {
-    return resolutionStatusMeta(h);
-  }));
-  var validOnly = futureTest
+  /* var mq = RsolutionEnum.mqdefault;
+  var futureTest = await Future.wait(firebaseHistory.map((h) => resolu(mq, h)));
+  var validOnlyy = futureTest
       .where(
         (listRes) => listRes.statusCode == 200,
       )
       .map((e) => e.video)
       .toList();
   log(firebaseHistory.length.toString());
-  log(validOnly.length.toString());
+  log(validOnlyy.length.toString()); */
   var historic = await getLocalHistoric();
   var data = await getThemeModePrefs();
+  var validOnly = firebaseHistory;
   runApp(
     ChangeNotifierProvider(
       create: (context) => AppProvider(history: historic, firebaseHistory: validOnly),

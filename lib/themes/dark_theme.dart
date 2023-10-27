@@ -7,6 +7,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
   colorScheme: const ColorScheme.dark(
     primary: primaryColor,
     error: Color(0xFF85120A),
+    background: Colors.black,
   ),
   brightness: Brightness.dark,
   dialogBackgroundColor: Colors.transparent,
@@ -23,7 +24,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
   primaryTextTheme: const TextTheme(),
   inputDecorationTheme: () {
     OutlineInputBorder outlineInputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(28),
+      borderRadius: BorderRadius.circular(10),
       borderSide: const BorderSide(color: Colors.white),
       gapPadding: 10,
     );
