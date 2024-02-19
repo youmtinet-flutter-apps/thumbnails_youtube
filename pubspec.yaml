@@ -1,7 +1,7 @@
 name: thumbnail_youtube
 description: A new Flutter project.
 
-publish_to: 'none' 
+publish_to: "none"
 
 version: 1.0.4+5
 
@@ -12,24 +12,24 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   cupertino_icons: ^1.0.6
   http: ^0.13.4
-  animated_theme_switcher: ^2.0.8
-  provider: ^6.0.5
+  animated_theme_switcher: ^2.0.10
+  provider: ^6.1.1
   wakelock: ^0.6.2
   shared_preferences: ^2.2.2
   gallery_saver: ^2.3.2
-  get: ^4.6.5
-  firebase_core: ^2.19.0
-  cloud_firestore: ^4.11.0
-  path_provider: ^2.1.1
-  intl: ^0.18.1
-  firebase_messaging: ^14.7.2
-  personal_dropdown: 
+  get: ^4.6.6
+  firebase_core: ^2.24.2
+  cloud_firestore: ^4.14.0
+  path_provider: ^2.1.2
+  intl: ^0.19.0
+  firebase_messaging: ^14.7.10
+  personal_dropdown:
     git:
       url: https://github.com/ymrabti/flutter-personal-dropdown.git
-      ref: v1.0.0
+      ref: v1.0.4
+  gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -45,19 +45,16 @@ flutter_native_splash:
   android_12:
     image: assets/launcher.png
     color: "#ff23a11a"
-# flutter pub run flutter_launcher_icons:main
+# dart run flutter_launcher_icons:main
 flutter_icons:
   android: ic_launcher
   ios: true
   image_path: assets/launcher.png
   remove_alpha_ios: true
-  adaptive_icon_background: "#ff23a11a"
+  adaptive_icon_background: "#00B40C73"
   adaptive_icon_foreground: assets/launcher.png
 
-
-
 flutter:
-
   uses-material-design: true
   assets:
     - assets/
@@ -65,32 +62,32 @@ flutter:
     - family: AlQuranAli
       fonts:
         - asset: assets/AlQuranAli-L3A83.ttf
-        # 
-        # 
+        #
+        #
     - family: font islamic color
       fonts:
         - asset: assets/font islamic color.ttf
-        # 
-        # 
+        #
+        #
     - family: My Font Quraan 7
       fonts:
         - asset: assets/My Font Quraan 7.ttf
-        # 
-        # 
+        #
+        #
     - family: My Font Quraan 9
       fonts:
         - asset: assets/My Font Quraan 9.ttf
-        # 
-        # 
+        #
+        #
     - family: Surah Names
       fonts:
         - asset: assets/sura_names.woff2
           weight: 900
-        # 
-        # 
+        #
+        #
     - family: Uthmanic
       fonts:
         - asset: assets/UthmanicHafs1Ver18.woff2
           weight: 900
-        # 
-        # 
+        #
+        #

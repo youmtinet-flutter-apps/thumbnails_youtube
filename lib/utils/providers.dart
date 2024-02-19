@@ -1,15 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'utils.dart';
 
 class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  late List<VideoThumbnailMetataData> _firebaseHistory;
-  List<VideoThumbnailMetataData> get firebaseHistory => _firebaseHistory
-    ..sort(
-      (a, b) => a.views - b.views,
-    );
   List<RsolutionEnum> _availableChoices = RsolutionEnum.values;
   List<RsolutionEnum> get availableChoices => _availableChoices;
   RsolutionEnum _resolution = RsolutionEnum.mqdefault;
@@ -39,29 +33,17 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void setvideoIdFromUrl(String url) {
+  void setvideoIdFromUrl(BuildContext context, String url) {
     var idFROMurl = convertUrlToId(url);
     if (idFROMurl == null) {
-      appSnackbar('Infos', "URI non valide");
+      appSnackbar(context, 'Infos', "URI non valide");
     } else {
       _videoId = idFROMurl;
     }
     notifyListeners();
   }
 
-  AppProvider({
-    required List<String> history,
-    required List<VideoThumbnailMetataData> firebaseHistory,
-  }) {
-    _firebaseHistory = firebaseHistory.map((e) => e.copyWith(history)).toList();
-  }
-
-  void add(VideoThumbnailMetataData value) {
-    VideoThumbnailMetataData? exists = _firebaseHistory.firstWhereOrNull((e) => e == value);
-    if (exists != null) return;
-    _firebaseHistory.add(value);
-    notifyListeners();
-  }
+  AppProvider({required List<String> history});
 
   Future<void> addLike(VideoThumbnailMetataData value, BuildContext context) async {
     await firestoreStatistics(Incremente.likes, value.videoId, context);
@@ -75,16 +57,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  Future<void> addDownload(BuildContext context) async {
-    await firestoreStatistics(Incremente.downloads, _videoId, context);
-    for (var histor in firebaseHistory) {
-      if (histor.videoId != _videoId) continue;
-      histor.downloads++;
-      break;
-    }
-    notifyListeners();
-  }
-
   void addFromLocal(VideoThumbnailMetataData value) {
     value.isLocal = true;
     notifyListeners();
@@ -93,7 +65,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(IterableProperty<VideoThumbnailMetataData>('_firebaseHistory', _firebaseHistory));
     properties.add(DiagnosticsProperty<TextEditingController>('textEditingController', textEditingController));
     properties.add(IterableProperty<RsolutionEnum>('_availableChoices', _availableChoices));
     properties.add(EnumProperty<RsolutionEnum>('_resolution', _resolution));

@@ -3,9 +3,8 @@ import 'package:thumbnail_youtube/themes/colors.dart';
 
 ThemeData lightTheme = ThemeData.light().copyWith(
   scaffoldBackgroundColor: Colors.white,
-  primaryColor: primaryColor,
-  colorScheme: const ColorScheme.light(
-    primary: primaryColor,
+  colorScheme: ColorScheme.light(
+    primary: primary,
     error: Color(0xFF85120A),
     background: Color(0xFFFFFFFF),
   ),
@@ -16,26 +15,26 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     elevation: 5,
     shadowColor: Colors.white.withOpacity(0.3),
     centerTitle: true,
-    titleTextStyle: const TextStyle(
+    titleTextStyle: TextStyle(
       fontSize: 16,
       fontFamily: "WORK SANS",
       fontWeight: FontWeight.bold,
       color: Colors.white,
     ),
   ),
-  primaryTextTheme: const TextTheme(),
+  primaryTextTheme: TextTheme(),
   inputDecorationTheme: () {
     OutlineInputBorder outlineInputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(color: Colors.black),
+      borderSide: BorderSide(color: Colors.black),
       gapPadding: 10,
     );
     return InputDecorationTheme(
       floatingLabelBehavior: FloatingLabelBehavior.always,
-      helperStyle: const TextStyle(color: Colors.black),
-      labelStyle: const TextStyle(color: Colors.black),
-      prefixStyle: const TextStyle(color: Colors.black),
-      contentPadding: const EdgeInsets.only(
+      helperStyle: TextStyle(color: Colors.black),
+      labelStyle: TextStyle(color: Colors.black),
+      prefixStyle: TextStyle(color: Colors.black),
+      contentPadding: EdgeInsets.only(
         right: 32,
         top: 10,
         left: 32,

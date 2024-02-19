@@ -6,7 +6,7 @@ class ButtonScaleTransition extends StatefulWidget {
   final double scaleFactor;
   final Duration duration;
   final bool stayOnBottom;
-  const ButtonScaleTransition({
+  ButtonScaleTransition({
     Key? key,
     required this.child,
     required this.onPressed,
@@ -19,8 +19,7 @@ class ButtonScaleTransition extends StatefulWidget {
   _ButtonScaleTransitionState createState() => _ButtonScaleTransitionState();
 }
 
-class _ButtonScaleTransitionState extends State<ButtonScaleTransition>
-    with SingleTickerProviderStateMixin {
+class _ButtonScaleTransitionState extends State<ButtonScaleTransition> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   late double _scale;
@@ -88,15 +87,15 @@ class _ButtonScaleTransitionState extends State<ButtonScaleTransition>
     );
   }
 
-  _triggerOnPressed() {
+  void _triggerOnPressed() {
     onPressed();
   }
 
-  _onTapDown(TapDownDetails details) {
+  void _onTapDown(TapDownDetails details) {
     _controller.forward();
   }
 
-  _onTapUp(TapUpDetails details) {
+  void _onTapUp(TapUpDetails details) {
     if (!_stayOnBottom) {
       Future.delayed(duration, () {
         _reverseAnimation();
@@ -106,12 +105,12 @@ class _ButtonScaleTransitionState extends State<ButtonScaleTransition>
     _triggerOnPressed();
   }
 
-  _onDragUpdate(DragUpdateDetails details, BuildContext context) {
+  void _onDragUpdate(DragUpdateDetails details, BuildContext context) {
     final Offset touchPosition = details.globalPosition;
     _isOutside = _isOutsideChildBox(touchPosition);
   }
 
-  _onLongPressEnd(LongPressEndDetails details, BuildContext context) {
+  void _onLongPressEnd(LongPressEndDetails details, BuildContext context) {
     final Offset touchPosition = details.globalPosition;
 
     if (!_isOutsideChildBox(touchPosition)) {
@@ -121,14 +120,14 @@ class _ButtonScaleTransitionState extends State<ButtonScaleTransition>
     _reverseAnimation();
   }
 
-  _onDragEnd(DragEndDetails details) {
+  void _onDragEnd(DragEndDetails details) {
     if (!_isOutside) {
       _triggerOnPressed();
     }
     _reverseAnimation();
   }
 
-  _reverseAnimation() {
+  void _reverseAnimation() {
     if (mounted) {
       _controller.reverse();
     }
@@ -142,9 +141,6 @@ class _ButtonScaleTransitionState extends State<ButtonScaleTransition>
     final Size childSize = childRenderBox.size;
     final Offset childPosition = childRenderBox.localToGlobal(Offset.zero);
 
-    return (touchPosition.dx < childPosition.dx ||
-        touchPosition.dx > childPosition.dx + childSize.width ||
-        touchPosition.dy < childPosition.dy ||
-        touchPosition.dy > childPosition.dy + childSize.height);
+    return (touchPosition.dx < childPosition.dx || touchPosition.dx > childPosition.dx + childSize.width || touchPosition.dy < childPosition.dy || touchPosition.dy > childPosition.dy + childSize.height);
   }
 }

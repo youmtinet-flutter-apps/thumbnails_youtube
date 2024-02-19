@@ -11,45 +11,31 @@ void main() async {
   await firebaseInitialization;
   await FirebaseMessagingApi().initNotifications();
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: primaryColor,
-      systemNavigationBarColor: primaryColor,
+    SystemUiOverlayStyle(
+      statusBarColor: primary,
+      systemNavigationBarColor: primary,
     ),
   );
-  final collection = firebaseFirestore.collection('statistics');
-  final dataCollection = await collection.get();
-  var firebaseHistory = dataCollection.docs.map((e) => VideoThumbnailMetataData.fromJson(e.data())).toList();
-  /* var mq = RsolutionEnum.mqdefault;
-  var futureTest = await Future.wait(firebaseHistory.map((h) => resolu(mq, h)));
-  var validOnlyy = futureTest
-      .where(
-        (listRes) => listRes.statusCode == 200,
-      )
-      .map((e) => e.video)
-      .toList();
-  log(firebaseHistory.length.toString());
-  log(validOnlyy.length.toString()); */
   var historic = await getLocalHistoric();
   var data = await getThemeModePrefs();
-  var validOnly = firebaseHistory;
   runApp(
     ChangeNotifierProvider(
-      create: (context) => AppProvider(history: historic, firebaseHistory: validOnly),
+      create: (context) => AppProvider(history: historic),
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         defaultTransition: Transition.topLevel,
-        actions: const {},
+        actions: {},
         popGesture: true,
         theme: lightTheme,
         darkTheme: darkTheme,
         title: 'Thumbnails YouTube',
         home: ThemeProvider(
           initTheme: data == Brightness.dark.name ? darkTheme : lightTheme,
-          duration: const Duration(milliseconds: 1001),
+          duration: Duration(milliseconds: 1001),
           child: Builder(builder: (context) {
             return ThemeSwitchingArea(
               child: Builder(builder: (context) {
-                return const ThmbHomePage();
+                return ThmbHomePage();
               }),
             );
           }),

@@ -5,14 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PhotoGallerySaver {
-  static const String channelName = 'gallery_saver';
-  static const String methodSaveImage = 'saveImage';
-  static const String methodSaveVideo = 'saveVideo';
+  static String channelName = 'gallery_saver';
+  static String methodSaveImage = 'saveImage';
+  static String methodSaveVideo = 'saveVideo';
 
-  static const String pleaseProvidePath = 'Please provide valid file path.';
-  static const String fileIsNotVideo = 'File on path is not a video.';
-  static const String fileIsNotImage = 'File on path is not an image.';
-  static const MethodChannel _channel = MethodChannel(channelName);
+  static String pleaseProvidePath = 'Please provide valid file path.';
+  static String fileIsNotVideo = 'File on path is not a video.';
+  static String fileIsNotImage = 'File on path is not an image.';
+  static MethodChannel _channel = MethodChannel(channelName);
 
   ///saves video from provided temp path and optional album name in gallery
 

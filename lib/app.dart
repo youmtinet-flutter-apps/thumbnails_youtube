@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 /* import 'dart:ui' as ui; */
 
 import 'package:thumbnail_youtube/lib.dart';
 
 class ThmbHomePage extends StatefulWidget {
-  const ThmbHomePage({Key? key}) : super(key: key);
+  ThmbHomePage({Key? key}) : super(key: key);
 
   @override
   State<ThmbHomePage> createState() => _ThmbHomePageState();
@@ -16,81 +17,89 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
   bool showFullscreenMonitor = true;
 
   final GlobalKey _globalKey = GlobalKey();
-  //
-  @override
-  void initState() {
-    super.initState();
-  }
 
+  final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var videoId = context.watch<AppProvider>().videoId;
     var availableChoices = context.watch<AppProvider>().availableChoices;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Thumbnails YouTube'),
-        actions: const [CuistomThemeSwitcher()],
+        title: Text('Thumbnails YouTube'),
+        actions: [CuistomThemeSwitcher()],
       ),
       key: _globalKey,
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
-            AppInputField(
-              textEditingController: context.watch<AppProvider>().textEditingController,
-              onPressed: () async {
-                await getImageFromUrl(
-                  context.watch<AppProvider>().textEditingController.text,
-                  context,
-                );
-              },
-            ),
-            if (videoId.isNotEmpty)
-              MainImageView(
-                showFullscreenMonitor: showFullscreenMonitor,
-                onPressed: () {
-                  setState(() {
-                    showFullscreenMonitor = !showFullscreenMonitor;
-                  });
+            Gap(30),
+            ...[
+              AppInputField(
+                textEditingController: context.watch<AppProvider>().textEditingController,
+                onPressed: () async {
+                  await getImageFromUrl(
+                    context.watch<AppProvider>().textEditingController.text,
+                    context,
+                  );
                 },
               ),
-            Row(
-              children: [
-                if (availableChoices.isNotEmpty)
-                  Expanded(
-                    child: ResolutionChoiceWidget(availableChoices: availableChoices),
-                  ),
-                const DownloadButton(),
-                const SizedBox(height: 20),
+              Gap(20),
+              if (videoId.isNotEmpty) ...[
+                MainImageView(
+                  showFullscreenMonitor: showFullscreenMonitor,
+                  onPressed: () {
+                    setState(() {
+                      showFullscreenMonitor = !showFullscreenMonitor;
+                    });
+                  },
+                ),
+                Gap(20),
               ],
-            ),
-            const HistoricIcon(),
-            const HistoricBuilder(preview: true),
+              Row(
+                children: [
+                  if (availableChoices.isNotEmpty)
+                    Expanded(
+                      child: ResolutionChoiceWidget(
+                        availableChoices: availableChoices,
+                        controller: controller,
+                      ),
+                    ),
+                  if (videoId.isNotEmpty) SizedBox(width: 24),
+                  if (videoId.isNotEmpty) DownloadButton(),
+                  SizedBox(height: 20),
+                ],
+              ),
+              Gap(20),
+              HistoricIcon(),
+            ].map((e) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: e,
+                )),
+            HistoricFeaturedAll(preview: true),
           ],
         ),
       ),
       floatingActionButton: InkWell(
         child: Container(
-          decoration: const BoxDecoration(
-            color: primaryColor,
-            /* shape: BoxShape.circle,
-          borderRadius: BorderRadius.all(
-            Radius.circular(2),
-          ), */
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            shape: BoxShape.circle,
+            /* borderRadius: BorderRadius.all(
+              Radius.circular(2),
+            ), */
           ),
-          child: const Padding(
+          child: Padding(
             padding: EdgeInsets.all(18.0),
             child: Icon(Icons.paste),
           ),
         ),
         onTap: () async {
           ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-          if (data != null) {
-            var text = data.text;
-            if (text != null) {
-              await getImageFromUrl(text, context);
-            }
-          }
+          if (data == null) return;
+          var text = data.text;
+          if (text == null) return;
+          await getImageFromUrl(text, context);
         },
       ),
     );

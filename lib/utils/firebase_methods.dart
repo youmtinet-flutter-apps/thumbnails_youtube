@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/lib.dart';
 import 'dart:developer' as developer;
 
@@ -22,7 +21,6 @@ Future<void> firestoreStatistics(Incremente incremente, String videoId, BuildCon
       views: 1,
     );
 
-    context.read<AppProvider>().add(docToAdd);
     await collection.add(docToAdd.toMap());
   } else {
     var docFound = data.docs.first;

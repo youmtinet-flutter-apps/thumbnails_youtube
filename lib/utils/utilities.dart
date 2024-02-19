@@ -54,13 +54,13 @@ Future<ResStatusCodeVideo> resolu(
 }
 
 Future<void> getImageFromUrl(String text, BuildContext context) async {
-  context.read<AppProvider>().setvideoIdFromUrl(text);
+  context.read<AppProvider>().setvideoIdFromUrl(context, text);
   var videoId = context.read<AppProvider>().videoId;
   List<ResStatusCode> resulutionsStatuses = await Future.wait(
     RsolutionEnum.values.map((e) => resolutionStatus(e, videoId)),
   );
   var available = resulutionsStatuses.where((e) => e.statusCode == 200).toList();
-  var textEditingController = context.watch<AppProvider>().textEditingController;
+  var textEditingController = context.read<AppProvider>().textEditingController;
   if (available.isNotEmpty) {
     textEditingController.text = "youtube.com/watch?v=$videoId";
     context.read<AppProvider>().setAvailableChoices(available.map((e) => e.resoluton).toList());
@@ -93,13 +93,13 @@ String? convertUrlToId(String url, {bool trimWhitespaces = true}) {
   return null;
 }
 
-void appSnackbar(String title, String message) {
+void appSnackbar(BuildContext context, String title, String message) {
   Get.snackbar(
     title,
     message,
     snackPosition: SnackPosition.TOP,
     backgroundColor: Colors.white,
-    duration: const Duration(seconds: 10),
+    duration: Duration(seconds: 10),
     forwardAnimationCurve: Curves.bounceInOut,
     reverseAnimationCurve: Curves.bounceOut,
     snackStyle: SnackStyle.FLOATING,
@@ -107,31 +107,31 @@ void appSnackbar(String title, String message) {
     snackbarStatus: (status) {
       dev.log(status.toString());
     },
-    padding: const EdgeInsets.all(30.0),
-    margin: const EdgeInsets.all(30.0),
+    padding: EdgeInsets.all(30.0),
+    margin: EdgeInsets.all(30.0),
     boxShadows: [
       BoxShadow(
         blurRadius: 30,
         blurStyle: BlurStyle.outer,
-        color: Get.theme.primaryColor,
+        color: Theme.of(context).colorScheme.primary,
       ),
     ],
-    animationDuration: const Duration(seconds: 2),
-    colorText: Get.theme.primaryColor,
+    animationDuration: Duration(seconds: 2),
+    colorText: Theme.of(context).colorScheme.primary,
     /* mainButton: TextButton(
       onPressed: () {
         controller.close();
       },
-      child: const Text('Dismiss'),
+      child: Text('Dismiss'),
     ), */
     icon: Container(
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.all(8.0),
         child: Icon(Icons.download_done),
       ),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Get.theme.primaryColor,
+        color: Theme.of(context).colorScheme.primary,
       ),
     ),
     barBlur: 0,
