@@ -22,7 +22,8 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String _videoId = "";
   String get videoId => _videoId;
   String thumbnail({String? videoId, bool maxRes = false, bool mainView = true}) {
-    var thum = "https://i.ytimg.com/vi/${videoId ?? _videoId}/${(maxRes ? _availableChoices.last : (mainView ? _resolution : RsolutionEnum.mqdefault)).name}.jpg";
+    var rsolutionEnum = (maxRes ? _availableChoices.last : (mainView ? _resolution : RsolutionEnum.mqdefault));
+    var thum = "https://i.ytimg.com/vi/${videoId ?? _videoId}/${rsolutionEnum.name}.jpg";
     return thum;
   }
 
