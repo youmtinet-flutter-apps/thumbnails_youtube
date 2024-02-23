@@ -264,6 +264,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  gallery_saver:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: v4
+      resolved-ref: "00aa3d00fe5ead65fd4c4dae38fdf8efd4ca782a"
+      url: "https://github.com/youmtinetflutterpacks/gallery_saver.git"
+    source: git
+    version: "0.0.1"
   gap:
     dependency: "direct main"
     description:
@@ -650,10 +659,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: a6f0236dbda0f63aa9a25ad1ff9a9d8a4eaaa5012da0dc59d21afdb1dc361ca4
+      sha256: b0f37db61ba2f2e9b7a78a1caece0052564d1bc70668156cf3a29d676fe4e574
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.4"
+    version: "5.1.1"
   xdg_directories:
     dependency: transitive
     description:

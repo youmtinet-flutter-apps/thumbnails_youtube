@@ -2,10 +2,11 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:personal_dropdown/personal_dropdown.dart';
 import 'package:provider/provider.dart';
-import 'package:thumbnail_youtube/lib.dart';
+import 'package:thumbnail_youtube/lib.dart' hide GallerySaver;
 
 class MyClipper implements ThemeSwitcherClipper {
   MyClipper();
@@ -358,7 +359,7 @@ class DownloadButton extends StatelessWidget {
         String path = context.read<AppProvider>().thumbnail();
         bool? afterSave = await GallerySaver.saveImage(
           path,
-          toDcim: false,
+          toDcim: true,
           albumName: PreferencesKeys.videoThumnails.name,
         );
 
