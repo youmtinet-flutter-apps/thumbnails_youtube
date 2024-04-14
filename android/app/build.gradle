@@ -26,14 +26,15 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-// START: FlutterFire Configuration
+
 apply plugin: 'com.google.gms.google-services'
-// END: FlutterFire Configuration
+
 apply plugin: 'kotlin-android'
 // apply plugin: 'dev.flutter.flutter-gradle-plugin'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    namespace "com.ymrabtiapps.thumbnails.thumbnail_youtube"
     compileSdk 34
 
     compileOptions {
@@ -49,11 +50,11 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-
     defaultConfig {
         applicationId "com.ymrabtiapps.thumbnails.thumbnail_youtube"
         minSdkVersion flutterMinSdkVersion.toInteger()
-        targetSdkVersion 34
+        targetSdkVersion 33
+        compileSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

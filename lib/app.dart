@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-/* import 'dart:ui' as ui; */
-
 import 'package:thumbnail_youtube/lib.dart';
 
 class ThmbHomePage extends StatefulWidget {
@@ -26,7 +24,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Thumbnails YouTube'),
-        actions: [CuistomThemeSwitcher()],
+        actions: [CustomThemeSwitcher()],
       ),
       key: _globalKey,
       body: SingleChildScrollView(

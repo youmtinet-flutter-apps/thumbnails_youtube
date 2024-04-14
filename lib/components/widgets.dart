@@ -8,8 +8,8 @@ import 'package:personal_dropdown/personal_dropdown.dart';
 import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/lib.dart' hide GallerySaver;
 
-class MyClipper implements ThemeSwitcherClipper {
-  MyClipper();
+class ThemeTogglerClipper implements ThemeSwitcherClipper {
+  ThemeTogglerClipper();
   @override
   Path getClip(Size size, Offset offset, double sizeRate) {
     Path path = Path();
@@ -90,15 +90,15 @@ class AppImageViewer extends StatelessWidget {
   }
 }
 
-class CuistomThemeSwitcher extends StatelessWidget {
-  CuistomThemeSwitcher({
+class CustomThemeSwitcher extends StatelessWidget {
+  CustomThemeSwitcher({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ThemeSwitcher(
-      clipper: MyClipper(),
+      clipper: ThemeTogglerClipper(),
       builder: (bc) {
         return IconButton(
           icon: AnimatedSwitcher(

@@ -1,91 +1,127 @@
 {
-  "project_info": {
-    "project_number": "150520271583",
-    "firebase_url": "https://youneswhatsapp-19dfa.firebaseio.com",
-    "project_id": "youneswhatsapp-19dfa",
-    "storage_bucket": "youneswhatsapp-19dfa.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:150520271583:android:c3cc0525a721c9aeafcf6a",
-        "android_client_info": {
-          "package_name": "com.ymrabtiapps.thumbnails.thumbnail_youtube"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC0CaM5GrksHxrGRWx17IscQoaLkbkSM1k"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "150520271583-4v5delkv0nprfu17fkssvq5riqi1juc4.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.ymrabtiapps.thumbnails.thumbnailYoutube"
-              }
-            }
-          ]
-        }
-      }
+    "project_info": {
+        "project_number": "150520271583",
+        "firebase_url": "https://youneswhatsapp-19dfa.firebaseio.com",
+        "project_id": "youneswhatsapp-19dfa",
+        "storage_bucket": "youneswhatsapp-19dfa.appspot.com"
     },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:150520271583:android:70cf980f1f7b4da4afcf6a",
-        "android_client_info": {
-          "package_name": "ma.ymrabti.youneswhatsapp"
-        }
-      },
-      "oauth_client": [
+    "client": [
         {
-          "client_id": "150520271583-ar3b2282j73bpo1u5lh2evf70uu7412i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ma.ymrabti.youneswhatsapp",
-            "certificate_hash": "aa13d9976661fb5d9ef1083bed2b3a4893ddaee5"
-          }
+            "client_info": {
+                "mobilesdk_app_id": "1:150520271583:android:0a24ca77b3299242afcf6a",
+                "android_client_info": {
+                    "package_name": "com.example.splash_screen_sample"
+                }
+            },
+            "oauth_client": [
+                {
+                    "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyC0CaM5GrksHxrGRWx17IscQoaLkbkSM1k"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [
+                        {
+                            "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
+                            "client_type": 3
+                        },
+                        {
+                            "client_id": "150520271583-4v5delkv0nprfu17fkssvq5riqi1juc4.apps.googleusercontent.com",
+                            "client_type": 2,
+                            "ios_info": {
+                                "bundle_id": "com.ymrabtiapps.thumbnails.thumbnailYoutube"
+                            }
+                        }
+                    ]
+                }
+            }
         },
         {
-          "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC0CaM5GrksHxrGRWx17IscQoaLkbkSM1k"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
-              "client_type": 3
+            "client_info": {
+                "mobilesdk_app_id": "1:150520271583:android:c3cc0525a721c9aeafcf6a",
+                "android_client_info": {
+                    "package_name": "com.ymrabtiapps.thumbnails.thumbnail_youtube"
+                }
             },
-            {
-              "client_id": "150520271583-4v5delkv0nprfu17fkssvq5riqi1juc4.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.ymrabtiapps.thumbnails.thumbnailYoutube"
-              }
+            "oauth_client": [
+                {
+                    "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyC0CaM5GrksHxrGRWx17IscQoaLkbkSM1k"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [
+                        {
+                            "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
+                            "client_type": 3
+                        },
+                        {
+                            "client_id": "150520271583-4v5delkv0nprfu17fkssvq5riqi1juc4.apps.googleusercontent.com",
+                            "client_type": 2,
+                            "ios_info": {
+                                "bundle_id": "com.ymrabtiapps.thumbnails.thumbnailYoutube"
+                            }
+                        }
+                    ]
+                }
             }
-          ]
+        },
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:150520271583:android:70cf980f1f7b4da4afcf6a",
+                "android_client_info": {
+                    "package_name": "ma.ymrabti.youneswhatsapp"
+                }
+            },
+            "oauth_client": [
+                {
+                    "client_id": "150520271583-ar3b2282j73bpo1u5lh2evf70uu7412i.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "ma.ymrabti.youneswhatsapp",
+                        "certificate_hash": "aa13d9976661fb5d9ef1083bed2b3a4893ddaee5"
+                    }
+                },
+                {
+                    "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyC0CaM5GrksHxrGRWx17IscQoaLkbkSM1k"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [
+                        {
+                            "client_id": "150520271583-1u8g417b3eefnrn9l6pc57uarnnedrvn.apps.googleusercontent.com",
+                            "client_type": 3
+                        },
+                        {
+                            "client_id": "150520271583-4v5delkv0nprfu17fkssvq5riqi1juc4.apps.googleusercontent.com",
+                            "client_type": 2,
+                            "ios_info": {
+                                "bundle_id": "com.ymrabtiapps.thumbnails.thumbnailYoutube"
+                            }
+                        }
+                    ]
+                }
+            }
         }
-      }
-    }
-  ],
-  "configuration_version": "1"
+    ],
+    "configuration_version": "1"
 }
