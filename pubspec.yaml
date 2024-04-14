@@ -12,30 +12,30 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.6
-  http: ^1.1.0
-  animated_theme_switcher: ^2.0.10
-  provider: ^6.1.1
   # wakelock: ^0.6.2
-  shared_preferences: ^2.2.2
   # gallery_saver: ^2.3.2
-  gallery_saver:
-    git:
-      url: https://github.com/youmtinetflutterpacks/gallery_saver.git
-      ref: v4
-  saver_gallery: ^3.0.2
-  get: ^4.6.6
-  firebase_core: ^2.24.2
-  cloud_firestore: ^4.14.0
-  path_provider: ^2.1.2
-  intl: ^0.19.0
+  animated_theme_switcher: ^2.0.10
+  shared_preferences: ^2.2.2
   firebase_messaging: ^14.7.10
+  cupertino_icons: ^1.0.6
+  cloud_firestore: ^4.14.0
+  saver_gallery: ^3.0.2
+  firebase_core: ^2.24.2
+  path_provider: ^2.1.2
+  provider: ^6.1.1
+  http: ^1.1.0
+  get: ^4.6.6
+  intl: ^0.19.0
+  gap: ^3.0.1
+  path: ^1.8.3
   personal_dropdown:
     git:
       url: https://github.com/youmtinetflutterpacks/flutter-personal-dropdown.git
       ref: v1.0.4
-  gap: ^3.0.1
-  path: ^1.8.3
+  gallery_saver:
+    git:
+      url: https://github.com/youmtinetflutterpacks/gallery_saver.git
+      ref: v4
 
 dev_dependencies:
   flutter_test:
