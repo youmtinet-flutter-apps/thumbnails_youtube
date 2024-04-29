@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: "none"
 
-version: 1.0.6+7
+version: 1.0.7+8
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
@@ -64,36 +64,3 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-  fonts:
-    - family: AlQuranAli
-      fonts:
-        - asset: assets/AlQuranAli-L3A83.ttf
-        #
-        #
-    - family: font islamic color
-      fonts:
-        - asset: assets/font islamic color.ttf
-        #
-        #
-    - family: My Font Quraan 7
-      fonts:
-        - asset: assets/My Font Quraan 7.ttf
-        #
-        #
-    - family: My Font Quraan 9
-      fonts:
-        - asset: assets/My Font Quraan 9.ttf
-        #
-        #
-    - family: Surah Names
-      fonts:
-        - asset: assets/sura_names.woff2
-          weight: 900
-        #
-        #
-    - family: Uthmanic
-      fonts:
-        - asset: assets/UthmanicHafs1Ver18.woff2
-          weight: 900
-        #
-        #
