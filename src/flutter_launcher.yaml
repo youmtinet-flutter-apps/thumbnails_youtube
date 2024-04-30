@@ -1,7 +1,7 @@
 # dart run flutter_launcher_icons -f src/flutter_launcher.yaml
 
 flutter_launcher_icons:
-  image_path: "src/design/launcher.png"
+  image_path: src/design/launcher.png
   android: ic_launcher
   ios: true
   remove_alpha_ios: true
