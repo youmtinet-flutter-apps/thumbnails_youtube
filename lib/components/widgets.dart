@@ -292,8 +292,7 @@ class AppInputField extends StatelessWidget {
         filled: true,
         fillColor: Theme.of(context).colorScheme.background,
         prefixText: "https://",
-        helperText: "URI de video",
-        hintText: 'Video url',
+        hintText: 'video_url_youtube',
       ),
     );
   }

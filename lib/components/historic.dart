@@ -74,21 +74,21 @@ class HistoricBuilder extends StatelessWidget {
     initializeDateFormatting();
     //  = context.watch<AppProvider>().firebaseHistory;
     return Padding(
-      padding: EdgeInsets.all(18.0),
+      padding: EdgeInsets.all(8.0),
       child: GridView.builder(
         physics: BouncingScrollPhysics(),
         shrinkWrap: preview,
         itemCount: preview ? 5 : historic.length,
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 300,
-          crossAxisSpacing: 5.0,
+          maxCrossAxisExtent: 200,
+          crossAxisSpacing: .0,
           mainAxisSpacing: .0,
         ),
         itemBuilder: (context, index) {
           VideoThumbnailMetataData vid = historic[(historic.length - (index + 1)) % historic.length];
           var lastuse = DateTime.fromMillisecondsSinceEpoch(vid.lastuse.millisecondsSinceEpoch);
           return Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(4.0),
             child: InkWell(
               onTap: () async {
                 await addToHistoric(vid.videoId);
@@ -105,18 +105,22 @@ class HistoricBuilder extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                      ClipRRect(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                        // decoration: BoxDecoration(borderRadius: BorderRadius.circular(28)),
                         child: Image(
                           image: NetworkImage(
                             context.watch<AppProvider>().thumbnail(videoId: vid.videoId, mainView: false),
                           ),
                           errorBuilder: (context, error, stackTrace) {
                             return LimitedBox(
-                                child: Image.asset(
-                              'assets/launcher.png',
-                              width: 50,
-                            ));
+                              child: Image.asset(
+                                'assets/launcher.png',
+                                width: 50,
+                              ),
+                            );
                           },
                           loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                             if (loadingProgress == null) {
@@ -132,14 +136,14 @@ class HistoricBuilder extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        padding: EdgeInsets.symmetric(vertical: 4.0),
                         child: Row(
                           children: [
-                            Icon(vid.isLocal ? Icons.folder : Icons.cloud, color: Colors.white),
+                            Icon(vid.isLocal ? Icons.folder : Icons.cloud, color: Colors.white, size: 16),
                             //
                             Expanded(child: SizedBox()),
                             //
-                            Icon(CupertinoIcons.cloud_download_fill, color: Colors.white),
+                            Icon(CupertinoIcons.cloud_download_fill, color: Colors.white, size: 16),
                             Text(
                               vid.downloads.toString(),
                               style: TextStyle(color: Colors.white),
@@ -147,7 +151,7 @@ class HistoricBuilder extends StatelessWidget {
                             SizedBox(width: 8),
 
                             //
-                            Icon(Icons.remove_red_eye, color: Colors.white),
+                            Icon(Icons.remove_red_eye, color: Colors.white, size: 16),
                             Text(
                               vid.views.toString(),
                               style: TextStyle(color: Colors.white),
@@ -161,7 +165,7 @@ class HistoricBuilder extends StatelessWidget {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(CupertinoIcons.heart_solid, color: Colors.white),
+                                  Icon(CupertinoIcons.heart_solid, color: Colors.white, size: 16),
                                   Text(
                                     vid.likes.toString(),
                                     style: TextStyle(color: Colors.white),

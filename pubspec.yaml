@@ -44,22 +44,6 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.3.2
 
-# flutter pub run flutter_native_splash:create
-flutter_native_splash:
-  image: assets/launcher.png
-  color: "#ff23a11a"
-  android_12:
-    image: assets/launcher.png
-    color: "#ff23a11a"
-# dart run flutter_launcher_icons:main
-flutter_icons:
-  android: ic_launcher
-  ios: true
-  image_path: assets/launcher.png
-  remove_alpha_ios: true
-  adaptive_icon_background: "#00B40C73"
-  adaptive_icon_foreground: assets/launcher.png
-
 flutter:
   uses-material-design: true
   assets:
