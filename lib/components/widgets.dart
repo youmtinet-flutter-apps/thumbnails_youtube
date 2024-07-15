@@ -8,60 +8,6 @@ import 'package:personal_dropdown/personal_dropdown.dart';
 import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/lib.dart' hide GallerySaver;
 
-class ThemeTogglerClipper implements ThemeSwitcherClipper {
-  ThemeTogglerClipper();
-  @override
-  Path getClip(Size size, Offset offset, double sizeRate) {
-    Path path = Path();
-
-    path.moveTo(offset.dx + sizeRate * 2 * (size.width * (0.87 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.03 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.13 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.03 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.12 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.03 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.11 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.03 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.09 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.04 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.08 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.05 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.07 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.05 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.06 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.06 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.05 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.07 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.05 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.08 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.04 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.09 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.03 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.11 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.03 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.12 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.03 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.13 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.03 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.87 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.03 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.88 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.03 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.89 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.04 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.91 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.05 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.92 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.05 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.93 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.06 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.94 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.07 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.95 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.08 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.95 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.09 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.96 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.11 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.97 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.12 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.97 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.13 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.97 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.42 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.97 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.42 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.65 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.29 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.65 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.29 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.5 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.42 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.5 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.42 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.39 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.42 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.26 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.5 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.18 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.61 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.18 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.73 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.19 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.73 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.32 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.67 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.32 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.6 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.32 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.58 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.36 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.58 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.4 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.58 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.5 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.72 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.5 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.7 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.65 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.58 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.65 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.58 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.97 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.87 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.97 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.88 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.97 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.89 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.97 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.91 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.96 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.92 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.95 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.93 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.95 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.94 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.94 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.95 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.93 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.95 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.92 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.96 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.91 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.97 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.89 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.97 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.88 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.97 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.87 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.97 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.13 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.97 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.12 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.97 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.11 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.96 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.09 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.95 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.08 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.95 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.07 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.94 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.06 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.93 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.05 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.92 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.05 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.91 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.04 - .5)));
-    path.cubicTo(offset.dx + sizeRate * 2 * (size.width * (0.89 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.03 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.88 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.03 - .5)), offset.dx + sizeRate * 2 * (size.width * (0.87 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.03 - .5)));
-    path.lineTo(offset.dx + sizeRate * 2 * (size.width * (0.87 - .5)), offset.dy + sizeRate * 2 * (size.height * (0.03 - .5)));
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper, Offset? offset, double? sizeRate) {
-    return true;
-  }
-}
-
 class AppImageViewer extends StatelessWidget {
   AppImageViewer({
     Key? key,
@@ -98,7 +44,7 @@ class CustomThemeSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ThemeSwitcher(
-      clipper: ThemeTogglerClipper(),
+      //   clipper: ThemeTogglerClipper(),
       builder: (bc) {
         return IconButton(
           icon: AnimatedSwitcher(
@@ -127,10 +73,9 @@ class CustomThemeSwitcher extends StatelessWidget {
             if (kDebugMode && (bc.findRenderObject()?.debugNeedsPaint ?? true)) return;
             var isDarkMode = Theme.of(bc).brightness == Brightness.dark;
             // Get.changeThemeMode(isDarkMode ? ThemeMode.light : ThemeMode.dark);
-            final theme = isDarkMode ? lightTheme : darkTheme;
             final switcher = ThemeSwitcher.of(bc);
             await saveThemeModePrefs(isDarkMode ? Brightness.light : Brightness.dark);
-            switcher.changeTheme(theme: theme, isReversed: isDarkMode);
+            switcher.changeTheme(theme: theme(isDarkMode), isReversed: isDarkMode);
           },
         );
       },
@@ -315,19 +260,20 @@ class ResolutionChoiceWidget extends StatelessWidget {
       searchableTextItem: (item) => item,
       hintText: 'Resolution',
       items: availableChoices.map((e) => e.resFrmEnum()).toList(),
+      itemBgColor: Colors.amber,
       fillColor: Theme.of(context).colorScheme.background,
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: Colors.grey),
       onItemSelect: (String? value) {
         context.read<AppProvider>().setResolution(resFrmStr(value));
       },
-      excludeSelected: true,
+      excludeSelected: false,
       listItemBuilder: (BuildContext context, String result) {
         return Text(
           result,
           style: context.watch<AppProvider>().resolution.resFrmEnum() == result
               ? TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 )
               : null,

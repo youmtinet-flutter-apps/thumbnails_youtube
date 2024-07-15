@@ -31,11 +31,12 @@ dependencies:
   personal_dropdown:
     git:
       url: https://github.com/youmtinetflutterpacks/flutter-personal-dropdown.git
-      ref: v1.0.4
+      ref: v1.0.6
   gallery_saver:
     git:
       url: https://github.com/youmtinetflutterpacks/gallery_saver.git
       ref: v4
+  google_mobile_ads: ^4.0.0
 
 dev_dependencies:
   flutter_test:

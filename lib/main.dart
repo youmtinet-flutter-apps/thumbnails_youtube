@@ -26,11 +26,11 @@ void main() async {
         defaultTransition: Transition.topLevel,
         actions: {},
         popGesture: true,
-        theme: lightTheme,
-        darkTheme: darkTheme,
+        theme: theme(false),
+        darkTheme: theme(true),
         title: 'Thumbnails YouTube',
         home: ThemeProvider(
-          initTheme: data == Brightness.dark.name ? darkTheme : lightTheme,
+          initTheme: theme(data == Brightness.dark.name),
           duration: Duration(milliseconds: 1001),
           child: Builder(builder: (context) {
             return ThemeSwitchingArea(
