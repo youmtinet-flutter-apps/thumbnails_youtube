@@ -9,6 +9,18 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   RsolutionEnum _resolution = RsolutionEnum.mqdefault;
   RsolutionEnum get resolution => _resolution;
 
+  late DateTime _datetimereward;
+  bool get isRewardTime => _datetimereward.isBefore(
+        DateTime.now().subtract(
+          Duration(minutes: 10),
+        ),
+      );
+
+  void updateRewardTime() {
+    _datetimereward = DateTime.now();
+    notifyListeners();
+  }
+
   void setResolution(RsolutionEnum? value) {
     _resolution = value ?? _resolution;
     notifyListeners();
@@ -44,7 +56,9 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  AppProvider({required List<String> history});
+  AppProvider({required DateTime datetimereward}) {
+    _datetimereward = datetimereward;
+  }
 
   Future<void> addLike(VideoThumbnailMetataData value, BuildContext context) async {
     await firestoreStatistics(Incremente.likes, value.videoId, context);

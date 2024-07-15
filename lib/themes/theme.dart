@@ -8,24 +8,31 @@ ThemeData theme(bool isDark) {
   return ThemeData(
     scaffoldBackgroundColor: bg,
     useMaterial3: true,
-    colorScheme: ColorScheme.dark(
-      primary: primaryDark,
-      error: error,
-      background: bg,
-    ),
+    colorScheme: isDark
+        ? ColorScheme.dark(
+            primary: primaryDark,
+            error: error,
+            background: bg,
+          )
+        : ColorScheme.light(
+            primary: primary,
+            error: error,
+            background: bg,
+          ),
     brightness: isDark ? Brightness.dark : Brightness.light,
     dialogBackgroundColor: Colors.transparent,
     appBarTheme: AppBarTheme(
-      //color: Colo rs.black,
+      //   color: fg,
       elevation: 5,
       centerTitle: true,
       titleTextStyle: TextStyle(
         fontSize: 16,
+        color: fg,
         fontFamily: "WORK SANS",
         fontWeight: FontWeight.bold,
       ),
     ),
-    primaryTextTheme: TextTheme(),
+    // primaryTextTheme: TextTheme(),
     inputDecorationTheme: () {
       OutlineInputBorder outlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

@@ -143,6 +143,7 @@ RsolutionEnum resFrmStr(String? resolu) {
 enum PreferencesKeys {
   theme,
   historic,
+  rewardDateTime,
   videoThumnails,
 }
 

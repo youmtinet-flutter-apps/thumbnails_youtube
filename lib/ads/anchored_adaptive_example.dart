@@ -19,7 +19,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'constants.dart';
+import 'package:thumbnail_youtube/lib.dart';
 
 /// This example demonstrates anchored adaptive banner ads.
 ///
@@ -52,7 +52,9 @@ class _AnchoredAdaptiveExampleState extends State<AnchoredAdaptiveExample> {
       _isLoaded = false;
     });
 
-    final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(MediaQuery.of(context).size.width.truncate());
+    final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+      MediaQuery.of(context).size.width.truncate(),
+    );
 
     if (size == null) {
       log('Unable to get height of anchored banner.');
@@ -108,31 +110,33 @@ class _AnchoredAdaptiveExampleState extends State<AnchoredAdaptiveExample> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('Anchored adaptive banner example'),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Anchored adaptive banner example'),
+      ),
+      body: Center(
+        child: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
+          children: <Widget>[
+            ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                itemBuilder: (context, index) {
+                  return Text(
+                    Constants.placeholderText,
+                    style: TextStyle(fontSize: 24),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Container(height: 40);
+                },
+                itemCount: 5),
+            _getAdWidget(),
+          ],
         ),
-        body: Center(
-          child: Stack(
-            alignment: AlignmentDirectional.bottomCenter,
-            children: <Widget>[
-              ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  itemBuilder: (context, index) {
-                    return Text(
-                      Constants.placeholderText,
-                      style: TextStyle(fontSize: 24),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return Container(height: 40);
-                  },
-                  itemCount: 5),
-              _getAdWidget(),
-            ],
-          ),
-        ),
-      );
+      ),
+    );
+  }
 
   @override
   void dispose() {

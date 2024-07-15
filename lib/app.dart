@@ -1,10 +1,15 @@
 import 'dart:developer';
+import 'dart:io';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+// import 'package:thumbnail_youtube/ads/constants.dart';
 import 'package:thumbnail_youtube/lib.dart';
 
 class ThmbHomePage extends StatefulWidget {
@@ -20,6 +25,13 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
   final GlobalKey _globalKey = GlobalKey();
 
   final TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    _createRewardedAd();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var videoId = context.watch<AppProvider>().videoId;
@@ -55,10 +67,17 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
                   AppInputField(
                     textEditingController: context.watch<AppProvider>().textEditingController,
                     onPressed: () async {
-                      await getImageFromUrl(
-                        context.watch<AppProvider>().textEditingController.text,
-                        context,
-                      );
+                      if (context.read<AppProvider>().isRewardTime) {
+                        _showRewardedAd(
+                          context,
+                          context.read<AppProvider>().textEditingController.text,
+                        );
+                      } else {
+                        await getImageFromUrl(
+                          context,
+                          context.read<AppProvider>().textEditingController.text,
+                        );
+                      }
                     },
                   ),
                   Gap(10),
@@ -95,6 +114,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
                     child: e,
                   ),
                 ),
+                ReusableInlineBanner(),
                 HistoricFeaturedAll(preview: true),
               ],
             ),
@@ -120,12 +140,81 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
           if (data == null) return;
           var text = data.text;
           if (text == null) return;
-          await getImageFromUrl(text, context);
+          if (context.read<AppProvider>().isRewardTime) {
+            _showRewardedAd(context, text);
+          } else {
+            await getImageFromUrl(context, text);
+          }
         },
       ),
     );
   }
 
+  RewardedAd? _rewardedAd;
+  int _numRewardedLoadAttempts = 0;
+
+  static final AdRequest request = AdRequest(
+    keywords: <String>['Games', 'GamePlay', 'XBOX', 'PS5'],
+    contentUrl: 'https://www.jumia.ma/',
+    nonPersonalizedAds: true,
+  );
+  void _createRewardedAd() {
+    RewardedAd.load(
+        adUnitId: Platform.isAndroid ? rewardedAdAndroid : rewardedAdIos,
+        request: request,
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (RewardedAd ad) {
+            log('$ad loaded.');
+            _rewardedAd = ad;
+            _numRewardedLoadAttempts = 0;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            log('RewardedAd failed to load: $error');
+            _rewardedAd = null;
+            _numRewardedLoadAttempts += 1;
+            if (_numRewardedLoadAttempts < maxFailedLoadAttempts) {
+              _createRewardedAd();
+            }
+          },
+        ));
+  }
+
+  void _showRewardedAd(BuildContext context, String text) {
+    if (_rewardedAd == null) {
+      log('Warning: attempt to show rewarded before loaded.');
+      return;
+    }
+    _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (RewardedAd ad) => log('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (RewardedAd ad) {
+        log('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        _createRewardedAd();
+      },
+      onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+        log('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        _createRewardedAd();
+      },
+    );
+
+    _rewardedAd!.setImmersiveMode(true);
+    _rewardedAd!.show(
+      onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+        log('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
+        context.read<AppProvider>().updateRewardTime();
+        saveRewardDateTime().then((value) {});
+        getImageFromUrl(context, text).then((value) {});
+      },
+    );
+    _rewardedAd = null;
+  }
+
+  @override
+  void dispose() {
+    _rewardedAd?.dispose();
+    super.dispose();
+  }
   /* Future<void> saveLocalImage() async {
     var currCtx = _globalKey.currentContext;
     if (currCtx == null) return;

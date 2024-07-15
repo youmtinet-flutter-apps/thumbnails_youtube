@@ -1,43 +1,15 @@
-// Copyright 2021 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// https://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// ignore_for_file: public_member_api_docs
-
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:thumbnail_youtube/ads/constants.dart';
+import 'package:thumbnail_youtube/lib.dart';
 import 'dart:developer';
-
-import 'anchored_adaptive_example.dart';
-import 'fluid_example.dart';
-import 'inline_adaptive_example.dart';
-import 'native_template_example.dart';
-import 'reusable_inline_example.dart';
-import 'webview_example.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   runApp(MyApp());
 }
-
-// You can also test with your own ad unit IDs by registering your device as a
-// test device. Check the logs for your device's ID value.
-const String testDevice = '254e4014-c6d1-4e18-bc3f-2cf7d84a94a7';
-const int maxFailedLoadAttempts = 3;
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -47,11 +19,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static final AdRequest request = AdRequest(
-    keywords: <String>['foo', 'bar'],
-    contentUrl: 'http://foo.com/bar.html',
-    nonPersonalizedAds: true,
-  );
+  static final AdRequest request = AdRequest();
 
   static const interstitialButtonText = 'InterstitialAd';
   static const rewardedButtonText = 'RewardedAd';
@@ -166,9 +134,11 @@ class _MyAppState extends State<MyApp> {
     );
 
     _rewardedAd!.setImmersiveMode(true);
-    _rewardedAd!.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-      log('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
-    });
+    _rewardedAd!.show(
+      onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+        log('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
+      },
+    );
     _rewardedAd = null;
   }
 
@@ -262,7 +232,9 @@ class _MyAppState extends State<MyApp> {
                     case anchoredAdaptiveButtonText:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AnchoredAdaptiveExample()),
+                        MaterialPageRoute(
+                          builder: (context) => AnchoredAdaptiveExample(),
+                        ),
                       );
                       break;
                     case nativeTemplateButtonText:
@@ -278,7 +250,11 @@ class _MyAppState extends State<MyApp> {
                       );
                       break;
                     case adInspectorButtonText:
-                      MobileAds.instance.openAdInspector((error) => log('Ad Inspector ' + (error == null ? 'opened.' : 'error: ' + (error.message ?? ''))));
+                      MobileAds.instance.openAdInspector(
+                        (error) => log(
+                          'Ad Inspector ' + (error == null ? 'opened.' : 'error: ' + (error.message ?? '')),
+                        ),
+                      );
                       break;
                     default:
                       throw AssertionError('unexpected button: $result');

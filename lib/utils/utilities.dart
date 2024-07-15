@@ -1,4 +1,5 @@
 import 'dart:developer' as dev;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,18 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thumbnail_youtube/lib.dart';
+
+Future<DateTime> getRewardDateTime() async {
+  var preferences = await SharedPreferences.getInstance();
+  var s = preferences.getString(PreferencesKeys.rewardDateTime.name);
+  var dateTime = DateTime.now().subtract(Duration(minutes: 11));
+  return DateTime.parse(s ?? dateTime.toString());
+}
+
+Future<void> saveRewardDateTime() async {
+  var preferences = await SharedPreferences.getInstance();
+  preferences.setString(PreferencesKeys.rewardDateTime.name, DateTime.now().toString());
+}
 
 Future<String> getThemeModePrefs() async {
   var preferences = await SharedPreferences.getInstance();
@@ -53,7 +66,7 @@ Future<ResStatusCodeVideo> resolu(
   return ResStatusCodeVideo(statusCode: response.statusCode, resoluton: resolution, video: video);
 }
 
-Future<void> getImageFromUrl(String text, BuildContext context) async {
+Future<void> getImageFromUrl(BuildContext context, String text) async {
   context.read<AppProvider>().setvideoIdFromUrl(context, text);
   var videoId = context.read<AppProvider>().videoId;
   List<ResStatusCode> resulutionsStatuses = await Future.wait(
@@ -80,10 +93,8 @@ String? convertUrlToId(String url, {bool trimWhitespaces = true}) {
   if (trimWhitespaces) url = url.trim();
 
   var list = [
-    RegExp(r"^youtube\.com\/watch\?v=([_\-a-zA-Z0-9]{11}).*$"),
-    RegExp(r"^https:\/\/(?:www\.|m\.)?youtube\.com\/watch\?v=([_\-a-zA-Z0-9]{11}).*$"),
-    RegExp(r"^https:\/\/(?:www\.|m\.)?youtube(?:-nocookie)?\.com\/embed\/([_\-a-zA-Z0-9]{11}).*$"),
-    RegExp(r"^https:\/\/youtu\.be\/([_\-a-zA-Z0-9]{11}).*$"),
+    RegExp(r"(?:https:\/\/)?(?:www\.|m\.)?youtube\.com\/watch\?v=([_\-a-zA-Z0-9]{11}).*$"),
+    RegExp(r"(?:https:\/\/)?youtu\.be\/([_\-a-zA-Z0-9]{11}).*$"),
   ];
   for (var exp in list) {
     Match? match = exp.firstMatch(url);
@@ -137,6 +148,52 @@ void appSnackbar(BuildContext context, String title, String message) {
     barBlur: 0,
   );
 }
+
+extension LISTWX<T> on Iterable<T> {
+  Iterable<E> mapFolded<E>(E Function(int index, T current, T next) convert) sync* {
+    for (var index = 0; index < length - 1; index++) {
+      yield convert(index, elementAt(index), elementAt(index + 1));
+    }
+  }
+
+  Iterable<E> mapFoldedGeneralized<E>(
+    E Function(int index, List<T> items) convert,
+    int groups,
+    int couverage,
+  ) sync* {
+    // groups > 1 && couverage >= 0 && couverage < groups;
+    var cover = min(couverage, groups - 1);
+    var ceiling = length - cover;
+    for (var index = 0; index < ceiling; index += groups - cover) {
+      yield convert(index, toList().sublist(index, min(index + groups, length)));
+    }
+  }
+
+  Iterable<W> whereMapCumuled<E, W>({
+    required E Function(int index, T current, T next) foldFunction,
+    required E Function(E a, E b) reduce,
+    required bool Function(int index, E cumul) test,
+    required W Function(int index, T element) convert,
+  }) sync* {
+    for (var index = 1; index < length; index++) {
+      List<T> ftt = toList().sublist(0, index + 1);
+      List<E> mpf = ftt.mapFolded<E>(foldFunction).toList();
+      var f = mpf.reduce(reduce);
+      if (test(index, f)) yield convert(index, elementAt(index));
+    }
+  }
+
+  W? firstWhereMapCumuled<E, W>({
+    required E Function(int index, T current, T next) foldFunction,
+    required bool Function(int index, E cumul) test,
+    required E Function(E a, E b) reduce,
+    required W Function(int index, T element) convert,
+  }) {
+    var where = whereMapCumuled(foldFunction: foldFunction, test: test, convert: convert, reduce: reduce);
+    return where.firstOrNull;
+  }
+}
+
 
 /* Future<void> _folding(CollectionReference<Map<String, dynamic>> collection) async {
   final data = await collection.get();

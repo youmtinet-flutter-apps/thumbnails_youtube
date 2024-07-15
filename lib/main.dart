@@ -16,11 +16,12 @@ void main() async {
       systemNavigationBarColor: primary,
     ),
   );
-  var historic = await getLocalHistoric();
+//   var historic = await getLocalHistoric();
   var data = await getThemeModePrefs();
+  var rewared = await getRewardDateTime();
   runApp(
     ChangeNotifierProvider(
-      create: (context) => AppProvider(history: historic),
+      create: (context) => AppProvider(datetimereward: rewared),
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         defaultTransition: Transition.topLevel,
