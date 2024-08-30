@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 // import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,9 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-// import 'package:thumbnail_youtube/ads/constants.dart';
 import 'package:thumbnail_youtube/lib.dart';
 
 class ThmbHomePage extends StatefulWidget {
@@ -153,14 +150,10 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
   RewardedAd? _rewardedAd;
   int _numRewardedLoadAttempts = 0;
 
-  static final AdRequest request = AdRequest(
-    keywords: <String>['Games', 'GamePlay', 'XBOX', 'PS5'],
-    contentUrl: 'https://www.jumia.ma/',
-    nonPersonalizedAds: true,
-  );
+  static final AdRequest request = AdRequest();
   void _createRewardedAd() {
     RewardedAd.load(
-        adUnitId: Platform.isAndroid ? rewardedAdAndroid : rewardedAdIos,
+        adUnitId: AdHelper.rewardedAdUnitId,
         request: request,
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (RewardedAd ad) {
@@ -200,11 +193,10 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
 
     _rewardedAd!.setImmersiveMode(true);
     _rewardedAd!.show(
-      onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+      onUserEarnedReward: (AdWithoutView ad, RewardItem reward) async {
         log('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
-        context.read<AppProvider>().updateRewardTime();
-        saveRewardDateTime().then((value) {});
-        getImageFromUrl(context, text).then((value) {});
+        await context.read<AppProvider>().updateRewardTime();
+        await getImageFromUrl(context, text);
       },
     );
     _rewardedAd = null;

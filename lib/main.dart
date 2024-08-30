@@ -1,15 +1,17 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/lib.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  MobileAds.instance.initialize();
   await firebaseInitialization;
   await FirebaseMessagingApi().initNotifications();
+
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: primary,

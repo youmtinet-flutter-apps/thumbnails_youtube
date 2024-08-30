@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:thumbnail_youtube/lib.dart';
-import 'dart:io' show Platform;
 
 class ReusableInlineExample extends StatefulWidget {
   const ReusableInlineExample({super.key});
@@ -66,7 +65,7 @@ class _ReusableInlineExampleState extends State<ReusableInlineExample> {
     // Create the ad objects and load ads.
     _bannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId: Platform.isAndroid ? bannerAd2Android : bannerAd2Ios,
+        adUnitId: AdHelper.bannerAd2UnitId,
         listener: BannerAdListener(
           onAdLoaded: (Ad ad) {
             log('$BannerAd loaded.');
@@ -85,7 +84,7 @@ class _ReusableInlineExampleState extends State<ReusableInlineExample> {
       ..load();
 
     _nativeAd = NativeAd(
-      adUnitId: Platform.isAndroid ? nativeAdAndroid : nativeAdIos,
+      adUnitId: AdHelper.nativeAdUnitId,
       request: AdRequest(),
       factoryId: 'adFactoryExample',
       listener: NativeAdListener(

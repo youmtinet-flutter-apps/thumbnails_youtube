@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:thumbnail_youtube/lib.dart';
-import 'dart:io' show Platform;
+
+import 'package:thumbnail_youtube/utils/ad_helper.dart';
 
 class ReusableInlineBanner extends StatefulWidget {
   const ReusableInlineBanner({super.key});
@@ -39,24 +39,24 @@ class _ReusableInlineBannerState extends State<ReusableInlineBanner> {
     super.didChangeDependencies();
     // Create the ad objects and load ads.
     _bannerAd = BannerAd(
-        size: AdSize.banner,
-        adUnitId: Platform.isAndroid ? bannerAd2Android : bannerAd2Ios,
-        listener: BannerAdListener(
-          onAdLoaded: (Ad ad) {
-            log('$BannerAd loaded.');
-            setState(() {
-              _bannerAdIsLoaded = true;
-            });
-          },
-          onAdFailedToLoad: (Ad ad, LoadAdError error) {
-            log('$BannerAd failedToLoad: $error');
-            ad.dispose();
-          },
-          onAdOpened: (Ad ad) => log('$BannerAd onAdOpened.'),
-          onAdClosed: (Ad ad) => log('$BannerAd onAdClosed.'),
-        ),
-        request: AdRequest())
-      ..load();
+      size: AdSize.banner,
+      adUnitId: AdHelper.bannerAdUnitId,
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          log('$BannerAd loaded.');
+          setState(() {
+            _bannerAdIsLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          log('$BannerAd failedToLoad: $error');
+          ad.dispose();
+        },
+        onAdOpened: (Ad ad) => log('$BannerAd onAdOpened.'),
+        onAdClosed: (Ad ad) => log('$BannerAd onAdClosed.'),
+      ),
+      request: AdRequest(),
+    )..load();
   }
 
   @override

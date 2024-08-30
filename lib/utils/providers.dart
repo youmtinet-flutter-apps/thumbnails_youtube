@@ -4,21 +4,29 @@ import 'package:flutter/material.dart';
 import 'utils.dart';
 
 class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  String _videoId = "";
   List<RsolutionEnum> _availableChoices = RsolutionEnum.values;
-  List<RsolutionEnum> get availableChoices => _availableChoices;
   RsolutionEnum _resolution = RsolutionEnum.mqdefault;
-  RsolutionEnum get resolution => _resolution;
-
   late DateTime _datetimereward;
+  final TextEditingController textEditingController = TextEditingController();
+
+  AppProvider({required DateTime datetimereward}) {
+    _datetimereward = datetimereward;
+  }
+
+  String get videoId => _videoId;
+  List<RsolutionEnum> get availableChoices => _availableChoices;
+  RsolutionEnum get resolution => _resolution;
   bool get isRewardTime => _datetimereward.isBefore(
         DateTime.now().subtract(
-          Duration(minutes: 10),
+          Duration(minutes: 5),
         ),
       );
 
-  void updateRewardTime() {
-    _datetimereward = DateTime.now();
-    notifyListeners();
+  String thumbnail({String? videoId, bool maxRes = false, bool mainView = true}) {
+    var rsolutionEnum = (maxRes ? _availableChoices.last : (mainView ? _resolution : RsolutionEnum.mqdefault));
+    var thum = "https://i.ytimg.com/vi/${videoId ?? _videoId}/${rsolutionEnum.name}.jpg";
+    return thum;
   }
 
   void setResolution(RsolutionEnum? value) {
@@ -30,16 +38,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _availableChoices = value;
     notifyListeners();
   }
-
-  String _videoId = "";
-  String get videoId => _videoId;
-  String thumbnail({String? videoId, bool maxRes = false, bool mainView = true}) {
-    var rsolutionEnum = (maxRes ? _availableChoices.last : (mainView ? _resolution : RsolutionEnum.mqdefault));
-    var thum = "https://i.ytimg.com/vi/${videoId ?? _videoId}/${rsolutionEnum.name}.jpg";
-    return thum;
-  }
-
-  final TextEditingController textEditingController = TextEditingController();
 
   void setvideoId(String value) {
     _videoId = value;
@@ -56,8 +54,15 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  AppProvider({required DateTime datetimereward}) {
-    _datetimereward = datetimereward;
+  void addFromLocal(VideoThumbnailMetataData value) {
+    value.isLocal = true;
+    notifyListeners();
+  }
+
+  Future<void> updateRewardTime() async {
+    _datetimereward = DateTime.now();
+    await saveRewardDateTime();
+    notifyListeners();
   }
 
   Future<void> addLike(VideoThumbnailMetataData value, BuildContext context) async {
@@ -72,16 +77,13 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void addFromLocal(VideoThumbnailMetataData value) {
-    value.isLocal = true;
-    notifyListeners();
-  }
-
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<TextEditingController>('textEditingController', textEditingController));
     properties.add(IterableProperty<RsolutionEnum>('_availableChoices', _availableChoices));
     properties.add(EnumProperty<RsolutionEnum>('_resolution', _resolution));
+    properties.add(DiagnosticsProperty<DateTime>('_datetimereward', _datetimereward));
+    properties.add(StringProperty('_videoId', _videoId));
   }
 }

@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:thumbnail_youtube/lib.dart';
-import 'dart:io' show Platform;
+
+import 'package:thumbnail_youtube/utils/ad_helper.dart';
 
 class ReusableInlineNative extends StatefulWidget {
   const ReusableInlineNative({super.key});
@@ -35,7 +35,7 @@ class _ReusableInlineNativeState extends State<ReusableInlineNative> {
     super.didChangeDependencies();
 
     _nativeAd = NativeAd(
-      adUnitId: Platform.isAndroid ? nativeAdAndroid : nativeAdIos,
+      adUnitId: AdHelper.nativeAdUnitId,
       request: AdRequest(),
       factoryId: 'adFactoryExample',
       listener: NativeAdListener(

@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:thumbnail_youtube/lib.dart';
@@ -51,7 +49,7 @@ class _MyAppState extends State<MyApp> {
 
   void _createInterstitialAd() {
     InterstitialAd.load(
-        adUnitId: Platform.isAndroid ? interstitialAdAndroid : interstitialAdIos,
+        adUnitId: AdHelper.interstitialAdUnitId,
         request: request,
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
@@ -95,7 +93,7 @@ class _MyAppState extends State<MyApp> {
 
   void _createRewardedAd() {
     RewardedAd.load(
-        adUnitId: Platform.isAndroid ? rewardedAdAndroid : rewardedAdIos,
+        adUnitId: AdHelper.rewardedAdUnitId,
         request: request,
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (RewardedAd ad) {
@@ -144,7 +142,7 @@ class _MyAppState extends State<MyApp> {
 
   void _createRewardedInterstitialAd() {
     RewardedInterstitialAd.load(
-        adUnitId: Platform.isAndroid ? rewardedInterstitialAdAndroid : rewardedInterstitialAdIos,
+        adUnitId: AdHelper.rewardedInterstitialAdUnitId,
         request: request,
         rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
           onAdLoaded: (RewardedInterstitialAd ad) {
