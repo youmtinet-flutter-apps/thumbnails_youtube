@@ -222,16 +222,8 @@ class AppInputField extends StatelessWidget {
           onTap: onPressed,
           child: Container(
             margin: EdgeInsets.only(right: 4.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [],
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.search,
-              ),
-            ),
+            decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: []),
+            child: Padding(padding: EdgeInsets.all(8.0), child: Icon(Icons.search)),
           ),
         ),
         filled: true,

@@ -26,11 +26,8 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-
 apply plugin: 'com.google.gms.google-services'
-
 apply plugin: 'kotlin-android'
-// apply plugin: 'dev.flutter.flutter-gradle-plugin'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -54,9 +51,18 @@ android {
         versionName flutterVersionName
     }
 
+    signingConfigs {
+        release {
+            storeFile file('')
+            storePassword ''
+            keyAlias ''
+            keyPassword ''
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }

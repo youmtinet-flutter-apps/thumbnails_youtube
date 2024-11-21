@@ -1,12 +1,11 @@
-import 'dart:developer';
 // import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:thumbnail_youtube/ads_units/ad_interstitial.dart';
 import 'package:thumbnail_youtube/lib.dart';
 
 class ThmbHomePage extends StatefulWidget {
@@ -19,13 +18,12 @@ class ThmbHomePage extends StatefulWidget {
 class _ThmbHomePageState extends State<ThmbHomePage> {
   bool showFullscreenMonitor = true;
 
-  final GlobalKey _globalKey = GlobalKey();
+  final GlobalKey<ReusableInterstitialAdsState> _globalKey = GlobalKey<ReusableInterstitialAdsState>();
 
   final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
-    _createRewardedAd();
     super.initState();
   }
 
@@ -33,13 +31,11 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
   Widget build(BuildContext context) {
     var videoId = context.watch<AppProvider>().videoId;
     var availableChoices = context.watch<AppProvider>().availableChoices;
-    log('Screen Width: ${Get.width.toString()}');
     return Scaffold(
       appBar: AppBar(
         title: Text('Thumbnails YouTube'),
         actions: [CustomThemeSwitcher()],
       ),
-      key: _globalKey,
       body: Stack(
         children: [
           Container(
@@ -61,21 +57,21 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
               children: [
                 Gap(10),
                 ...[
-                  AppInputField(
-                    textEditingController: context.watch<AppProvider>().textEditingController,
-                    onPressed: () async {
-                      if (context.read<AppProvider>().isRewardTime) {
-                        _showRewardedAd(
-                          context,
-                          context.read<AppProvider>().textEditingController.text,
-                        );
-                      } else {
+                  ReusableInterstitialAds(
+                    key: _globalKey,
+                    child: AppInputField(
+                      textEditingController: context.watch<AppProvider>().textEditingController,
+                      onPressed: () async {
                         await getImageFromUrl(
                           context,
                           context.read<AppProvider>().textEditingController.text,
                         );
-                      }
-                    },
+                        if (!context.read<AppProvider>().isAdsTime) return;
+                        await _globalKey.currentState?.showInterstitialAd(
+                          context.read<AppProvider>().textEditingController.text,
+                        );
+                      },
+                    ),
                   ),
                   Gap(10),
                   if (videoId.isNotEmpty) ...[
@@ -111,7 +107,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
                     child: e,
                   ),
                 ),
-                ReusableInlineBanner(),
+                //   ReusableInlineBanner(),
                 HistoricFeaturedAll(preview: true),
               ],
             ),
@@ -124,8 +120,8 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
             color: Theme.of(context).colorScheme.primary,
             shape: BoxShape.circle,
             /* borderRadius: BorderRadius.all(
-              Radius.circular(2),
-            ), */
+                Radius.circular(2),
+              ), */
           ),
           child: Padding(
             padding: EdgeInsets.all(18.0),
@@ -137,81 +133,23 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
           if (data == null) return;
           var text = data.text;
           if (text == null) return;
-          if (context.read<AppProvider>().isRewardTime) {
-            _showRewardedAd(context, text);
-          } else {
-            await getImageFromUrl(context, text);
-          }
+          await getImageFromUrl(context, text);
+          if (!context.read<AppProvider>().isAdsTime) return;
+          await _globalKey.currentState?.showInterstitialAd(text);
         },
       ),
     );
   }
 
-  RewardedAd? _rewardedAd;
-  int _numRewardedLoadAttempts = 0;
-
-  static final AdRequest request = AdRequest();
-  void _createRewardedAd() {
-    RewardedAd.load(
-        adUnitId: AdHelper.rewardedAdUnitId,
-        request: request,
-        rewardedAdLoadCallback: RewardedAdLoadCallback(
-          onAdLoaded: (RewardedAd ad) {
-            log('$ad loaded.');
-            _rewardedAd = ad;
-            _numRewardedLoadAttempts = 0;
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            log('RewardedAd failed to load: $error');
-            _rewardedAd = null;
-            _numRewardedLoadAttempts += 1;
-            if (_numRewardedLoadAttempts < maxFailedLoadAttempts) {
-              _createRewardedAd();
-            }
-          },
-        ));
-  }
-
-  void _showRewardedAd(BuildContext context, String text) {
-    if (_rewardedAd == null) {
-      log('Warning: attempt to show rewarded before loaded.');
-      return;
-    }
-    _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (RewardedAd ad) => log('ad onAdShowedFullScreenContent.'),
-      onAdDismissedFullScreenContent: (RewardedAd ad) {
-        log('$ad onAdDismissedFullScreenContent.');
-        ad.dispose();
-        _createRewardedAd();
-      },
-      onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-        log('$ad onAdFailedToShowFullScreenContent: $error');
-        ad.dispose();
-        _createRewardedAd();
-      },
-    );
-
-    _rewardedAd!.setImmersiveMode(true);
-    _rewardedAd!.show(
-      onUserEarnedReward: (AdWithoutView ad, RewardItem reward) async {
-        log('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
-        await context.read<AppProvider>().updateRewardTime();
-        await getImageFromUrl(context, text);
-      },
-    );
-    _rewardedAd = null;
-  }
-
   @override
   void dispose() {
-    _rewardedAd?.dispose();
     super.dispose();
   }
   /* Future<void> saveLocalImage() async {
     var currCtx = _globalKey.currentContext;
     if (currCtx == null) return;
     var rendered = currCtx.findRenderObject();
-    log(rendered.runtimeType.toString());
+    log (rendered.runtimeType.toString());
     late RenderRepaintBoundary boundary;
     if (rendered is RenderRepaintBoundary) {
       boundary = rendered;
@@ -219,7 +157,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
       ByteData? byteData = await (image.toByteData(format: ui.ImageByteFormat.png));
       if (byteData != null) {
         final result = await PhotoGallerySaver.saveImage(byteData.buffer.asUint8List());
-        log('$result');
+        log ('$result');
       }
     }
   } */

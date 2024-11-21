@@ -31,26 +31,6 @@ class AdHelper {
     }
   }
 
-  static String get rewardedAdUnitId {
-    if (Platform.isAndroid) {
-      return 'ca-app-pub-7566702396165026/4292371011';
-    } else if (Platform.isIOS) {
-      return '';
-    } else {
-      throw UnsupportedError('Unsupported platform');
-    }
-  }
-
-  static String get rewardedInterstitialAdUnitId {
-    if (Platform.isAndroid) {
-      return 'ca-app-pub-7566702396165026/4588842346';
-    } else if (Platform.isIOS) {
-      return '';
-    } else {
-      throw UnsupportedError('Unsupported platform');
-    }
-  }
-
   static String get nativeAdUnitId {
     if (Platform.isAndroid) {
       return 'ca-app-pub-7566702396165026/8144943979';

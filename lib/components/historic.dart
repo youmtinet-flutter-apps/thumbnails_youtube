@@ -107,7 +107,7 @@ class HistoricBuilder extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       child: ListView.separated(
         separatorBuilder: (context, index) {
-          return index % 8 == 0 ? ReusableInlineBanner() : SizedBox(height: 15);
+          return /* index % 8 == 0 ? ReusableInlineBanner() : */ SizedBox(height: 15);
         },
         physics: BouncingScrollPhysics(),
         shrinkWrap: preview,

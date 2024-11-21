@@ -8,16 +8,16 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thumbnail_youtube/lib.dart';
 
-Future<DateTime> getRewardDateTime() async {
+Future<DateTime> getAdsDateTime() async {
   var preferences = await SharedPreferences.getInstance();
-  var s = preferences.getString(PreferencesKeys.rewardDateTime.name);
+  var s = preferences.getString(PreferencesKeys.adsDateTime.name);
   var dateTime = DateTime.now().subtract(Duration(minutes: 11));
   return DateTime.parse(s ?? dateTime.toString());
 }
 
-Future<void> saveRewardDateTime() async {
+Future<void> saveAdsDateTime() async {
   var preferences = await SharedPreferences.getInstance();
-  preferences.setString(PreferencesKeys.rewardDateTime.name, DateTime.now().toString());
+  preferences.setString(PreferencesKeys.adsDateTime.name, DateTime.now().toString());
 }
 
 Future<String> getThemeModePrefs() async {
@@ -202,10 +202,10 @@ extension LISTWX<T> on Iterable<T> {
     if (!previousValue.map((e) => e.videoId).contains(element.videoId)) {
       previousValue.add(element);
     } else {
-      developer.log('element = $element');
+      developer.log ('element = $element');
     }
     return previousValue;
   });
-  developer.log("Before ${metadata.length}", level: 1);
-  developer.log("After ${foldmetadata.length}", level: 1);
+  developer.log ("Before ${metadata.length}", level: 1);
+  developer.log ("After ${foldmetadata.length}", level: 1);
 } */

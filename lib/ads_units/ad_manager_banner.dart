@@ -52,8 +52,8 @@ class _ReusableInlineManagerBannerState extends State<ReusableInlineManagerBanne
           log('$AdManagerBannerAd failedToLoad: $error');
           ad.dispose();
         },
-        onAdOpened: (Ad ad) => log('$AdManagerBannerAd onAdOpened.'),
-        onAdClosed: (Ad ad) => log('$AdManagerBannerAd onAdClosed.'),
+        onAdOpened: (Ad ad) => log('$ad onAdOpened.'),
+        onAdClosed: (Ad ad) => log('$ad onAdClosed.'),
       ),
     )..load();
   }

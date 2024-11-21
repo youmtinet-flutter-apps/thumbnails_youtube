@@ -7,17 +7,17 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String _videoId = "";
   List<RsolutionEnum> _availableChoices = RsolutionEnum.values;
   RsolutionEnum _resolution = RsolutionEnum.mqdefault;
-  late DateTime _datetimereward;
+  late DateTime _datetimeAds;
   final TextEditingController textEditingController = TextEditingController();
 
-  AppProvider({required DateTime datetimereward}) {
-    _datetimereward = datetimereward;
+  AppProvider({required DateTime datetimeAds}) {
+    _datetimeAds = datetimeAds;
   }
 
   String get videoId => _videoId;
   List<RsolutionEnum> get availableChoices => _availableChoices;
   RsolutionEnum get resolution => _resolution;
-  bool get isRewardTime => _datetimereward.isBefore(
+  bool get isAdsTime => _datetimeAds.isBefore(
         DateTime.now().subtract(
           Duration(minutes: 5),
         ),
@@ -59,9 +59,9 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  Future<void> updateRewardTime() async {
-    _datetimereward = DateTime.now();
-    await saveRewardDateTime();
+  Future<void> updateAdsTime() async {
+    _datetimeAds = DateTime.now();
+    await saveAdsDateTime();
     notifyListeners();
   }
 
@@ -83,7 +83,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     properties.add(DiagnosticsProperty<TextEditingController>('textEditingController', textEditingController));
     properties.add(IterableProperty<RsolutionEnum>('_availableChoices', _availableChoices));
     properties.add(EnumProperty<RsolutionEnum>('_resolution', _resolution));
-    properties.add(DiagnosticsProperty<DateTime>('_datetimereward', _datetimereward));
+    properties.add(DiagnosticsProperty<DateTime>('_datetimeAds', _datetimeAds));
     properties.add(StringProperty('_videoId', _videoId));
   }
 }
