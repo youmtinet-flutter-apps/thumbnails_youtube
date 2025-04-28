@@ -42,13 +42,7 @@ Future<void> main() async {
         home: ThemeProvider(
           initTheme: theme(data == Brightness.dark.name),
           duration: Duration(milliseconds: 1001),
-          child: Builder(builder: (context) {
-            return ThemeSwitchingArea(
-              child: Builder(builder: (context) {
-                return ThmbHomePage();
-              }),
-            );
-          }),
+          child: ThmbHomePage(),
         ),
       ),
     ),

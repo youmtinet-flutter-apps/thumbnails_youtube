@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -39,6 +40,13 @@ class AppImageViewer extends StatelessWidget {
   }
 }
 
+extension ThemeSata on ThemeData {
+  bool get isDarkMode => brightness == Brightness.dark;
+  Color get backgroundColor => colorScheme.surface;
+
+  Color get adaptativeTextColor => isDarkMode ? const Color(0xFFF3F3F3) : primaryColorDark;
+}
+
 class CustomThemeSwitcher extends StatelessWidget {
   CustomThemeSwitcher({
     Key? key,
@@ -46,9 +54,8 @@ class CustomThemeSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ThemeSwitcher(
-      //   clipper: ThemeTogglerClipper(),
-      builder: (bc) {
+    return ThemeSwitcher.switcher(
+      builder: (_, switcher) {
         return IconButton(
           icon: AnimatedSwitcher(
             duration: Duration(milliseconds: 500),
@@ -73,12 +80,23 @@ class CustomThemeSwitcher extends StatelessWidget {
             },
           ),
           onPressed: () async {
-            if (kDebugMode && (bc.findRenderObject()?.debugNeedsPaint ?? true)) return;
-            var isDarkMode = Theme.of(bc).brightness == Brightness.dark;
-            // Get.changeThemeMode(isDarkMode ? ThemeMode.light : ThemeMode.dark);
-            final switcher = ThemeSwitcher.of(bc);
-            await saveThemeModePrefs(isDarkMode ? Brightness.light : Brightness.dark);
-            switcher.changeTheme(theme: theme(isDarkMode), isReversed: isDarkMode);
+            // Debug START
+            RenderObject? boundary = context.findRenderObject();
+            if (boundary == null) {
+              log('boundary');
+              return;
+            }
+            bool debugNeedsPaint = false;
+            if (kDebugMode) debugNeedsPaint = boundary.debugNeedsPaint;
+            if (debugNeedsPaint) {
+              log('debugNeedsPaint');
+              return;
+            }
+            // Debug END
+            final bool prevDark = context.theme.isDarkMode;
+            // Get.changeThemeMode(!prevDark ? ThemeMode.light : ThemeMode.dark);
+            await saveThemeModePrefs(prevDark ? Brightness.light : Brightness.dark);
+            switcher.changeTheme(theme: theme(!prevDark), isReversed: prevDark);
           },
         );
       },

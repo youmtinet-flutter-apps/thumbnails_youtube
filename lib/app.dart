@@ -1,5 +1,6 @@
 // import 'dart:io';
 
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -31,112 +32,114 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
   Widget build(BuildContext context) {
     var videoId = context.watch<AppProvider>().videoId;
     var availableChoices = context.watch<AppProvider>().availableChoices;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Thumbnails YouTube'),
-        actions: [CustomThemeSwitcher()],
-      ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/background.jpeg'), // Your image path here
-                fit: BoxFit.cover, // You can change this property according to your needs
+    return ThemeSwitchingArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Thumbnails YouTube'),
+          actions: [CustomThemeSwitcher()],
+        ),
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/background.jpeg'), // Your image path here
+                  fit: BoxFit.cover, // You can change this property according to your needs
+                ),
               ),
             ),
-          ),
-          Container(
-            width: Get.width,
-            height: Get.height,
-            color: Colors.black.withOpacity(0.7),
-          ),
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                Gap(10),
-                ...[
-                  ReusableInterstitialAds(
-                    key: _globalKey,
-                    child: AppInputField(
-                      textEditingController: context.watch<AppProvider>().textEditingController,
-                      onPressed: () async {
-                        await getImageFromUrl(
-                          context,
-                          context.read<AppProvider>().textEditingController.text,
-                        );
-                        if (!context.read<AppProvider>().isAdsTime) return;
-                        await _globalKey.currentState?.showInterstitialAd(
-                          context.read<AppProvider>().textEditingController.text,
-                        );
-                      },
-                    ),
-                  ),
+            Container(
+              width: Get.width,
+              height: Get.height,
+              color: Colors.black.withOpacity(0.7),
+            ),
+            SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
                   Gap(10),
-                  if (videoId.isNotEmpty) ...[
-                    MainImageView(
-                      showFullscreenMonitor: showFullscreenMonitor,
-                      onPressed: () {
-                        setState(() {
-                          showFullscreenMonitor = !showFullscreenMonitor;
-                        });
-                      },
+                  ...[
+                    ReusableInterstitialAds(
+                      key: _globalKey,
+                      child: AppInputField(
+                        textEditingController: context.watch<AppProvider>().textEditingController,
+                        onPressed: () async {
+                          await getImageFromUrl(
+                            context,
+                            context.read<AppProvider>().textEditingController.text,
+                          );
+                          if (!context.read<AppProvider>().isAdsTime) return;
+                          await _globalKey.currentState?.showInterstitialAd(
+                            context.read<AppProvider>().textEditingController.text,
+                          );
+                        },
+                      ),
                     ),
                     Gap(10),
-                  ],
-                  Row(
-                    children: [
-                      if (availableChoices.isNotEmpty)
-                        Expanded(
-                          child: ResolutionChoiceWidget(
-                            availableChoices: availableChoices,
-                            controller: controller,
-                          ),
-                        ),
-                      if (videoId.isNotEmpty) SizedBox(width: 24),
-                      if (videoId.isNotEmpty) DownloadButton(),
-                      SizedBox(height: 20),
+                    if (videoId.isNotEmpty) ...[
+                      MainImageView(
+                        showFullscreenMonitor: showFullscreenMonitor,
+                        onPressed: () {
+                          setState(() {
+                            showFullscreenMonitor = !showFullscreenMonitor;
+                          });
+                        },
+                      ),
+                      Gap(10),
                     ],
+                    Row(
+                      children: [
+                        if (availableChoices.isNotEmpty)
+                          Expanded(
+                            child: ResolutionChoiceWidget(
+                              availableChoices: availableChoices,
+                              controller: controller,
+                            ),
+                          ),
+                        if (videoId.isNotEmpty) SizedBox(width: 24),
+                        if (videoId.isNotEmpty) DownloadButton(),
+                        SizedBox(height: 20),
+                      ],
+                    ),
+                    Gap(10),
+                    HistoricIcon(),
+                  ].map(
+                    (e) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: e,
+                    ),
                   ),
-                  Gap(10),
-                  HistoricIcon(),
-                ].map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: e,
-                  ),
-                ),
-                ReusableInlineBanner(),
-                HistoricFeaturedAll(preview: true),
-              ],
+                  ReusableInlineBanner(),
+                  HistoricFeaturedAll(preview: true),
+                ],
+              ),
+            ),
+          ],
+        ),
+        floatingActionButton: InkWell(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              shape: BoxShape.circle,
+              /* borderRadius: BorderRadius.all(
+                  Radius.circular(2),
+                ), */
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(18.0),
+              child: Icon(Icons.paste),
             ),
           ),
-        ],
-      ),
-      floatingActionButton: InkWell(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            shape: BoxShape.circle,
-            /* borderRadius: BorderRadius.all(
-                Radius.circular(2),
-              ), */
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(18.0),
-            child: Icon(Icons.paste),
-          ),
+          onTap: () async {
+            ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+            if (data == null) return;
+            var text = data.text;
+            if (text == null) return;
+            await getImageFromUrl(context, text);
+            if (!context.read<AppProvider>().isAdsTime) return;
+            await _globalKey.currentState?.showInterstitialAd(text);
+          },
         ),
-        onTap: () async {
-          ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-          if (data == null) return;
-          var text = data.text;
-          if (text == null) return;
-          await getImageFromUrl(context, text);
-          if (!context.read<AppProvider>().isAdsTime) return;
-          await _globalKey.currentState?.showInterstitialAd(text);
-        },
       ),
     );
   }
