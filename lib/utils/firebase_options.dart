@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, Tar
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options.dart';
+/// import 'fire base_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,

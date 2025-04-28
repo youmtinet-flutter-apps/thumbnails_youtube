@@ -12,12 +12,12 @@ ThemeData theme(bool isDark) {
         ? ColorScheme.dark(
             primary: primaryDark,
             error: error,
-            background: bg,
+            surface: bg,
           )
         : ColorScheme.light(
             primary: primary,
             error: error,
-            background: bg,
+            surface: bg,
           ),
     brightness: isDark ? Brightness.dark : Brightness.light,
     dialogBackgroundColor: Colors.transparent,

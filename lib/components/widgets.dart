@@ -1,12 +1,15 @@
+import 'dart:io';
+
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+import 'package:path/path.dart';
+import 'package:saver_gallery/saver_gallery.dart';
 import 'package:get/get.dart';
 import 'package:personal_dropdown/personal_dropdown.dart';
 import 'package:provider/provider.dart';
-import 'package:thumbnail_youtube/lib.dart' hide GallerySaver;
+import 'package:thumbnail_youtube/lib.dart';
 
 class AppImageViewer extends StatelessWidget {
   AppImageViewer({
@@ -227,7 +230,7 @@ class AppInputField extends StatelessWidget {
           ),
         ),
         filled: true,
-        fillColor: Theme.of(context).colorScheme.background,
+        fillColor: Theme.of(context).colorScheme.surface,
         prefixText: "https://",
         hintText: 'video_url_youtube',
       ),
@@ -253,7 +256,7 @@ class ResolutionChoiceWidget extends StatelessWidget {
       hintText: 'Resolution',
       items: availableChoices.map((e) => e.resFrmEnum()).toList(),
       itemBgColor: Colors.amber,
-      fillColor: Theme.of(context).colorScheme.background,
+      fillColor: Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: Colors.grey),
       onItemSelect: (String? value) {
@@ -283,6 +286,11 @@ class ResolutionChoiceWidget extends StatelessWidget {
   }
 }
 
+Future<Uint8List> getUint8ListFromImagePath(String imagePath) async {
+  File imageFile = File(imagePath);
+  return await imageFile.readAsBytes();
+}
+
 class DownloadButton extends StatelessWidget {
   DownloadButton({
     Key? key,
@@ -294,15 +302,17 @@ class DownloadButton extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         String path = context.read<AppProvider>().thumbnail();
-        bool? afterSave = await GallerySaver.saveImage(
-          path,
-          toDcim: true,
-          albumName: PreferencesKeys.videoThumnails.name,
+        Uint8List bites = await getUint8ListFromImagePath(path);
+        SaveResult afterSave = await SaverGallery.saveImage(
+          bites,
+          skipIfExists: true,
+          fileName: basename(path),
+          //   albumName: PreferencesKeys.videoThumnails.name,
         );
 
-        if (afterSave == null) return;
+        // if (afterSave == null) return;
 
-        if (!afterSave) return;
+        if (!afterSave.isSuccess) return;
         appSnackbar(context, 'Infos', "Image downloaded successfully!");
       },
       child: Container(

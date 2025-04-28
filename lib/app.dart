@@ -107,7 +107,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
                     child: e,
                   ),
                 ),
-                //   ReusableInlineBanner(),
+                ReusableInlineBanner(),
                 HistoricFeaturedAll(preview: true),
               ],
             ),

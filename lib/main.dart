@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/lib.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
@@ -24,7 +24,7 @@ void main() async {
   MobileAds.instance.initialize();
   await firebaseInitialization;
   await FirebaseMessagingApi().initNotifications();
-//   var historic = await getLocalHistoric();
+
   String data = await getThemeModePrefs();
   DateTime rewared = await getAdsDateTime();
 
