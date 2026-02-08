@@ -69,7 +69,7 @@ tasks.whenTaskAdded {
             val date = SimpleDateFormat("yyMMdd.HHmm").format(Date())
             val bundleDir = layout.buildDirectory.dir("outputs/bundle/release").get().asFile
             bundleDir.listFiles()?.filter { it.extension == "aab" }?.forEach { aabFile ->
-                val newName = "portfolio-$date-v$currentVersionName+$currentVersionCode-release.aab"
+                val newName = "youtube-thumbnails-$date-v$currentVersionName+$currentVersionCode-release.aab"
                 val newFile = File(aabFile.parentFile, newName)
                 if (aabFile.renameTo(newFile)) {
                     println(">>> Renamed AAB: ${aabFile.name} → $newName")
@@ -133,7 +133,7 @@ android {
             val arch = filters.find {
                 it.filterType == com.android.build.api.variant.FilterConfiguration.FilterType.ABI.name
             }?.identifier ?: "universal"
-            val newName = "portfolio-$date-v$versionNameValue+$versionCodeValue-$variantName-$arch.apk"
+            val newName = "youtube-thumbnails-$date-v$versionNameValue+$versionCodeValue-$variantName-$arch.apk"
             (this as BaseVariantOutputImpl).outputFileName = newName
         }
     }
