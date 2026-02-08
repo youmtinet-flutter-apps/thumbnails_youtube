@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -5,29 +7,82 @@ plugins {
     id "com.google.gms.google-services"
 }
 
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
+// Load optional signing properties from local.properties (kept out of VCS)
+def versionPropsFile = rootProject.file("local.properties")
+def localProps = new Properties()
+if (versionPropsFile.exists()) {
+    versionPropsFile.withInputStream { localProps.load(it) }
+}
+
+def releaseStoreFile = localProps.getProperty("release.storeFile")
+def releaseStorePassword = localProps.getProperty("release.storePassword")
+def releaseKeyAlias = localProps.getProperty("release.keyAlias")
+def releaseKeyPassword = localProps.getProperty("release.keyPassword")
+
+def currentVersionCode = (localProps.getProperty("VERSION_CODE") ?: "1").toInteger()
+def currentVersionName = localProps.getProperty("VERSION_NAME") ?: "1.0.0"
+
+
+// Version bumping task for release builds
+tasks.register("bumpVersion") {
+    doLast {
+        def newVersionCode = currentVersionCode + 1
+
+        def parts = currentVersionName.split("\\.")
+        def major = parts[0].toInteger()
+        def minor = parts[1].toInteger()
+        def patch = parts[2].toInteger()
+
+        patch++
+        if (patch >= 100) {
+            patch = 0
+            minor++
+        }
+        if (minor >= 100) {
+            minor = 0
+            major++
+        }
+
+        def newVersionName = "${major}.${minor}.${patch}"
+
+        println(">>> Bumped versionName: ${currentVersionName} → ${newVersionName}")
+        println(">>> Bumped versionCode: ${currentVersionCode} → ${newVersionCode}")
+
+        // Save back
+        localProps["VERSION_CODE"] = newVersionCode.toString()
+        localProps["VERSION_NAME"] = newVersionName.toString()
+        versionPropsFile.withOutputStream { localProps.store(it, null) }
     }
 }
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+
+
+// Make release builds depend on version bump
+tasks.matching { it.name == "assembleRelease" || it.name == "bundleRelease" }.configureEach {
+    dependsOn("bumpVersion")
 }
-def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdk')
-if (flutterMinSdkVersion == null) {
-    flutterMinSdkVersion = '16'
-}
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+
+// Rename AAB outputs after bundleRelease completes
+tasks.whenTaskAdded { task ->
+    if (task.name == "bundleRelease") {
+        task.doLast {
+            def date = new SimpleDateFormat("yyMMdd.HHmm").format(new Date())
+            def bundleDir = file("${project.layout.buildDirectory.get()}/outputs/bundle/release")
+            bundleDir.listFiles()?.findAll { it.extension == "aab" }?.each { aabFile ->
+                def newName = "portfolio-${date}-v${currentVersionName}+${currentVersionCode}-release.aab"
+                def newFile = new File(aabFile.parentFile, newName)
+                if (aabFile.renameTo(newFile)) {
+                    println(">>> Renamed AAB: ${aabFile.name} → ${newName}")
+                } else {
+                    println(">>> Failed to rename AAB: ${aabFile.name}")
+                }
+            }
+        }
+    }
 }
 
 android {
     namespace "com.ymrabtiapps.thumbnails.thumbnail_youtube"
-    compileSdk 34
+    compileSdk 36
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -40,10 +95,11 @@ android {
 
     defaultConfig {
         applicationId "com.ymrabtiapps.thumbnails.thumbnail_youtube"
-        minSdkVersion flutterMinSdkVersion.toInteger()
-        targetSdkVersion 34
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 36
+        versionCode = currentVersionCode
+        versionName = currentVersionName
+        multiDexEnabled = true
     }
 
     signingConfigs {
@@ -52,6 +108,38 @@ android {
             // storePassword ''
             // keyAlias ''
             // keyPassword ''
+        }
+    }
+
+    // Configure release signing if properties are provided
+    if (releaseStoreFile != null &&
+        releaseStorePassword != null &&
+        releaseKeyAlias != null &&
+        releaseKeyPassword != null) {
+        
+        signingConfigs {
+            release {
+                storeFile = file(releaseStoreFile)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
+    applicationVariants.all { variant ->
+        def variantName = variant.name
+        def versionCode = variant.versionCode
+        def versionName = variant.versionName
+        
+        // Rename APK outputs
+        variant.outputs.all { output ->
+            def date = new SimpleDateFormat("yyMMdd.HHmm").format(new Date())
+            def arch = output.filters.find { 
+                it.filterType == com.android.build.api.variant.FilterConfiguration.FilterType.ABI.name 
+            }?.identifier ?: "universal"
+            def newName = "portfolio-${date}-v${versionName}+${versionCode}-${variantName}-${arch}.apk"
+            outputFileName = newName
         }
     }
 

@@ -20,7 +20,20 @@ ThemeData theme(bool isDark) {
             surface: bg,
           ),
     brightness: isDark ? Brightness.dark : Brightness.light,
-    dialogBackgroundColor: Colors.transparent,
+    dialogTheme: DialogThemeData(
+      backgroundColor: Colors.transparent,
+      titleTextStyle: TextStyle(
+        fontSize: 18,
+        color: fg,
+        fontFamily: "WORK SANS",
+        fontWeight: FontWeight.bold,
+      ),
+      contentTextStyle: TextStyle(
+        fontSize: 14,
+        color: fg,
+        fontFamily: "WORK SANS",
+      ),
+    ),
     appBarTheme: AppBarTheme(
       //   color: fg,
       elevation: 5,

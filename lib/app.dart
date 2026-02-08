@@ -51,7 +51,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
             Container(
               width: Get.width,
               height: Get.height,
-              color: Colors.black.withOpacity(0.7),
+              color: Colors.black.withValues(alpha: 0.7),
             ),
             SingleChildScrollView(
               physics: BouncingScrollPhysics(),

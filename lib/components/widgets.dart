@@ -342,7 +342,7 @@ class DownloadButton extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              primary.withBlue(primary.blue + 50),
+              primary.withBlue((primary.b * 255.0).round().clamp(0, 255) + 50),
               primary,
             ],
           ),

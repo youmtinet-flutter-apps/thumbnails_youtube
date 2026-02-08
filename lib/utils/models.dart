@@ -119,8 +119,6 @@ extension EnumX on RsolutionEnum {
         return "640 x 480";
       case RsolutionEnum.maxresdefault:
         return "1280 x 720";
-      default:
-        return "320 x 180";
     }
   }
 }
