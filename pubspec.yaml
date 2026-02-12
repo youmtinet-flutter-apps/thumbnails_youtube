@@ -25,6 +25,7 @@ dependencies:
     path: ^1.9.1
     google_mobile_ads: ^7.0.0
     # wakelock_plus: ^1.4.0
+    url_launcher: ^6.3.1
 
     personal_dropdown:
         git:

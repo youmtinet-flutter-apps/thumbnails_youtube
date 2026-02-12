@@ -30,19 +30,21 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Thumbnails YouTube'),
+          centerTitle: true,
+          elevation: 0,
           titleTextStyle: TextStyle(color: context.theme.textTheme.titleLarge?.color, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 12.r,
-            children: <Widget>[
-              ReusableInterstitialAds(
-                key: _globalKey,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0.r),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(12.r, 12.r, 12.r, 24.r),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 12.r,
+              children: <Widget>[
+                ReusableInterstitialAds(
+                  key: _globalKey,
                   child: AppInputField(
                     textEditingController: context.watch<AppProvider>().textEditingController,
                     onPressed: () async {
@@ -56,34 +58,27 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
                     },
                   ),
                 ),
-              ),
-              if (videoId.isNotEmpty)
-                MainImageView(
-                  showFullscreenMonitor: showFullscreenMonitor,
-                  onPressed: () {
-                    setState(() {
-                      showFullscreenMonitor = !showFullscreenMonitor;
-                    });
-                  },
-                ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0.r),
-                child: Row(
-                  spacing: 12.r,
-                  children: <Widget>[
-                    if (availableChoices.isNotEmpty)
-                      Expanded(
-                        child: ResolutionChoiceWidget(availableChoices: availableChoices, controller: context.watch<AppProvider>().resolutionSelectionController),
-                      ),
-                    if (videoId.isNotEmpty) DownloadButton(),
-                  ],
-                ),
-              ),
-              HistoricIcon(),
-
-              ReusableInlineBanner(),
-              HistoricFeaturedAll(preview: true),
-            ],
+                if (videoId.isNotEmpty) MainImageView(showFullscreenMonitor: showFullscreenMonitor),
+                if (availableChoices.isNotEmpty)
+                  SizedBox(
+                    width: double.infinity,
+                    child: ResolutionChoiceWidget(availableChoices: availableChoices, controller: context.watch<AppProvider>().resolutionSelectionController),
+                  ),
+                if (videoId.isNotEmpty)
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 12.r,
+                    runSpacing: 12.r,
+                    children: <Widget>[
+                      DownloadButton(),
+                      WatchOnYouTubeButton(videoId: videoId),
+                    ],
+                  ),
+                HistoricIcon(),
+                ReusableInlineBanner(),
+                HistoricFeaturedAll(preview: true),
+              ],
+            ),
           ),
         ),
         floatingActionButton: InkWell(

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart';
 import 'package:saver_gallery/saver_gallery.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:personal_dropdown/personal_dropdown.dart';
 import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/lib.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppImageViewer extends StatelessWidget {
   AppImageViewer({Key? key}) : super(key: key);
@@ -20,9 +22,14 @@ class AppImageViewer extends StatelessWidget {
       child: InteractiveViewer(
         child: Image(
           image: NetworkImage(context.watch<AppProvider>().thumbnail()),
+          fit: BoxFit.cover,
+          filterQuality: FilterQuality.high,
           repeat: ImageRepeat.repeatX,
           loadingBuilder: (BuildContext bcntxt, Widget widget, ImageChunkEvent? i) {
-            return widget;
+            if (i == null) return widget;
+            return Center(
+              child: SizedBox(width: 24.r, height: 24.r, child: CircularProgressIndicator(strokeWidth: 2)),
+            );
           },
           errorBuilder: (BuildContext btext, Object object, StackTrace? stackTrace) {
             return ErrorWidget(object);
@@ -61,82 +68,123 @@ class ErreurWidget extends StatelessWidget {
 }
 
 class MainImageView extends StatelessWidget {
-  MainImageView({Key? key, this.onPressed, required this.showFullscreenMonitor}) : super(key: key);
-  final void Function()? onPressed;
+  MainImageView({Key? key, required this.showFullscreenMonitor}) : super(key: key);
   final bool showFullscreenMonitor;
+
+  Future<void> _openFullQuality(BuildContext context) async {
+    final String imageUrl = context.read<AppProvider>().thumbnail(maxRes: true);
+    await Get.to<void>(() => FullQualityViewerPage(imageUrl: imageUrl), duration: Duration(milliseconds: 350));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (BuildContext context) {
-        return Stack(
+    final ThemeData theme = Theme.of(context);
+    return Card(
+      elevation: 6,
+      shadowColor: theme.colorScheme.primary.withValues(alpha: 0.2),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => _openFullQuality(context),
+        child: Stack(
           children: <Widget>[
-            // SizedBox(height: 300, width: Get.width),
-            Material(
-              child: InkWell(
-                onTap: onPressed,
-                child: Align(alignment: Alignment.center, child: AppImageViewer()),
+            AspectRatio(aspectRatio: 16 / 9, child: AppImageViewer()),
+            if (showFullscreenMonitor)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 10.r),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: <Color>[Colors.transparent, Colors.black.withValues(alpha: 0.65)]),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Icon(Icons.open_in_full, color: Colors.white, size: 18.r),
+                      SizedBox(width: 8.r),
+                      Text('Open full quality', style: theme.textTheme.labelLarge?.copyWith(color: Colors.white)),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FullQualityViewerPage extends StatefulWidget {
+  const FullQualityViewerPage({Key? key, required this.imageUrl}) : super(key: key);
+
+  final String imageUrl;
+
+  @override
+  State<FullQualityViewerPage> createState() => _FullQualityViewerPageState();
+}
+
+class _FullQualityViewerPageState extends State<FullQualityViewerPage> {
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: <Widget>[
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => Get.back<void>(),
+              child: Center(
+                child: InteractiveViewer(
+                  child: Hero(
+                    tag: 'CurrentViewer',
+                    child: Image(
+                      image: NetworkImage(widget.imageUrl),
+                      fit: BoxFit.contain,
+                      filterQuality: FilterQuality.high,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? progress) {
+                        if (progress == null) return child;
+                        return Center(
+                          child: SizedBox(width: 32.r, height: 32.r, child: CircularProgressIndicator(strokeWidth: 2)),
+                        );
+                      },
+                      errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                        return Icon(Icons.broken_image, color: Colors.white70, size: 48.r);
+                      },
+                    ),
+                  ),
+                ),
               ),
             ),
-            AnimatedSwitcher(
-              duration: Duration(seconds: 1),
-              child: showFullscreenMonitor
-                  ? Material(
-                      child: InkWell(
-                        onTap: () async {
-                          await Get.generalDialog(
-                            barrierColor: Colors.white,
-                            barrierDismissible: true,
-                            barrierLabel: 'Close',
-                            transitionDuration: Duration(seconds: 2),
-                            transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-                              return SizeTransition(sizeFactor: animation, child: child);
-                            },
-                            pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-                              return SizeTransition(
-                                sizeFactor: animation,
-                                child: Transform.rotate(
-                                  angle: 90.toRadian,
-                                  child: Hero(
-                                    tag: 'CurrentViewer',
-                                    child: Image(image: NetworkImage(context.watch<AppProvider>().thumbnail(maxRes: true))),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                          /* await Get.to<void>(
-                            () => Scaffold(
-                              body: Center(
-                                child: Transform.rotate(
-                                  angle: (90).toRadian,
-                                  child: Hero(
-                                    tag: 'CurrentViewer',
-                                    child: Image(image: NetworkImage(context.watch<AppProvider>().thumbnail(maxRes: true))),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            duration: Duration(milliseconds: 400),
-                          ); */
-                        },
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Expanded(child: SizedBox()),
-                              Icon(Icons.fullscreen),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  : null,
+          ),
+          Positioned(
+            top: 16.r,
+            right: 16.r,
+            child: SafeArea(
+              child: IconButton(
+                onPressed: () => Get.back<void>(),
+                icon: Icon(Icons.close, color: Colors.white),
+              ),
             ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -151,19 +199,26 @@ class AppInputField extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       textInputAction: TextInputAction.search,
+      keyboardType: TextInputType.url,
       decoration: InputDecoration(
-        suffixIcon: GestureDetector(
-          onTap: onPressed,
-          child: Container(
-            margin: EdgeInsets.only(right: 4.0),
-            decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: <BoxShadow>[]),
-            child: Padding(padding: EdgeInsets.all(8.0), child: Icon(Icons.search)),
-          ),
-        ),
+        hintText: 'Paste a YouTube URL',
+        prefixIcon: Icon(Icons.link),
+        suffixIcon: IconButton(onPressed: onPressed, icon: Icon(Icons.search)),
         filled: true,
         fillColor: Theme.of(context).colorScheme.surface,
-        prefixText: "https://",
-        hintText: 'video_url_youtube',
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 14.r),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.r),
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.r),
+          borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.r),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.2),
+        ),
       ),
     );
   }
@@ -214,7 +269,7 @@ class ResolutionChoiceWidget extends StatelessWidget {
       searchableTextItem: (String item) => item,
       hintText: 'Resolution',
       items: availableChoices.map((RsolutionEnum e) => e.getResourceFromEnum()).toList(),
-      itemBgColor: Colors.amber,
+      itemBgColor: Theme.of(context).colorScheme.primary,
       fillColor: Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: Colors.grey),
@@ -273,6 +328,33 @@ class DownloadButton extends StatelessWidget {
           color: primary,
         ),
         child: Icon(Icons.download, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class WatchOnYouTubeButton extends StatelessWidget {
+  const WatchOnYouTubeButton({Key? key, required this.videoId}) : super(key: key);
+
+  final String videoId;
+
+  Future<void> _launchVideo(BuildContext context) async {
+    final Uri url = Uri.parse('https://www.youtube.com/watch?v=$videoId');
+    final bool launched = await launchUrl(url, mode: LaunchMode.externalApplication);
+    if (!launched) {
+      appSnackbar(context, 'Error', 'Could not open YouTube');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton.icon(
+      onPressed: videoId.isEmpty ? null : () => _launchVideo(context),
+      icon: Icon(Icons.play_circle_fill),
+      label: Text('Watch on YouTube'),
+      style: FilledButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
+        shape: StadiumBorder(),
       ),
     );
   }
