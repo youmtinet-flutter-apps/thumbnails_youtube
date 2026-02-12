@@ -16,20 +16,16 @@ class _ReusableInlineManagerBannerState extends State<ReusableInlineManagerBanne
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (BuildContext context) {
-        final AdManagerBannerAd? adManagerBannerAd = _adManagerBannerAd;
-        if (_adManagerBannerAdIsLoaded && adManagerBannerAd != null) {
-          return SizedBox(
-            height: adManagerBannerAd.sizes[0].height.toDouble(),
-            width: adManagerBannerAd.sizes[0].width.toDouble(),
-            child: AdWidget(ad: _adManagerBannerAd!),
-          );
-        }
+    final AdManagerBannerAd? adManagerBannerAd = _adManagerBannerAd;
+    if (_adManagerBannerAdIsLoaded && adManagerBannerAd != null) {
+      return SizedBox(
+        height: adManagerBannerAd.sizes[0].height.toDouble(),
+        width: adManagerBannerAd.sizes[0].width.toDouble(),
+        child: AdWidget(ad: _adManagerBannerAd!),
+      );
+    }
 
-        return SizedBox();
-      },
-    );
+    return SizedBox();
   }
 
   @override

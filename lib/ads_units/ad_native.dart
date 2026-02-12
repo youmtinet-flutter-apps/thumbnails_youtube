@@ -18,16 +18,12 @@ class _ReusableInlineNativeState extends State<ReusableInlineNative> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (BuildContext context) {
-        final NativeAd? nativeAd = _nativeAd;
-        if (_nativeAdIsLoaded && nativeAd != null) {
-          return SizedBox(width: 250, height: 350, child: AdWidget(ad: nativeAd));
-        }
+    final NativeAd? nativeAd = _nativeAd;
+    if (_nativeAdIsLoaded && nativeAd != null) {
+      return SizedBox(width: 250, height: 350, child: AdWidget(ad: nativeAd));
+    }
 
-        return SizedBox();
-      },
-    );
+    return SizedBox();
   }
 
   @override

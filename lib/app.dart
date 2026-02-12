@@ -1,12 +1,8 @@
-// import 'dart:io';
-
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:thumbnail_youtube/ads_units/ad_interstitial.dart';
 import 'package:thumbnail_youtube/lib.dart';
 
 class ThmbHomePage extends StatefulWidget {
@@ -21,8 +17,6 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
 
   final GlobalKey<ReusableInterstitialAdsState> _globalKey = GlobalKey<ReusableInterstitialAdsState>();
 
-  final TextEditingController controller = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -30,91 +24,67 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var videoId = context.watch<AppProvider>().videoId;
-    var availableChoices = context.watch<AppProvider>().availableChoices;
-    return ThemeSwitchingArea(
+    String videoId = context.watch<AppProvider>().videoId;
+    List<RsolutionEnum> availableChoices = context.watch<AppProvider>().availableChoices;
+    return StackLoading(
       child: Scaffold(
         appBar: AppBar(
           title: Text('Thumbnails YouTube'),
-          actions: [CustomThemeSwitcher()],
+          titleTextStyle: TextStyle(color: context.theme.textTheme.titleLarge?.color, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        body: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/background.jpeg'), // Your image path here
-                  fit: BoxFit.cover, // You can change this property according to your needs
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 12.r,
+            children: <Widget>[
+              ReusableInterstitialAds(
+                key: _globalKey,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0.r),
+                  child: AppInputField(
+                    textEditingController: context.watch<AppProvider>().textEditingController,
+                    onPressed: () async {
+                      String text2 = context.read<AppProvider>().textEditingController.text;
+                      await getImageFromUrl(context, text2);
+                      if (context.read<AppProvider>().isAdsTime) {
+                        await _globalKey.currentState?.showInterstitialAdIfAvailable();
+                      }
+
+                      await getImageFromUrl(context, text2);
+                    },
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: Get.width,
-              height: Get.height,
-              color: Colors.black.withValues(alpha: 0.7),
-            ),
-            SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  Gap(10),
-                  ...[
-                    ReusableInterstitialAds(
-                      key: _globalKey,
-                      child: AppInputField(
-                        textEditingController: context.watch<AppProvider>().textEditingController,
-                        onPressed: () async {
-                          await getImageFromUrl(
-                            context,
-                            context.read<AppProvider>().textEditingController.text,
-                          );
-                          if (!context.read<AppProvider>().isAdsTime) return;
-                          await _globalKey.currentState?.showInterstitialAd(
-                            context.read<AppProvider>().textEditingController.text,
-                          );
-                        },
+              if (videoId.isNotEmpty)
+                MainImageView(
+                  showFullscreenMonitor: showFullscreenMonitor,
+                  onPressed: () {
+                    setState(() {
+                      showFullscreenMonitor = !showFullscreenMonitor;
+                    });
+                  },
+                ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0.r),
+                child: Row(
+                  spacing: 12.r,
+                  children: <Widget>[
+                    if (availableChoices.isNotEmpty)
+                      Expanded(
+                        child: ResolutionChoiceWidget(availableChoices: availableChoices, controller: context.watch<AppProvider>().resolutionSelectionController),
                       ),
-                    ),
-                    Gap(10),
-                    if (videoId.isNotEmpty) ...[
-                      MainImageView(
-                        showFullscreenMonitor: showFullscreenMonitor,
-                        onPressed: () {
-                          setState(() {
-                            showFullscreenMonitor = !showFullscreenMonitor;
-                          });
-                        },
-                      ),
-                      Gap(10),
-                    ],
-                    Row(
-                      children: [
-                        if (availableChoices.isNotEmpty)
-                          Expanded(
-                            child: ResolutionChoiceWidget(
-                              availableChoices: availableChoices,
-                              controller: controller,
-                            ),
-                          ),
-                        if (videoId.isNotEmpty) SizedBox(width: 24),
-                        if (videoId.isNotEmpty) DownloadButton(),
-                        SizedBox(height: 20),
-                      ],
-                    ),
-                    Gap(10),
-                    HistoricIcon(),
-                  ].map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: e,
-                    ),
-                  ),
-                  ReusableInlineBanner(),
-                  HistoricFeaturedAll(preview: true),
-                ],
+                    if (videoId.isNotEmpty) DownloadButton(),
+                  ],
+                ),
               ),
-            ),
-          ],
+              HistoricIcon(),
+
+              ReusableInlineBanner(),
+              HistoricFeaturedAll(preview: true),
+            ],
+          ),
         ),
         floatingActionButton: InkWell(
           child: Container(
@@ -122,22 +92,28 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
               color: Theme.of(context).colorScheme.primary,
               shape: BoxShape.circle,
               /* borderRadius: BorderRadius.all(
-                  Radius.circular(2),
-                ), */
+                    Radius.circular(2),
+                  ), */
             ),
-            child: Padding(
-              padding: EdgeInsets.all(18.0),
-              child: Icon(Icons.paste),
-            ),
+            child: Padding(padding: EdgeInsets.all(18.0.w), child: Icon(Icons.paste)),
           ),
           onTap: () async {
-            ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-            if (data == null) return;
-            var text = data.text;
-            if (text == null) return;
-            await getImageFromUrl(context, text);
-            if (!context.read<AppProvider>().isAdsTime) return;
-            await _globalKey.currentState?.showInterstitialAd(text);
+            try {
+              context.read<AppProvider>().setLoading(true);
+              context.read<AppProvider>().setResolution(RsolutionEnum.mqdefault);
+              ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+              if (data == null) return;
+              String? text = data.text;
+              if (text == null) return;
+              await getImageFromUrl(context, text);
+              if (context.read<AppProvider>().isAdsTime) {
+                await _globalKey.currentState?.showInterstitialAdIfAvailable();
+              }
+              context.read<AppProvider>().setLoading(false);
+            } on Exception catch (_) {
+              context.read<AppProvider>().setLoading(false);
+              appSnackbar(context, 'Error', "Une erreur s'est produite lors du chargement de la vidéo");
+            }
           },
         ),
       ),
@@ -148,6 +124,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
   void dispose() {
     super.dispose();
   }
+
   /* Future<void> saveLocalImage() async {
     var currCtx = _globalKey.currentContext;
     if (currCtx == null) return;

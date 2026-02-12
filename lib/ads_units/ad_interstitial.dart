@@ -31,13 +31,11 @@ class ReusableInterstitialAdsState extends State<ReusableInterstitialAds> {
       request: request,
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
-          log('$ad loaded');
           _interstitialAd = ad;
           _numInterstitialLoadAttempts = 0;
           _interstitialAd?.setImmersiveMode(true);
         },
         onAdFailedToLoad: (LoadAdError error) {
-          log('InterstitialAd failed to load: $error.');
           _numInterstitialLoadAttempts += 1;
           _interstitialAd = null;
           if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
@@ -48,12 +46,11 @@ class ReusableInterstitialAdsState extends State<ReusableInterstitialAds> {
     );
   }
 
-  Future<void> showInterstitialAd(String text) async {
+  Future<void> showInterstitialAdIfAvailable() async {
     if (_interstitialAd == null) {
-      log('Warning: attempt to show interstitial before loaded.', name: 'warning');
       return;
     }
-    _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
+    _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback<InterstitialAd>(
       onAdShowedFullScreenContent: (InterstitialAd ad) => log('$ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
         log('$ad onAdDismissedFullScreenContent.');
@@ -69,7 +66,6 @@ class ReusableInterstitialAdsState extends State<ReusableInterstitialAds> {
     _interstitialAd?.show();
     _interstitialAd = null;
     await context.read<AppProvider>().updateAdsTime();
-    await getImageFromUrl(context, text);
   }
 
   @override
@@ -80,7 +76,6 @@ class ReusableInterstitialAdsState extends State<ReusableInterstitialAds> {
 
   @override
   Widget build(BuildContext context) {
-    log(context.read<AppProvider>().isAdsTime.toString());
     return widget.child;
   }
 }

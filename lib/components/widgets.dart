@@ -1,10 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:get/get.dart';
@@ -13,9 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:thumbnail_youtube/lib.dart';
 
 class AppImageViewer extends StatelessWidget {
-  AppImageViewer({
-    Key? key,
-  }) : super(key: key);
+  AppImageViewer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,80 +43,17 @@ extension ThemeSata on ThemeData {
   Color get adaptativeTextColor => isDarkMode ? const Color(0xFFF3F3F3) : primaryColorDark;
 }
 
-class CustomThemeSwitcher extends StatelessWidget {
-  CustomThemeSwitcher({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ThemeSwitcher.switcher(
-      builder: (_, switcher) {
-        return IconButton(
-          icon: AnimatedSwitcher(
-            duration: Duration(milliseconds: 500),
-            child: () {
-              if (Theme.of(context).brightness == Brightness.dark) {
-                return Icon(CupertinoIcons.moon_stars);
-              } else {
-                return Icon(CupertinoIcons.sun_haze);
-              }
-            }(),
-            transitionBuilder: (child, animation) {
-              return ScaleTransition(
-                scale: animation,
-                child: SizeTransition(
-                  sizeFactor: animation,
-                  child: RotationTransition(
-                    turns: animation,
-                    child: child,
-                  ),
-                ),
-              );
-            },
-          ),
-          onPressed: () async {
-            // Debug START
-            RenderObject? boundary = context.findRenderObject();
-            if (boundary == null) {
-              log('boundary');
-              return;
-            }
-            bool debugNeedsPaint = false;
-            if (kDebugMode) debugNeedsPaint = boundary.debugNeedsPaint;
-            if (debugNeedsPaint) {
-              log('debugNeedsPaint');
-              return;
-            }
-            // Debug END
-            final bool prevDark = context.theme.isDarkMode;
-            // Get.changeThemeMode(!prevDark ? ThemeMode.light : ThemeMode.dark);
-            await saveThemeModePrefs(prevDark ? Brightness.light : Brightness.dark);
-            switcher.changeTheme(theme: theme(!prevDark), isReversed: prevDark);
-          },
-        );
-      },
-    );
-  }
-}
-
 class ErreurWidget extends StatelessWidget {
-  ErreurWidget({
-    Key? key,
-    this.message,
-  }) : super(key: key);
+  ErreurWidget({Key? key, this.message}) : super(key: key);
   final String? message;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(50),
+      padding: EdgeInsets.all(50.r),
       child: Column(
-        children: [
-          Icon(
-            Icons.error,
-            color: Colors.red,
-          ),
-          if (message != null) Text(message ?? '')
+        children: <Widget>[
+          Icon(Icons.error, color: Colors.red),
+          if (message != null) Text(message ?? ''),
         ],
       ),
     );
@@ -128,108 +61,88 @@ class ErreurWidget extends StatelessWidget {
 }
 
 class MainImageView extends StatelessWidget {
-  MainImageView({
-    Key? key,
-    this.onPressed,
-    required this.showFullscreenMonitor,
-  }) : super(key: key);
+  MainImageView({Key? key, this.onPressed, required this.showFullscreenMonitor}) : super(key: key);
   final void Function()? onPressed;
   final bool showFullscreenMonitor;
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      return Stack(
-        children: [
-          // SizedBox(height: 300, width: Get.width),
-          Material(
-            child: InkWell(
-              onTap: onPressed,
-              child: Align(
-                alignment: Alignment.center,
-                child: AppImageViewer(),
+    return Builder(
+      builder: (BuildContext context) {
+        return Stack(
+          children: <Widget>[
+            // SizedBox(height: 300, width: Get.width),
+            Material(
+              child: InkWell(
+                onTap: onPressed,
+                child: Align(alignment: Alignment.center, child: AppImageViewer()),
               ),
             ),
-          ),
-          AnimatedSwitcher(
-            duration: Duration(seconds: 1),
-            child: showFullscreenMonitor
-                ? Material(
-                    child: InkWell(
-                      onTap: () async {
-                        /* await Get.generalDialog(
-                          barrierColor: Colors.white,
-                          barrierDismissible: true,
-                          barrierLabel: 'Close',
-                          transitionDuration: Duration(seconds: 2),
-                          transitionBuilder: (context, animation, secondaryAnimation, child) {
-                            return SizeTransition(
-                              sizeFactor: animation,
-                              child: child,
-                            );
-                          },
-                          pageBuilder: (context, animation, secondaryAnimation) {
-                            return SizeTransition(
-                              sizeFactor: animation,
-                              child: Transform.rotate(
-                                angle: 90.toRadian,
-                                child: Hero(
-                                  tag: 'CurrentViewer',
-                                  child: Image(
-                                    image: NetworkImage(
-                                      context.watch<AppProvider>().thumbnail(maxRes: true),
-                                    ),
+            AnimatedSwitcher(
+              duration: Duration(seconds: 1),
+              child: showFullscreenMonitor
+                  ? Material(
+                      child: InkWell(
+                        onTap: () async {
+                          await Get.generalDialog(
+                            barrierColor: Colors.white,
+                            barrierDismissible: true,
+                            barrierLabel: 'Close',
+                            transitionDuration: Duration(seconds: 2),
+                            transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+                              return SizeTransition(sizeFactor: animation, child: child);
+                            },
+                            pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                              return SizeTransition(
+                                sizeFactor: animation,
+                                child: Transform.rotate(
+                                  angle: 90.toRadian,
+                                  child: Hero(
+                                    tag: 'CurrentViewer',
+                                    child: Image(image: NetworkImage(context.watch<AppProvider>().thumbnail(maxRes: true))),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ); */
-                        await Get.to<void>(
-                          () => Scaffold(
-                            body: Center(
-                              child: Transform.rotate(
-                                angle: (90).toRadian,
-                                child: Hero(
-                                  tag: 'CurrentViewer',
-                                  child: Image(
-                                    image: NetworkImage(
-                                      context.watch<AppProvider>().thumbnail(maxRes: true),
-                                    ),
+                              );
+                            },
+                          );
+                          /* await Get.to<void>(
+                            () => Scaffold(
+                              body: Center(
+                                child: Transform.rotate(
+                                  angle: (90).toRadian,
+                                  child: Hero(
+                                    tag: 'CurrentViewer',
+                                    child: Image(image: NetworkImage(context.watch<AppProvider>().thumbnail(maxRes: true))),
                                   ),
                                 ),
                               ),
                             ),
+                            duration: Duration(milliseconds: 400),
+                          ); */
+                        },
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Expanded(child: SizedBox()),
+                              Icon(Icons.fullscreen),
+                            ],
                           ),
-                          duration: Duration(milliseconds: 400),
-                        );
-                      },
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Expanded(child: SizedBox()),
-                            Icon(Icons.fullscreen),
-                          ],
                         ),
                       ),
-                    ),
-                  )
-                : null,
-          ),
-        ],
-      );
-    });
+                    )
+                  : null,
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
 class AppInputField extends StatelessWidget {
-  AppInputField({
-    Key? key,
-    this.onPressed,
-    required this.textEditingController,
-  }) : super(key: key);
+  AppInputField({Key? key, this.onPressed, required this.textEditingController}) : super(key: key);
   final void Function()? onPressed;
   final TextEditingController textEditingController;
 
@@ -243,7 +156,7 @@ class AppInputField extends StatelessWidget {
           onTap: onPressed,
           child: Container(
             margin: EdgeInsets.only(right: 4.0),
-            decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: []),
+            decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: <BoxShadow>[]),
             child: Padding(padding: EdgeInsets.all(8.0), child: Icon(Icons.search)),
           ),
         ),
@@ -256,12 +169,40 @@ class AppInputField extends StatelessWidget {
   }
 }
 
+class StackLoading extends StatelessWidget {
+  const StackLoading({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/wa-doodle.png'), // Your image path here
+              repeat: ImageRepeat.repeat, // You can change this property according to your needs
+            ),
+          ),
+        ),
+        Container(width: Get.width, height: Get.height, color: Colors.black.withValues(alpha: 0.5)),
+        child,
+        if (context.watch<AppProvider>().loading)
+          AbsorbPointer(
+            absorbing: true,
+            child: Container(
+              color: Colors.black.withValues(alpha: 0.5),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class ResolutionChoiceWidget extends StatelessWidget {
-  ResolutionChoiceWidget({
-    Key? key,
-    required this.availableChoices,
-    required this.controller,
-  }) : super(key: key);
+  ResolutionChoiceWidget({Key? key, required this.availableChoices, required this.controller}) : super(key: key);
 
   final List<RsolutionEnum> availableChoices;
   final TextEditingController controller;
@@ -269,33 +210,25 @@ class ResolutionChoiceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomDropdown<String>.search(
-      searchFunction: (e, searchPrompt) => e.contains(searchPrompt),
-      searchableTextItem: (item) => item,
+      searchFunction: (String e, String searchPrompt) => e.contains(searchPrompt),
+      searchableTextItem: (String item) => item,
       hintText: 'Resolution',
-      items: availableChoices.map((e) => e.resFrmEnum()).toList(),
+      items: availableChoices.map((RsolutionEnum e) => e.getResourceFromEnum()).toList(),
       itemBgColor: Colors.amber,
       fillColor: Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: Colors.grey),
       onItemSelect: (String? value) {
-        context.read<AppProvider>().setResolution(resFrmStr(value));
+        context.read<AppProvider>().setResolution(parseResolutionString(value));
       },
       excludeSelected: false,
       listItemBuilder: (BuildContext context, String result) {
         return Text(
           result,
-          style: context.watch<AppProvider>().resolution.resFrmEnum() == result
-              ? TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                )
-              : null,
+          style: context.watch<AppProvider>().resolution.getResourceFromEnum() == result ? TextStyle(color: Colors.white, fontWeight: FontWeight.bold) : null,
         );
       },
-      selectedStyle: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Theme.of(context).colorScheme.primary,
-      ),
+      selectedStyle: TextStyle(fontWeight: FontWeight.bold, color: context.isDarkMode ? Color(0xFFFFFFFF) : context.theme.colorScheme.primary),
       /* onChanged: (value) {
         controller.text = value;
       }, */
@@ -304,54 +237,42 @@ class ResolutionChoiceWidget extends StatelessWidget {
   }
 }
 
-Future<Uint8List> getUint8ListFromImagePath(String imagePath) async {
-  File imageFile = File(imagePath);
-  return await imageFile.readAsBytes();
+Future<Uint8List> getUint8ListFromImagePath(String url) async {
+  HttpClientRequest download = await HttpClient().getUrl(Uri.parse(url));
+  HttpClientResponse response = await download.close();
+  Uint8List bytes = await consolidateHttpClientResponseBytes(response);
+  return bytes;
 }
 
 class DownloadButton extends StatelessWidget {
-  DownloadButton({
-    Key? key,
-  }) : super(key: key);
+  DownloadButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var primary = Theme.of(context).colorScheme.primary;
+    Color primary = Theme.of(context).colorScheme.primary;
     return GestureDetector(
       onTap: () async {
-        String path = context.read<AppProvider>().thumbnail();
-        Uint8List bites = await getUint8ListFromImagePath(path);
-        SaveResult afterSave = await SaverGallery.saveImage(
-          bites,
-          skipIfExists: true,
-          fileName: basename(path),
-          //   albumName: PreferencesKeys.videoThumnails.name,
-        );
-
-        // if (afterSave == null) return;
-
-        if (!afterSave.isSuccess) return;
-        appSnackbar(context, 'Infos', "Image downloaded successfully!");
+        try {
+          context.read<AppProvider>().setLoading(true);
+          String path = context.read<AppProvider>().thumbnail();
+          Uint8List bites = await getUint8ListFromImagePath(path);
+          SaveResult afterSave = await SaverGallery.saveImage(bites, skipIfExists: true, fileName: basename(path));
+          if (!afterSave.isSuccess) return;
+          appSnackbar(context, 'Infos', "Image downloaded successfully!");
+          context.read<AppProvider>().setLoading(false);
+        } on Exception catch (_) {
+          context.read<AppProvider>().setLoading(false);
+        }
       },
       child: Container(
         height: 60,
         width: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              primary.withBlue((primary.b * 255.0).round().clamp(0, 255) + 50),
-              primary,
-            ],
-          ),
+          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: <Color>[primary.withBlue((primary.b * 255.0).round().clamp(0, 255) + 50), primary]),
           color: primary,
         ),
-        child: Icon(
-          Icons.download,
-          color: Colors.white,
-        ),
+        child: Icon(Icons.download, color: Colors.white),
       ),
     );
   }

@@ -10,10 +10,7 @@ class ResolutionList {
 class ResStatusCode {
   RsolutionEnum resoluton;
   int statusCode;
-  ResStatusCode({
-    required this.resoluton,
-    required this.statusCode,
-  });
+  ResStatusCode({required this.resoluton, required this.statusCode});
 
   @override
   String toString() {
@@ -25,11 +22,7 @@ class ResStatusCodeVideo {
   RsolutionEnum resoluton;
   int statusCode;
   VideoThumbnailMetataData video;
-  ResStatusCodeVideo({
-    required this.resoluton,
-    required this.statusCode,
-    required this.video,
-  });
+  ResStatusCodeVideo({required this.resoluton, required this.statusCode, required this.video});
 
   @override
   String toString() {
@@ -44,14 +37,7 @@ class VideoThumbnailMetataData {
   late int views;
   late int likes;
   bool isLocal = false;
-  VideoThumbnailMetataData({
-    required this.videoId,
-    required this.lastuse,
-    required this.downloads,
-    required this.views,
-    required this.likes,
-    this.isLocal = false,
-  });
+  VideoThumbnailMetataData({required this.videoId, required this.lastuse, required this.downloads, required this.views, required this.likes, this.isLocal = false});
   VideoThumbnailMetataData.fromJson(Map<String, dynamic> data) {
     lastuse = data["lastuse"];
     downloads = data["downloads"];
@@ -60,23 +46,10 @@ class VideoThumbnailMetataData {
     likes = data["likes"];
   }
   VideoThumbnailMetataData copyWith(List<String> vId) {
-    return VideoThumbnailMetataData(
-      lastuse: lastuse,
-      downloads: downloads,
-      videoId: videoId,
-      views: views,
-      likes: likes,
-      isLocal: vId.contains(videoId),
-    );
+    return VideoThumbnailMetataData(lastuse: lastuse, downloads: downloads, videoId: videoId, views: views, likes: likes, isLocal: vId.contains(videoId));
   }
 
-  Map<String, dynamic> toMap() => ({
-        "lastuse": lastuse,
-        "downloads": downloads,
-        "videoId": videoId,
-        "views": views,
-        "likes": likes,
-      });
+  Map<String, dynamic> toMap() => (<String, dynamic>{"lastuse": lastuse, "downloads": downloads, "videoId": videoId, "views": views, "likes": likes});
   @override
   String toString() {
     return "VideoThumbnailMetataData(lastuse = $lastuse, downloads = $downloads, videoId = $videoId, views = $views, likes = $likes)";
@@ -89,14 +62,7 @@ class VideoThumbnailMetataData {
 
   @override
   int get hashCode {
-    return Object.hash(
-      runtimeType,
-      lastuse,
-      downloads,
-      videoId,
-      views,
-      likes,
-    );
+    return Object.hash(runtimeType, lastuse, downloads, videoId, views, likes);
   }
 }
 
@@ -109,7 +75,7 @@ extension DoubleX on int {
 }
 
 extension EnumX on RsolutionEnum {
-  String resFrmEnum() {
+  String getResourceFromEnum() {
     switch (this) {
       case RsolutionEnum.mqdefault:
         return "320 x 180";
@@ -123,7 +89,7 @@ extension EnumX on RsolutionEnum {
   }
 }
 
-RsolutionEnum resFrmStr(String? resolu) {
+RsolutionEnum parseResolutionString(String? resolu) {
   switch (resolu) {
     case "320 x 180":
       return RsolutionEnum.mqdefault;
@@ -138,18 +104,8 @@ RsolutionEnum resFrmStr(String? resolu) {
   }
 }
 
-enum PreferencesKeys {
-  theme,
-  historic,
-  adsDateTime,
-  videoThumnails,
-}
+enum PreferencesKeys { historic, adsDateTime, videoThumnails }
 
 enum Incremente { views, likes, downloads }
 
-enum RsolutionEnum {
-  mqdefault,
-  hqdefault,
-  sddefault,
-  maxresdefault,
-}
+enum RsolutionEnum { mqdefault, hqdefault, sddefault, maxresdefault }

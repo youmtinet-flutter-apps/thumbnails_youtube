@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'utils.dart';
 
 class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  bool _loading = false;
   String _videoId = "";
   List<RsolutionEnum> _availableChoices = RsolutionEnum.values;
   RsolutionEnum _resolution = RsolutionEnum.mqdefault;
   late DateTime _datetimeAds;
   final TextEditingController textEditingController = TextEditingController();
+  final TextEditingController resolutionSelectionController = TextEditingController();
 
   AppProvider({required DateTime datetimeAds}) {
     _datetimeAds = datetimeAds;
@@ -17,20 +19,23 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String get videoId => _videoId;
   List<RsolutionEnum> get availableChoices => _availableChoices;
   RsolutionEnum get resolution => _resolution;
-  bool get isAdsTime => _datetimeAds.isBefore(
-        DateTime.now().subtract(
-          Duration(minutes: 5),
-        ),
-      );
+  bool get isAdsTime => _datetimeAds.isBefore(DateTime.now().subtract(Duration(minutes: 10)));
+  bool get loading => _loading;
+
+  void setLoading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
 
   String thumbnail({String? videoId, bool maxRes = false, bool mainView = true}) {
-    var rsolutionEnum = (maxRes ? _availableChoices.last : (mainView ? _resolution : RsolutionEnum.mqdefault));
-    var thum = "https://i.ytimg.com/vi/${videoId ?? _videoId}/${rsolutionEnum.name}.jpg";
+    RsolutionEnum rsolutionEnum = (maxRes ? _availableChoices.last : (mainView ? _resolution : RsolutionEnum.mqdefault));
+    String thum = "https://i.ytimg.com/vi/${videoId ?? _videoId}/${rsolutionEnum.name}.jpg";
     return thum;
   }
 
   void setResolution(RsolutionEnum? value) {
     _resolution = value ?? _resolution;
+    resolutionSelectionController.text = _resolution.getResourceFromEnum();
     notifyListeners();
   }
 
@@ -39,13 +44,19 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  void updateTextEditor() {
+    textEditingController.text = "youtube.com/watch?v=$_videoId";
+    notifyListeners();
+  }
+
   void setvideoId(String value) {
     _videoId = value;
+    updateTextEditor();
     notifyListeners();
   }
 
   void setvideoIdFromUrl(BuildContext context, String url) {
-    var idFROMurl = convertUrlToId(url);
+    String? idFROMurl = convertUrlToId(url);
     if (idFROMurl == null) {
       appSnackbar(context, 'Infos', "URI non valide");
     } else {

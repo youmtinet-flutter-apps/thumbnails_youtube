@@ -6,14 +6,7 @@ class ButtonScaleTransition extends StatefulWidget {
   final double scaleFactor;
   final Duration duration;
   final bool stayOnBottom;
-  ButtonScaleTransition({
-    Key? key,
-    required this.child,
-    required this.onPressed,
-    this.scaleFactor = 2,
-    this.duration = const Duration(milliseconds: 80),
-    this.stayOnBottom = false,
-  }) : super(key: key);
+  ButtonScaleTransition({Key? key, required this.child, required this.onPressed, this.scaleFactor = 2, this.duration = const Duration(milliseconds: 80), this.stayOnBottom = false}) : super(key: key);
 
   @override
   _ButtonScaleTransitionState createState() => _ButtonScaleTransitionState();
@@ -40,12 +33,8 @@ class _ButtonScaleTransitionState extends State<ButtonScaleTransition> with Sing
 
   @override
   void initState() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: duration,
-      lowerBound: 0.0,
-      upperBound: 0.1,
-    )..addListener(() {
+    _controller = AnimationController(vsync: this, duration: duration, lowerBound: 0.0, upperBound: 0.1)
+      ..addListener(() {
         setState(() {});
       });
 
@@ -74,16 +63,12 @@ class _ButtonScaleTransitionState extends State<ButtonScaleTransition> with Sing
     return GestureDetector(
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
-      onLongPressEnd: (details) => _onLongPressEnd(details, context),
+      onLongPressEnd: (LongPressEndDetails details) => _onLongPressEnd(details, context),
       onHorizontalDragEnd: _onDragEnd,
       onVerticalDragEnd: _onDragEnd,
-      onHorizontalDragUpdate: (details) => _onDragUpdate(details, context),
-      onVerticalDragUpdate: (details) => _onDragUpdate(details, context),
-      child: Transform.scale(
-        key: _childKey,
-        scale: _scale,
-        child: child,
-      ),
+      onHorizontalDragUpdate: (DragUpdateDetails details) => _onDragUpdate(details, context),
+      onVerticalDragUpdate: (DragUpdateDetails details) => _onDragUpdate(details, context),
+      child: Transform.scale(key: _childKey, scale: _scale, child: child),
     );
   }
 
@@ -97,7 +82,7 @@ class _ButtonScaleTransitionState extends State<ButtonScaleTransition> with Sing
 
   void _onTapUp(TapUpDetails details) {
     if (!_stayOnBottom) {
-      Future.delayed(duration, () {
+      Future<void>.delayed(duration, () {
         _reverseAnimation();
       });
     }

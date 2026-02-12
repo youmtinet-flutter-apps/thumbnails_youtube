@@ -18,20 +18,16 @@ class _ReusableInlineBannerState extends State<ReusableInlineBanner> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (BuildContext context) {
-        final BannerAd? bannerAd = _bannerAd;
-        if (_bannerAdIsLoaded && bannerAd != null) {
-          return SizedBox(
-            height: bannerAd.size.height.toDouble(),
-            width: bannerAd.size.width.toDouble(),
-            child: AdWidget(ad: bannerAd),
-          );
-        }
+    final BannerAd? bannerAd = _bannerAd;
+    if (_bannerAdIsLoaded && bannerAd != null) {
+      return SizedBox(
+        height: bannerAd.size.height.toDouble(),
+        width: bannerAd.size.width.toDouble(),
+        child: AdWidget(ad: bannerAd),
+      );
+    }
 
-        return SizedBox();
-      },
-    );
+    return SizedBox();
   }
 
   @override
