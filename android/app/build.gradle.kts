@@ -23,8 +23,8 @@ val releaseStorePassword = localProps.getProperty("release.storePassword")
 val releaseKeyAlias = localProps.getProperty("release.keyAlias")
 val releaseKeyPassword = localProps.getProperty("release.keyPassword")
 
-val currentVersionCode = (localProps.getProperty("VERSION_CODE") ?: "1").toInt()
-val currentVersionName = localProps.getProperty("VERSION_NAME") ?: "1.0.0"
+val currentVersionCode = (localProps.getProperty("flutter.versionCode") ?: "1").toInt()
+val currentVersionName = localProps.getProperty("flutter.versionName") ?: "1.0.0"
 
 // Version bumping task for release builds
 tasks.register("bumpVersion") {
@@ -51,8 +51,8 @@ tasks.register("bumpVersion") {
         println(">>> Bumped versionName: $currentVersionName → $newVersionName")
         println(">>> Bumped versionCode: $currentVersionCode → $newVersionCode")
 
-        localProps["VERSION_CODE"] = newVersionCode.toString()
-        localProps["VERSION_NAME"] = newVersionName
+        localProps["flutter.versionCode"] = newVersionCode.toString()
+        localProps["flutter.versionName"] = newVersionName
         versionPropsFile.outputStream().use { localProps.store(it, null) }
     }
 }
