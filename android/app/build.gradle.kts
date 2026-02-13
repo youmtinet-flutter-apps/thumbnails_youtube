@@ -23,8 +23,8 @@ val releaseStorePassword = localProps.getProperty("release.storePassword")
 val releaseKeyAlias = localProps.getProperty("release.keyAlias")
 val releaseKeyPassword = localProps.getProperty("release.keyPassword")
 
-val currentVersionCode = (localProps.getProperty("flutter.versionCode") ?: "1").toInt()
-val currentVersionName = localProps.getProperty("flutter.versionName") ?: "1.0.0"
+val currentVersionCode = (localProps.getProperty("versionCode") ?: "1").toInt()
+val currentVersionName = localProps.getProperty("versionName") ?: "1.0.0"
 
 // Version bumping task for release builds
 tasks.register("bumpVersion") {
@@ -51,8 +51,8 @@ tasks.register("bumpVersion") {
         println(">>> Bumped versionName: $currentVersionName → $newVersionName")
         println(">>> Bumped versionCode: $currentVersionCode → $newVersionCode")
 
-        localProps["flutter.versionCode"] = newVersionCode.toString()
-        localProps["flutter.versionName"] = newVersionName
+        localProps["versionCode"] = newVersionCode.toString()
+        localProps["versionName"] = newVersionName
         versionPropsFile.outputStream().use { localProps.store(it, null) }
     }
 }
@@ -67,7 +67,7 @@ tasks.whenTaskAdded {
     if (name == "bundleRelease") {
         doLast {
             val date = SimpleDateFormat("yyMMdd.HHmm").format(Date())
-            val bundleDir = layout.buildDirectory.dir("outputs/bundle/release").get().asFile
+            val bundleDir = file("${project.layout.buildDirectory.get()}/outputs/bundle/release")
             bundleDir.listFiles()?.filter { it.extension == "aab" }?.forEach { aabFile ->
                 val newName = "youtube-thumbnails-$date-v$currentVersionName+$currentVersionCode-release.aab"
                 val newFile = File(aabFile.parentFile, newName)
