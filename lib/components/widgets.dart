@@ -295,8 +295,7 @@ class ResolutionChoiceWidget extends StatelessWidget {
 Future<Uint8List> getUint8ListFromImagePath(String url) async {
   HttpClientRequest download = await HttpClient().getUrl(Uri.parse(url));
   HttpClientResponse response = await download.close();
-  Uint8List bytes = await consolidateHttpClientResponseBytes(response);
-  return bytes;
+  return await consolidateHttpClientResponseBytes(response);
 }
 
 class DownloadButton extends StatelessWidget {

@@ -240,15 +240,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  gallery_saver:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: v4
-      resolved-ref: "00aa3d00fe5ead65fd4c4dae38fdf8efd4ca782a"
-      url: "https://github.com/youmtinetflutterpacks/gallery_saver.git"
-    source: git
-    version: "0.0.1"
   gap:
     dependency: "direct main"
     description:
