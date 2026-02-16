@@ -1,9 +1,9 @@
 # dart run flutter_native_splash:create --path=src/flutter_splash.yaml
 flutter_native_splash:
-  image: src/design/splash.png
-  image_dark: src/design/splash.png
-  color: "#B40C73"
-  color_dark: "#B40C73"
+  image: src/design/thumbhub.png
+  image_dark: src/design/thumbhub.png
+  color: "#c69ff2"
+  color_dark: "#c69ff2"
   #background_image: "src/images/background.png"
   #background_image_dark: "src/images/dark-background.png"
   # branding: src/images/branding-dark.png
@@ -12,10 +12,10 @@ flutter_native_splash:
   # branding_mode_dark: bottom
 
   android_12:
-    image: src/design/splash.png
-    image_dark: src/design/splash.png
-    color: "#B40C73"
-    color_dark: "#B40C73"
+    image: src/design/thumbhub.png
+    image_dark: src/design/thumbhub.png
+    color: "#c69ff2"
+    color_dark: "#c69ff2"
     # icon_background_color: "#111111"
     # icon_background_color_dark: "#eeeeee"
 
