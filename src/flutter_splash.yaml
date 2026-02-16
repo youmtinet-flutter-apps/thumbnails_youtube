@@ -2,8 +2,8 @@
 flutter_native_splash:
   image: src/design/thumbhub.png
   image_dark: src/design/thumbhub.png
-  color: "#c69ff2"
-  color_dark: "#c69ff2"
+  color: "#0f0f1a"
+  color_dark: "#0f0f1a"
   #background_image: "src/images/background.png"
   #background_image_dark: "src/images/dark-background.png"
   # branding: src/images/branding-dark.png
@@ -14,8 +14,8 @@ flutter_native_splash:
   android_12:
     image: src/design/thumbhub.png
     image_dark: src/design/thumbhub.png
-    color: "#c69ff2"
-    color_dark: "#c69ff2"
+    color: "#0f0f1a"
+    color_dark: "#0f0f1a"
     # icon_background_color: "#111111"
     # icon_background_color_dark: "#eeeeee"
 
