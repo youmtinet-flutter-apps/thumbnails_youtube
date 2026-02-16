@@ -11,6 +11,7 @@ class ThumbHubApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ThumbHub',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.dark, primarySwatch: Colors.deepPurple, scaffoldBackgroundColor: const Color(0xFF0F0F1A), cardColor: const Color(0xFF1E1E2C)),
       home: const HomeScreen(),
     );
