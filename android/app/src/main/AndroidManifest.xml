@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <!--  -->
-    <application android:label="Video Thumbnails" android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
+    <application android:label="ThumbHub" android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyAwWRUwCoumy_5Pjb4uQvF-0BmUQJZCTJQ" />
         <meta-data
