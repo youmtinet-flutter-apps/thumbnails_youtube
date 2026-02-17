@@ -1,0 +1,109 @@
+{
+	"appTitle": "Miniatures YouTube",
+	"@appTitle": {"description": "Titre de l'application"},
+
+	"videoLoadError": "Une erreur s'est produite lors du chargement de la vidéo",
+	"@videoLoadError": {"description": "Erreur générique de chargement"},
+
+	"errorTitle": "Erreur",
+	"@errorTitle": {"description": "Titre générique d'erreur"},
+
+	"infoTitle": "Infos",
+	"@infoTitle": {"description": "Titre générique d'information"},
+
+	"invalidUrl": "URI non valide",
+	"@invalidUrl": {"description": "Message d'URL YouTube invalide"},
+
+	"pasteYoutubeUrlHint": "Collez une URL YouTube",
+	"@pasteYoutubeUrlHint": {"description": "Indice pour le champ URL principal"},
+
+	"openFullQuality": "Ouvrir en pleine résolution",
+	"@openFullQuality": {"description": "Appel pour ouvrir l'image en pleine qualité"},
+
+	"resolutionLabel": "Résolution",
+	"@resolutionLabel": {"description": "Libellé du menu de résolution"},
+
+	"downloadSuccess": "Image téléchargée avec succès !",
+	"@downloadSuccess": {"description": "Toast après enregistrement"},
+
+	"watchOnYoutube": "Regarder sur YouTube",
+	"@watchOnYoutube": {"description": "Bouton pour ouvrir YouTube"},
+
+	"youtubeOpenFailed": "Impossible d'ouvrir YouTube",
+	"@youtubeOpenFailed": {"description": "Erreur quand l'ouverture échoue"},
+
+	"adsDialogTitle": "Publicité",
+	"@adsDialogTitle": {"description": "Titre de la boîte de dialogue publicité"},
+
+	"adsDialogMessage": "Une publicité va être affichée avant de charger la vidéo",
+	"@adsDialogMessage": {"description": "Message avant l'affichage d'une publicité"},
+
+	"ok": "OK",
+	"@ok": {"description": "Libellé d'action positive"},
+
+	"loading": "Chargement...",
+	"@loading": {"description": "Indication de chargement"},
+
+	"errorWithReason": "Erreur : {reason}",
+	"@errorWithReason": {
+		"description": "Erreur avec raison",
+		"placeholders": {"reason": {"type": "String"}}
+	},
+
+	"historyTitle": "Historique complet",
+	"@historyTitle": {"description": "Titre de l'écran d'historique"},
+
+	"youtubeUrlDetected": "URL YouTube détectée et collée !",
+	"@youtubeUrlDetected": {"description": "SnackBar lors du collage d'URL"},
+
+	"thumbHubTitle": "ThumbHub",
+	"@thumbHubTitle": {"description": "Titre de l'application ThumbHub"},
+
+	"thumbHubAppBarTitle": "THUMBHUB",
+	"@thumbHubAppBarTitle": {"description": "Titre de l'AppBar ThumbHub"},
+
+	"pasteUrlHereHint": "Collez l'URL YouTube ici...",
+	"@pasteUrlHereHint": {"description": "Indice dans le champ ThumbHub"},
+
+	"pasteFromClipboard": "Coller depuis le presse-papiers",
+	"@pasteFromClipboard": {"description": "Bouton pour coller depuis le presse-papiers"},
+
+	"fetchThumb": "Récupérer la miniature",
+	"@fetchThumb": {"description": "Bouton pour récupérer la miniature"},
+
+	"communityHub": "Hub communautaire",
+	"@communityHub": {"description": "En-tête de section pour le hub"},
+
+	"viewsLabel": "{count} vues",
+	"@viewsLabel": {
+		"description": "Libellé affichant le nombre de vues",
+		"placeholders": {"count": {"type": "String"}}
+	},
+
+	"viralVideoThumbnail": "Miniature vidéo virale {number}",
+	"@viralVideoThumbnail": {
+		"description": "Titre fictif de miniature avec index",
+		"placeholders": {"number": {"type": "int"}}
+	},
+
+	"maxResPreview": "Aperçu MaxRes",
+	"@maxResPreview": {"description": "Titre d'aperçu en résolution maximale"},
+
+	"selectQuality": "Sélectionnez la qualité",
+	"@selectQuality": {"description": "Invite de sélection de qualité"},
+
+	"qualityHd": "HD",
+	"@qualityHd": {"description": "Libellé qualité HD"},
+
+	"qualitySd": "SD",
+	"@qualitySd": {"description": "Libellé qualité SD"},
+
+	"qualityNormal": "Normal",
+	"@qualityNormal": {"description": "Libellé qualité normale"},
+
+	"launchVideoInYoutube": "Ouvrir la vidéo sur YouTube",
+	"@launchVideoInYoutube": {"description": "Bouton pour lancer la vidéo sur YouTube"},
+
+	"saveToGallery": "Enregistrer dans la galerie",
+	"@saveToGallery": {"description": "Bouton pour enregistrer dans la galerie"}
+}

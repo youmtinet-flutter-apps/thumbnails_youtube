@@ -104,7 +104,7 @@ class MainImageView extends StatelessWidget {
                     children: <Widget>[
                       Icon(Icons.open_in_full, color: Colors.white, size: 18.r),
                       SizedBox(width: 8.r),
-                      Text('Open full quality', style: theme.textTheme.labelLarge?.copyWith(color: Colors.white)),
+                      Text(context.l10n.openFullQuality, style: theme.textTheme.labelLarge?.copyWith(color: Colors.white)),
                     ],
                   ),
                 ),
@@ -201,7 +201,7 @@ class AppInputField extends StatelessWidget {
       textInputAction: TextInputAction.search,
       keyboardType: TextInputType.url,
       decoration: InputDecoration(
-        hintText: 'Paste a YouTube URL',
+        hintText: context.l10n.pasteYoutubeUrlHint,
         prefixIcon: Icon(Icons.link),
         suffixIcon: IconButton(onPressed: onPressed, icon: Icon(Icons.search)),
         filled: true,
@@ -267,7 +267,7 @@ class ResolutionChoiceWidget extends StatelessWidget {
     return CustomDropdown<String>.search(
       searchFunction: (String e, String searchPrompt) => e.contains(searchPrompt),
       searchableTextItem: (String item) => item,
-      hintText: 'Resolution',
+      hintText: context.l10n.resolutionLabel,
       items: availableChoices.map((RsolutionEnum e) => e.getResourceFromEnum()).toList(),
       itemBgColor: Theme.of(context).colorScheme.primary,
       fillColor: Theme.of(context).colorScheme.surface,
@@ -312,7 +312,7 @@ class DownloadButton extends StatelessWidget {
           Uint8List bites = await getUint8ListFromImagePath(path);
           SaveResult afterSave = await SaverGallery.saveImage(bites, skipIfExists: true, fileName: basename(path));
           if (!afterSave.isSuccess) return;
-          appSnackbar(context, 'Infos', "Image downloaded successfully!");
+          appSnackbar(context, context.l10n.infoTitle, context.l10n.downloadSuccess);
           context.read<AppProvider>().setLoading(false);
         } on Exception catch (_) {
           context.read<AppProvider>().setLoading(false);
@@ -341,7 +341,7 @@ class WatchOnYouTubeButton extends StatelessWidget {
     final Uri url = Uri.parse('https://www.youtube.com/watch?v=$videoId');
     final bool launched = await launchUrl(url, mode: LaunchMode.externalApplication);
     if (!launched) {
-      appSnackbar(context, 'Error', 'Could not open YouTube');
+      appSnackbar(context, context.l10n.errorTitle, context.l10n.youtubeOpenFailed);
     }
   }
 
@@ -350,7 +350,7 @@ class WatchOnYouTubeButton extends StatelessWidget {
     return FilledButton.icon(
       onPressed: videoId.isEmpty ? null : () => _launchVideo(context),
       icon: Icon(Icons.play_circle_fill),
-      label: Text('Watch on YouTube'),
+      label: Text(context.l10n.watchOnYoutube),
       style: FilledButton.styleFrom(
         padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
         shape: StadiumBorder(),

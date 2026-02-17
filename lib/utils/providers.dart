@@ -9,6 +9,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<RsolutionEnum> _availableChoices = RsolutionEnum.values;
   RsolutionEnum _resolution = RsolutionEnum.mqdefault;
   late DateTime _datetimeAds;
+  Locale _locale = const Locale('en');
   final TextEditingController textEditingController = TextEditingController();
   final TextEditingController resolutionSelectionController = TextEditingController();
 
@@ -21,6 +22,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   RsolutionEnum get resolution => _resolution;
   bool get isAdsTime => _datetimeAds.isBefore(DateTime.now().subtract(Duration(minutes: 10)));
   bool get loading => _loading;
+  Locale get locale => _locale;
 
   void setLoading(bool value) {
     _loading = value;
@@ -44,6 +46,15 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  void setLocale(Locale locale) {
+    _locale = locale;
+    notifyListeners();
+  }
+
+  void toggleLocale() {
+    setLocale(_locale.languageCode == 'en' ? const Locale('fr') : const Locale('en'));
+  }
+
   void updateTextEditor() {
     textEditingController.text = "youtube.com/watch?v=$_videoId";
     notifyListeners();
@@ -58,7 +69,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void setvideoIdFromUrl(BuildContext context, String url) {
     String? idFROMurl = convertUrlToId(url);
     if (idFROMurl == null) {
-      appSnackbar(context, 'Infos', "URI non valide");
+      appSnackbar(context, context.l10n.infoTitle, context.l10n.invalidUrl);
     } else {
       _videoId = idFROMurl;
     }
@@ -96,5 +107,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     properties.add(EnumProperty<RsolutionEnum>('_resolution', _resolution));
     properties.add(DiagnosticsProperty<DateTime>('_datetimeAds', _datetimeAds));
     properties.add(StringProperty('_videoId', _videoId));
+    properties.add(DiagnosticsProperty<Locale>('_locale', _locale));
   }
 }

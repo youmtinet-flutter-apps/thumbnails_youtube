@@ -29,9 +29,10 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
     return StackLoading(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Thumbnails YouTube'),
+          title: Text(context.l10n.appTitle),
           centerTitle: true,
           elevation: 0,
+          actions: <Widget>[TextButton(onPressed: () => context.read<AppProvider>().toggleLocale(), child: Text(context.watch<AppProvider>().locale.languageCode.toUpperCase()))],
           titleTextStyle: TextStyle(color: context.theme.textTheme.titleLarge?.color, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
@@ -107,7 +108,7 @@ class _ThmbHomePageState extends State<ThmbHomePage> {
               context.read<AppProvider>().setLoading(false);
             } on Exception catch (_) {
               context.read<AppProvider>().setLoading(false);
-              appSnackbar(context, 'Error', "Une erreur s'est produite lors du chargement de la vidéo");
+              appSnackbar(context, context.l10n.errorTitle, context.l10n.videoLoadError);
             }
           },
         ),

@@ -11,6 +11,8 @@ environment:
 dependencies:
     flutter:
         sdk: flutter
+    flutter_localizations:
+        sdk: flutter
     shared_preferences: ^2.5.4
     cupertino_icons: ^1.0.8
     cloud_firestore: ^6.1.2
@@ -54,6 +56,7 @@ flutter_launcher_icons:
     adaptive_icon_foreground: src/design/launcher.png
 
 flutter:
+    generate: true
     uses-material-design: true
     assets:
         - assets/

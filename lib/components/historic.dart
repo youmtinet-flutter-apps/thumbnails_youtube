@@ -35,10 +35,10 @@ class _HistoricFeaturedAllState extends State<HistoricFeaturedAll> {
       stream: _sataStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(child: Text(context.l10n.errorWithReason(snapshot.error.toString())));
         }
         if (!snapshot.hasData) {
-          return Center(child: Text('Loading...'));
+          return Center(child: Text(context.l10n.loading));
         }
         return HistoricBuilder(
           preview: widget.preview,
@@ -134,15 +134,15 @@ class _HistoricBuilderState extends State<HistoricBuilder> {
                   final GlobalKey<ReusableInterstitialAdsState> _globalKey = GlobalKey<ReusableInterstitialAdsState>();
                   await Get.dialog(
                     AlertDialog(
-                      title: Text('Publicité'),
-                      content: Text("Une publicité va être affichée avant de charger la vidéo"),
+                      title: Text(context.l10n.adsDialogTitle),
+                      content: Text(context.l10n.adsDialogMessage),
                       backgroundColor: context.theme.colorScheme.surface,
                       actions: <Widget>[
                         TextButton(
                           onPressed: () async {
                             Get.back();
                           },
-                          child: Text('OK'),
+                          child: Text(context.l10n.ok),
                         ),
                       ],
                     ),
@@ -161,7 +161,7 @@ class _HistoricBuilderState extends State<HistoricBuilder> {
                 }
               } catch (e) {
                 context.read<AppProvider>().setLoading(false);
-                appSnackbar(context, 'Error', "Une erreur s'est produite lors du chargement de la vidéo");
+                appSnackbar(context, context.l10n.errorTitle, context.l10n.videoLoadError);
               }
             },
             child: PhysicalModel(
@@ -216,7 +216,7 @@ class _HistoricBuilderState extends State<HistoricBuilder> {
                                   context.read<AppProvider>().setLoading(false);
                                 } catch (e) {
                                   context.read<AppProvider>().setLoading(false);
-                                  appSnackbar(context, 'Error', "Une erreur s'est produite lors du chargement de la vidéo");
+                                  appSnackbar(context, context.l10n.errorTitle, context.l10n.videoLoadError);
                                 }
                               },
                               child: Row(
@@ -254,7 +254,7 @@ class AllHistory extends StatelessWidget {
     return StackLoading(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Historique complet'),
+          title: Text(context.l10n.historyTitle),
           centerTitle: true,
           elevation: 0,
           titleTextStyle: TextStyle(color: Theme.of(context).textTheme.titleLarge?.color),

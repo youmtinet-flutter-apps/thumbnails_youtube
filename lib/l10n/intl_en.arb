@@ -1,0 +1,109 @@
+{
+	"appTitle": "Thumbnails YouTube",
+	"@appTitle": {"description": "Application title"},
+
+	"videoLoadError": "An error occurred while loading the video",
+	"@videoLoadError": {"description": "Generic video loading failure"},
+
+	"errorTitle": "Error",
+	"@errorTitle": {"description": "Generic error title"},
+
+	"infoTitle": "Info",
+	"@infoTitle": {"description": "Generic info title"},
+
+	"invalidUrl": "Invalid URL",
+	"@invalidUrl": {"description": "Invalid YouTube URL message"},
+
+	"pasteYoutubeUrlHint": "Paste a YouTube URL",
+	"@pasteYoutubeUrlHint": {"description": "Hint for the main URL input"},
+
+	"openFullQuality": "Open full quality",
+	"@openFullQuality": {"description": "Call to open the full quality image"},
+
+	"resolutionLabel": "Resolution",
+	"@resolutionLabel": {"description": "Label for resolution dropdown"},
+
+	"downloadSuccess": "Image downloaded successfully!",
+	"@downloadSuccess": {"description": "Toast when image is saved"},
+
+	"watchOnYoutube": "Watch on YouTube",
+	"@watchOnYoutube": {"description": "Button text to open YouTube"},
+
+	"youtubeOpenFailed": "Could not open YouTube",
+	"@youtubeOpenFailed": {"description": "Error when opening YouTube fails"},
+
+	"adsDialogTitle": "Advertisement",
+	"@adsDialogTitle": {"description": "Dialog title before showing an ad"},
+
+	"adsDialogMessage": "An ad will be displayed before loading the video",
+	"@adsDialogMessage": {"description": "Dialog message before showing an ad"},
+
+	"ok": "OK",
+	"@ok": {"description": "Affirmative action label"},
+
+	"loading": "Loading...",
+	"@loading": {"description": "Loading placeholder"},
+
+	"errorWithReason": "Error: {reason}",
+	"@errorWithReason": {
+		"description": "Error message with reason",
+		"placeholders": {"reason": {"type": "String"}}
+	},
+
+	"historyTitle": "Full history",
+	"@historyTitle": {"description": "AppBar title for the history page"},
+
+	"youtubeUrlDetected": "YouTube URL detected and pasted!",
+	"@youtubeUrlDetected": {"description": "SnackBar when URL is pasted from clipboard"},
+
+	"thumbHubTitle": "ThumbHub",
+	"@thumbHubTitle": {"description": "ThumbHub application title"},
+
+	"thumbHubAppBarTitle": "THUMBHUB",
+	"@thumbHubAppBarTitle": {"description": "ThumbHub app bar title"},
+
+	"pasteUrlHereHint": "Paste YouTube URL here...",
+	"@pasteUrlHereHint": {"description": "Hint inside ThumbHub text field"},
+
+	"pasteFromClipboard": "Paste from Clipboard",
+	"@pasteFromClipboard": {"description": "Button label to paste from clipboard"},
+
+	"fetchThumb": "Fetch Thumb",
+	"@fetchThumb": {"description": "Button label to fetch thumbnail"},
+
+	"communityHub": "Community Hub",
+	"@communityHub": {"description": "Section header for community hub"},
+
+	"viewsLabel": "{count} views",
+	"@viewsLabel": {
+		"description": "Label showing view count",
+		"placeholders": {"count": {"type": "String"}}
+	},
+
+	"viralVideoThumbnail": "Viral Video Thumbnail {number}",
+	"@viralVideoThumbnail": {
+		"description": "Mock thumbnail title with index",
+		"placeholders": {"number": {"type": "int"}}
+	},
+
+	"maxResPreview": "MaxRes Preview",
+	"@maxResPreview": {"description": "App bar title for max resolution preview"},
+
+	"selectQuality": "Select Quality",
+	"@selectQuality": {"description": "Prompt to select quality"},
+
+	"qualityHd": "HD",
+	"@qualityHd": {"description": "HD quality label"},
+
+	"qualitySd": "SD",
+	"@qualitySd": {"description": "SD quality label"},
+
+	"qualityNormal": "Normal",
+	"@qualityNormal": {"description": "Normal quality label"},
+
+	"launchVideoInYoutube": "Launch Video in YouTube",
+	"@launchVideoInYoutube": {"description": "Button label to launch video in YouTube"},
+
+	"saveToGallery": "Save to Gallery",
+	"@saveToGallery": {"description": "Button label to save thumbnail to gallery"}
+}

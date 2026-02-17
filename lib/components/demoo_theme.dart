@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:thumbnail_youtube/l10n/app_localizations.dart';
+import 'package:thumbnail_youtube/lib.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(const ThumbHubApp());
@@ -10,8 +13,14 @@ class ThumbHubApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ThumbHub',
+      onGenerateTitle: (BuildContext context) => context.l10n.thumbHubTitle,
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        //
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(brightness: Brightness.dark, primarySwatch: Colors.deepPurple, scaffoldBackgroundColor: const Color(0xFF0F0F1A), cardColor: const Color(0xFF1E1E2C)),
       home: const HomeScreen(),
     );
@@ -45,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _urlController.text = data.text!;
       });
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("YouTube URL detected and pasted!")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.youtubeUrlDetected)));
     }
   }
 
@@ -53,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('THUMBHUB', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+        title: Text(context.l10n.thumbHubAppBarTitle, style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -70,8 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: <Widget>[
                   TextField(
                     controller: _urlController,
-                    decoration: const InputDecoration(
-                      hintText: 'Paste YouTube URL here...',
+                    decoration: InputDecoration(
+                      hintText: context.l10n.pasteUrlHereHint,
                       border: InputBorder.none,
                       prefixIcon: Icon(Icons.link, color: Colors.blueAccent),
                     ),
@@ -83,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: ElevatedButton.icon(
                           onPressed: _fetchFromClipboard,
                           icon: const Icon(Icons.assignment_returned),
-                          label: const Text("Paste from Clipboard"),
+                          label: Text(context.l10n.pasteFromClipboard),
                           style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[800]),
                         ),
                       ),
@@ -94,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             // Logic to extract ID and navigate
                           },
                           style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-                          child: const Text("Fetch Thumb"),
+                          child: Text(context.l10n.fetchThumb),
                         ),
                       ),
                     ],
@@ -104,11 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 24),
             // Hub Header
-            const Row(
+            Row(
               children: <Widget>[
                 Icon(Icons.whatshot, color: Colors.orange),
-                SizedBox(width: 8),
-                Text("Community Hub", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(width: 8),
+                Text(context.l10n.communityHub, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 12),
@@ -138,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text("${thumb['views']} views", style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                            Text(context.l10n.viewsLabel(thumb['views'] ?? ''), style: const TextStyle(fontSize: 12, color: Colors.grey)),
                             const Icon(Icons.favorite_border, size: 14, color: Colors.grey),
                           ],
                         ),
@@ -162,7 +171,7 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("MaxRes Preview")),
+      appBar: AppBar(title: Text(context.l10n.maxResPreview)),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -185,11 +194,11 @@ class DetailScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const Text("Select Quality", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(context.l10n.selectQuality, style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <String>['HD', 'SD', 'Normal'].map((String q) => ActionChip(label: Text(q), onPressed: () {})).toList(),
+                  children: <String>[context.l10n.qualityHd, context.l10n.qualitySd, context.l10n.qualityNormal].map((String q) => ActionChip(label: Text(q), onPressed: () {})).toList(),
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
@@ -198,7 +207,7 @@ class DetailScreen extends StatelessWidget {
                   child: ElevatedButton.icon(
                     onPressed: () => launchUrl(Uri.parse('https://www.youtube.com/watch?v=$id')),
                     icon: const Icon(Icons.play_circle_fill),
-                    label: const Text("Launch Video in YouTube"),
+                    label: Text(context.l10n.launchVideoInYoutube),
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   ),
                 ),
@@ -206,7 +215,7 @@ class DetailScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: OutlinedButton.icon(onPressed: () {}, icon: const Icon(Icons.download), label: const Text("Save to Gallery")),
+                  child: OutlinedButton.icon(onPressed: () {}, icon: const Icon(Icons.download), label: Text(context.l10n.saveToGallery)),
                 ),
               ],
             ),

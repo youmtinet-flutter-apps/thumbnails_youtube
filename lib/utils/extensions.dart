@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:thumbnail_youtube/l10n/app_localizations.dart';
 
 extension NumberFormatter on num {
   String toThousands() {
@@ -52,4 +53,16 @@ extension ColorX on Color {
             '${(b * 255).floor().toRadixString(16).padLeft(2, '0')}'
         .toUpperCase();
   }
+}
+
+extension BuilderExtension on Widget {
+  Widget withPadding(EdgeInsetsGeometry padding) => Padding(padding: padding, child: this);
+  Widget withSymmetricPadding({double horizontal = 0.0, double vertical = 0.0}) => withPadding(EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical));
+  Widget withAllPadding(double padding) => withPadding(EdgeInsets.all(padding));
+}
+
+extension BuildContextExtension on BuildContext {
+  AppLocalizations get l10n => AppLocalizations.of(this)!;
+  /* ThemeData get theme => Theme.of(this);
+  TextTheme get textTheme => theme.textTheme; */
 }
