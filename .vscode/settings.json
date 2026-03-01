@@ -1,11 +1,11 @@
 {
-    "dart.flutterSdkPath": ".fvm/versions/3.38.9",
-    "[dart]": {
-        "editor.tabSize": 4,
-        "editor.insertSpaces": true,
-        "editor.detectIndentation": true,
-        "editor.suggest.insertMode": "replace",
-        "editor.defaultFormatter": "Dart-Code.dart-code",
-        "editor.inlayHints.enabled": "offUnlessPressed",
-    }
+  "dart.flutterSdkPath": ".fvm/versions/3.38.9",
+  "[dart]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": true,
+    "editor.suggest.insertMode": "replace",
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.inlayHints.enabled": "offUnlessPressed"
+  }
 }

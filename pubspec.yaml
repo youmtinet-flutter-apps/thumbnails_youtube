@@ -1,5 +1,11 @@
 name: thumbnail_youtube
-description: A new Flutter project.
+description: >
+    ThumbHub — Fetch, preview, and download YouTube video thumbnails in multiple
+    resolutions (MQ, HQ, SD, Max). Supports history, trending, localization (EN/FR),
+    dark/light theme, and Google Mobile Ads.
+homepage: https://github.com/youmtinetflutterpacks/thumbhub
+repository: https://github.com/youmtinetflutterpacks/thumbhub
+issue_tracker: https://github.com/youmtinetflutterpacks/thumbhub/issues
 
 publish_to: "none"
 
