@@ -1,0 +1,138 @@
+name: Deploy to Internal/Beta Track
+
+on:
+    push:
+        tags:
+            - "beta-v*"
+    workflow_dispatch:
+        inputs:
+            track:
+                description: "Play Store track"
+                required: true
+                default: "internal"
+                type: choice
+                options:
+                    - ""
+                    - internal
+                    - beta
+
+concurrency:
+    group: deploy-beta
+    cancel-in-progress: false
+
+jobs:
+    deploy:
+        name: Build & Deploy Beta
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        environment: beta
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Extract version from tag
+              if: startsWith(github.ref, 'refs/tags/beta-v')
+              id: version
+              run: |
+                  TAG="${GITHUB_REF#refs/tags/beta-v}"
+                  echo "version=$TAG" >> $GITHUB_OUTPUT
+                  echo "Deploying version: $TAG"
+
+            - name: Set up Java 17
+              uses: actions/setup-java@v4
+              with:
+                  distribution: "temurin"
+                  java-version: "17"
+
+            - name: Set up Flutter
+              uses: subosito/flutter-action@v2
+              with:
+                  flutter-version: "3.38.9"
+                  channel: "stable"
+                  cache: true
+
+            - name: Set up Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: "3.2"
+                  bundler-cache: true
+                  working-directory: android
+
+            - name: Install Flutter dependencies
+              run: flutter pub get
+
+            - name: Decode keystore
+              if: inputs.promote_from == '' || inputs.promote_from == null
+              run: |
+                  mkdir -p android/app/keystore
+                  echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore/upload-keystore.jks
+
+
+            - name: Write key.properties
+              if: inputs.promote_from == '' || inputs.promote_from == null
+              run: |
+                  cat > android/key.properties <<EOF
+                  storeFile=keystore/upload-keystore.jks
+                  storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+                  keyAlias=${{ secrets.KEY_ALIAS }}
+                  keyPassword=${{ secrets.KEY_PASSWORD }}
+                  EOF
+
+            - name: Write version.properties
+              if: inputs.promote_from == '' || inputs.promote_from == null
+              run: |
+                  TAG="${{ github.ref_name }}"
+                  VERSION_NAME="${TAG#beta-v}"
+                  VERSION_NAME="${VERSION_NAME%+*}"
+                  if [[ "$TAG" == *"+"* ]]; then
+                    VERSION_CODE="${TAG##*+}"
+                  else
+                    VERSION_CODE=$(git rev-list --count HEAD)
+                  fi
+                  cat > android/version.properties <<EOF
+                  versionCode=${VERSION_CODE}
+                  versionName=${VERSION_NAME}
+                  EOF
+
+            - name: Decode Google Play service account
+              env:
+                  GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+              run: |
+                  echo "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > android/google-play-service-account.json
+
+            - name: Determine track
+              id: track
+              run: |
+                  if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+                    echo "lane=${{ inputs.track }}" >> $GITHUB_OUTPUT
+                  else
+                    echo "lane=internal" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Deploy via Fastlane
+              working-directory: android
+              run: bundle exec fastlane ${{ steps.track.outputs.lane }}
+
+            - name: Upload AAB artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: release-aab-beta
+                  path: build/app/outputs/bundle/release/*.aab
+                  retention-days: 30
+
+            - name: Upload debug symbols
+              if: success()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: debug-symbols-beta
+                  path: build/debug-info/
+                  retention-days: 90
+
+            - name: Clean up secrets
+              if: always()
+              run: |
+                  rm -f android/google-play-service-account.json
+                  rm -f android/app/keystore/upload-keystore.jks
+                  rm -f android/key.properties

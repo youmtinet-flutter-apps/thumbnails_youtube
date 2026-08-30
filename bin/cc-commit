@@ -1,0 +1,16 @@
+#!/bin/bash
+git add .
+
+DIFF=$(git diff --staged)
+if [ -z "$DIFF" ]; then
+  echo "No staged changes."
+  exit 1
+fi
+
+MSG=$(echo "$DIFF" | ollama run qwen:7b "Write a concise git commit message for this diff. Output only the message:")
+
+echo "Committing with: $MSG"
+git commit -m "$MSG"
+
+# Launch Claude Code after commit
+claude

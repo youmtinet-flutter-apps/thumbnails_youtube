@@ -1,0 +1,2 @@
+json_key_file("google-play-service-account.json")
+package_name("com.ymrabtiapps.thumbnails.thumbnail_youtube") # e.g. com.krausefx.app

@@ -1,0 +1,148 @@
+name: Deploy to Production
+
+on:
+    push:
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+*"
+    workflow_dispatch:
+        inputs:
+            promote_from:
+                description: "Promote from track (skip build)"
+                required: false
+                default: ""
+                type: choice
+                options:
+                    - ""
+                    - internal
+                    - beta
+
+concurrency:
+    group: deploy-production
+    cancel-in-progress: false
+
+jobs:
+    deploy:
+        name: Build & Deploy Production
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        environment: production
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Extract version from tag
+              if: startsWith(github.ref, 'refs/tags/v')
+              id: version
+              run: |
+                  TAG="${GITHUB_REF#refs/tags/v}"
+                  echo "version=$TAG" >> $GITHUB_OUTPUT
+                  echo "Deploying version: $TAG"
+
+            - name: Set up Java 17
+              uses: actions/setup-java@v4
+              with:
+                  distribution: "temurin"
+                  java-version: "17"
+
+            - name: Set up Flutter
+              uses: subosito/flutter-action@v2
+              with:
+                  flutter-version: "3.38.9"
+                  channel: "stable"
+                  cache: true
+
+            - name: Set up Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: "3.2"
+                  bundler-cache: true
+                  working-directory: android
+
+            - name: Install Flutter dependencies
+              run: flutter pub get
+
+            - name: Decode keystore
+              if: inputs.promote_from == '' || inputs.promote_from == null
+              run: |
+                  mkdir -p android/app/keystore
+                  echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/keythumbnails.jks
+
+            - name: Write key.properties
+              if: inputs.promote_from == '' || inputs.promote_from == null
+              run: |
+                  cat > android/key.properties <<EOF
+                  storeFile=keythumbnails.jks
+                  storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+                  keyAlias=${{ secrets.KEY_ALIAS }}
+                  keyPassword=${{ secrets.KEY_PASSWORD }}
+                  EOF
+
+            - name: Write version.properties
+              if: inputs.promote_from == '' || inputs.promote_from == null
+              run: |
+                  TAG="${{ github.ref_name }}"
+                  VERSION_NAME="${TAG#v}"
+                  VERSION_NAME="${VERSION_NAME%+*}"
+                  if [[ "$TAG" == *"+"* ]]; then
+                    VERSION_CODE="${TAG##*+}"
+                  else
+                    VERSION_CODE=$(git rev-list --count HEAD)
+                  fi
+                  cat > android/version.properties <<EOF
+                  versionCode=${VERSION_CODE}
+                  versionName=${VERSION_NAME}
+                  EOF
+
+            - name: Decode Google Play service account
+              env:
+                  GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+              run: |
+                  echo "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > android/google-play-service-account.json
+
+            - name: Deploy production (full build)
+              if: inputs.promote_from == '' || inputs.promote_from == null
+              working-directory: android
+              run: bundle exec fastlane production
+
+            - name: Promote to production (no rebuild)
+              if: inputs.promote_from != '' && inputs.promote_from != null
+              working-directory: android
+              run: bundle exec fastlane promote_to_production
+
+            - name: Upload AAB artifact
+              if: inputs.promote_from == '' || inputs.promote_from == null
+              uses: actions/upload-artifact@v4
+              with:
+                  name: release-aab-production
+                  path: build/app/outputs/bundle/release/*.aab
+                  retention-days: 90
+
+            - name: Upload debug symbols
+              if: (inputs.promote_from == '' || inputs.promote_from == null) && success()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: debug-symbols-production
+                  path: build/debug-info/
+                  retention-days: 180
+
+            - name: Create GitHub Release
+              if: startsWith(github.ref, 'refs/tags/v')
+              uses: softprops/action-gh-release@v2
+              with:
+                  tag_name: ${{ github.ref_name }}
+                  name: "Release ${{ github.ref_name }}"
+                  draft: false
+                  prerelease: false
+                  generate_release_notes: true
+                  files: |
+                      build/app/outputs/bundle/release/*.aab
+
+            - name: Clean up secrets
+              if: always()
+              run: |
+                  rm -f android/google-play-service-account.json
+                  rm -f android/app/keythumbnails.jks
+                  rm -f android/key.properties
+                  rm -f android/version.properties

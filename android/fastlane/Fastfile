@@ -1,0 +1,89 @@
+default_platform(:android)
+
+platform :android do
+
+  desc "Run Flutter tests"
+  lane :test do
+    sh("cd ../.. && flutter test")
+  end
+
+  desc "Build release AAB"
+  private_lane :build_release do
+    sh("cd ../.. && flutter clean")
+    sh("cd ../.. && flutter pub get")
+    sh("cd ../.. && flutter build appbundle --release --obfuscate --split-debug-info=build/debug-info")
+  end
+
+  # The build.gradle.kts renames AABs with timestamps.
+  # This helper finds the actual AAB path.
+  private_lane :find_aab do
+    aab_files = Dir["../../build/app/outputs/bundle/release/*.aab"]
+    UI.user_error!("No AAB found in build/app/outputs/bundle/release/") if aab_files.empty?
+    aab_path = File.expand_path(aab_files.first)
+    UI.message("Found AAB: #{aab_path}")
+    aab_path
+  end
+
+  desc "Deploy to Google Play internal testing track"
+  lane :internal do
+    build_release
+    aab = find_aab
+
+    upload_to_play_store(
+      track: 'internal',
+      aab: aab,
+      skip_upload_metadata: false,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: 'draft'
+    )
+  end
+
+  desc "Deploy to Google Play beta (open testing) track"
+  lane :beta do
+    build_release
+    aab = find_aab
+
+    upload_to_play_store(
+      track: 'beta',
+      aab: aab,
+      skip_upload_metadata: false,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: 'completed'
+    )
+  end
+
+  desc "Deploy to Google Play production track"
+  lane :production do
+    build_release
+    aab = find_aab
+
+    upload_to_play_store(
+      track: 'production',
+      aab: aab,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: 'completed'
+    )
+  end
+
+  desc "Promote internal track to beta"
+  lane :promote_to_beta do
+    upload_to_play_store(
+      track: 'internal',
+      track_promote_to: 'beta',
+      skip_upload_changelogs: false
+    )
+  end
+
+  desc "Promote beta track to production"
+  lane :promote_to_production do
+    upload_to_play_store(
+      track: 'beta',
+      track_promote_to: 'production',
+      skip_upload_changelogs: false
+    )
+  end
+
+end
